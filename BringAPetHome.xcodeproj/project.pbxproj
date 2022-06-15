@@ -9,10 +9,18 @@
 /* Begin PBXBuildFile section */
 		251CF7FB28586FC7004BDEC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */; };
 		251CF7FD28586FC7004BDEC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */; };
-		251CF7FF28586FC7004BDEC9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* ViewController.swift */; };
+		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
 		251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80028586FC7004BDEC9 /* Main.storyboard */; };
 		251CF80428586FC8004BDEC9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80328586FC8004BDEC9 /* Assets.xcassets */; };
 		251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */; };
+		252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */; };
+		252D807E285995290076236B /* ShelterDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807D285995290076236B /* ShelterDataModel.swift */; };
+		252D80802859A1A40076236B /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807F2859A1A40076236B /* UITableViewCell.swift */; };
+		252D80822859CC7C0076236B /* ShelterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80812859CC7C0076236B /* ShelterManager.swift */; };
+		252D80842859E67C0076236B /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80832859E67C0076236B /* HTTP.swift */; };
+		257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 257CA5EC285895620009BE17 /* GoogleService-Info.plist */; };
+		257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5EF28589A780009BE17 /* UIView+Extension.swift */; };
+		257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5F228589B550009BE17 /* UIScreen+Extension.swift */; };
 		7954F532F797B975F70B0FAD /* Pods_BringAPetHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */; };
 /* End PBXBuildFile section */
 
@@ -20,11 +28,19 @@
 		251CF7F728586FC7004BDEC9 /* BringAPetHome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BringAPetHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		251CF7FE28586FC7004BDEC9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		251CF80128586FC7004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		251CF80328586FC8004BDEC9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		251CF80628586FC8004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		251CF80828586FC8004BDEC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		252D807D285995290076236B /* ShelterDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterDataModel.swift; sourceTree = "<group>"; };
+		252D807F2859A1A40076236B /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
+		252D80812859CC7C0076236B /* ShelterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterManager.swift; sourceTree = "<group>"; };
+		252D80832859E67C0076236B /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
+		257CA5EC285895620009BE17 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		257CA5EF28589A780009BE17 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		257CA5F228589B550009BE17 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
 		3553C5DC4967E9C811258625 /* Pods-BringAPetHome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.release.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.release.xcconfig"; sourceTree = "<group>"; };
 		6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BringAPetHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88403816CC320A23BF606720 /* Pods-BringAPetHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.debug.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.debug.xcconfig"; sourceTree = "<group>"; };
@@ -74,13 +90,53 @@
 			children = (
 				251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */,
 				251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */,
-				251CF7FE28586FC7004BDEC9 /* ViewController.swift */,
-				251CF80028586FC7004BDEC9 /* Main.storyboard */,
 				251CF80328586FC8004BDEC9 /* Assets.xcassets */,
-				251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */,
+				257CA5F128589B2C0009BE17 /* Extension */,
+				25C4818D2858E47D000C6D7F /* Model */,
+				25C4818C2858E464000C6D7F /* Controller */,
+				25C4818B2858E443000C6D7F /* View */,
 				251CF80828586FC8004BDEC9 /* Info.plist */,
+				257CA5EC285895620009BE17 /* GoogleService-Info.plist */,
 			);
 			path = BringAPetHome;
+			sourceTree = "<group>";
+		};
+		257CA5F128589B2C0009BE17 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				257CA5EF28589A780009BE17 /* UIView+Extension.swift */,
+				257CA5F228589B550009BE17 /* UIScreen+Extension.swift */,
+				252D807F2859A1A40076236B /* UITableViewCell.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		25C4818B2858E443000C6D7F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				251CF80028586FC7004BDEC9 /* Main.storyboard */,
+				251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */,
+				252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		25C4818C2858E464000C6D7F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		25C4818D2858E47D000C6D7F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				252D807D285995290076236B /* ShelterDataModel.swift */,
+				252D80812859CC7C0076236B /* ShelterManager.swift */,
+				252D80832859E67C0076236B /* HTTP.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		D5EDE5F826D72F73483289C1 /* Frameworks */ = {
@@ -103,6 +159,7 @@
 				251CF7F428586FC7004BDEC9 /* Frameworks */,
 				251CF7F528586FC7004BDEC9 /* Resources */,
 				0D5C4694D7DBD01C2426F7CD /* [CP] Embed Pods Frameworks */,
+				257CA5EE285899460009BE17 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -152,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */,
+				257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */,
 				251CF80428586FC8004BDEC9 /* Assets.xcassets in Resources */,
 				251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */,
 			);
@@ -176,6 +234,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		257CA5EE285899460009BE17 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 		E2AC4D3A6F3F155308DF51BA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -206,9 +281,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				251CF7FF28586FC7004BDEC9 /* ViewController.swift in Sources */,
+				252D80822859CC7C0076236B /* ShelterManager.swift in Sources */,
+				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
+				252D80802859A1A40076236B /* UITableViewCell.swift in Sources */,
+				257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */,
 				251CF7FB28586FC7004BDEC9 /* AppDelegate.swift in Sources */,
+				252D80842859E67C0076236B /* HTTP.swift in Sources */,
+				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,
+				252D807E285995290076236B /* ShelterDataModel.swift in Sources */,
 				251CF7FD28586FC7004BDEC9 /* SceneDelegate.swift in Sources */,
+				252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
