@@ -17,7 +17,7 @@ class HomeDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.tabBarController?.tabBar.isHidden = true
         tableView.backgroundColor = .orange
         tableView.dataSource = self
         tableView.delegate = self
@@ -26,6 +26,18 @@ class HomeDetailViewController: UIViewController {
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor,
                          padding: .init(top: 0, left: 0, bottom: 0, right: 0))
+    }
+    @IBAction func clickMapButton(_ sender: Any) {
+        guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
+            self.navigationController?.pushViewController(mapVC, animated: true)
+    }
+    
+    @IBAction func clickPhoneButton(_ sender: Any) {
+        
+    }
+    
+    @IBAction func shareInfoButton(_ sender: Any) {
+        
     }
 }
 
