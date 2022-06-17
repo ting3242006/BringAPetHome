@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 struct AnimalData: Codable {    
     let animalId: Int
     let place: String

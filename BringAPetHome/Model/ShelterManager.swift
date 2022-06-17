@@ -15,7 +15,7 @@ class ShelterManager {
     
 //    var skip: Int = 100
     
-    func fetchData(skip: Int?, completion: @escaping (Result<[AnimalData]>) -> Void) {
+    func fetchData(skip: Int, completion: @escaping (Result<[AnimalData]>) -> Void) {
         let urlString =  "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=100&$skip=\(skip)"
         
         guard let url = URL(string: urlString) else { return }

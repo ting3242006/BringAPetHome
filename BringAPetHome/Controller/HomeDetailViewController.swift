@@ -18,14 +18,11 @@ class HomeDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print(self)
-        print("77777\(pet)")
 
         tableView.backgroundColor = .orange
         tableView.dataSource = self
         tableView.delegate = self
         tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0))
-        print("~~~~~~~\(String(describing: pet))")
     }
 }
 
@@ -40,8 +37,6 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate  
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeDetailTableViewCell.identifier, for: indexPath) as? HomeDetailTableViewCell else { return UITableViewCell() }
-        cell.albumFileImageView.image = UIImage(named: "cat_ref")
-        print("===\(pet)")
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "cat_ref"))
         cell.placeLabel.text = pet?.place

@@ -50,13 +50,13 @@ class HomeViewController: UIViewController {
         fetchData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true // 初始畫面不要顯示 NavigationBar
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = false // 下一頁出現 NavigationBar
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        navigationController?.isNavigationBarHidden = true // 初始畫面不要顯示 NavigationBar
+//    }
+//    
+//    override func viewWillDisappear(_ animated: Bool) {
+//        navigationController?.isNavigationBarHidden = false // 下一頁出現 NavigationBar
+//    }
     
     private func reloadData() {
         guard Thread.isMainThread == true else {
@@ -105,7 +105,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             let item = self.animalDatas[indexPath.item]
             let url = item.albumFile
             cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "cat_ref"))
-            print("66666\(url)")
             cell.shelterImageView.contentMode = .scaleAspectFill
             cell.shelterImageView.layer.cornerRadius = 10
             cell.shelterImageView.clipsToBounds = true
