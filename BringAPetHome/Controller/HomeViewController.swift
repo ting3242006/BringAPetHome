@@ -6,6 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
+
+// 頁面狀態
+enum PageStatus {
+    case loadingMore
+    case notLoadingMore
+}
 
 class HomeViewController: UIViewController {
     
@@ -15,6 +22,9 @@ class HomeViewController: UIViewController {
         }
     }
     
+    var newAnimalList: [AnimalData] = []
+    var skip: Int = 100
+    var pageStatus: PageStatus = .notLoadingMore
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -22,9 +32,10 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         // setup
-      
         collectionView.delegate = self
         collectionView.dataSource = self
+        //        collectionView.isPagingEnabled = true
+        collectionView.allowsSelection = true
         
         // style
         collectionView.backgroundColor = .gray
@@ -58,11 +69,10 @@ class HomeViewController: UIViewController {
     }
     
     func fetchData() {
-        ShelterManager.shared.fetchData() { [weak self] result in
+        ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
             switch result {
             case .success(let animalDatas):
                 self?.animalDatas = animalDatas
-                print("=======\(animalDatas)")
             case .failure(let error):
                 print(error)
             }
@@ -76,28 +86,64 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        if newAnimalList.isEmpty {
+//            print(":)))\(animalDatas.count)")
+            return animalDatas.count
+            
+        } else {
+//            print("~~~\(newAnimalList.count)")
+            return newAnimalList.count
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier, for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() }
-//        guard let data = animalDatas[indexPath.section] as? AnimalData else { return }
-        cell.shelterImageView.image = UIImage(named: "cat_ref")
-        cell.shelterImageView.contentMode = .scaleAspectFill
-        cell.shelterImageView.layer.cornerRadius = 10
-        cell.shelterImageView.clipsToBounds = true
-        cell.sexLabel.text = "M"
-        cell.placeLabel.text = "New Taipei City"
+        DispatchQueue.main.async {
+            let item = self.animalDatas[indexPath.item]
+            let url = item.albumFile
+            cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "cat_ref"))
+            print("66666\(url)")
+            cell.shelterImageView.contentMode = .scaleAspectFill
+            cell.shelterImageView.layer.cornerRadius = 10
+            cell.shelterImageView.clipsToBounds = true
+            cell.sexLabel.text = String(item.sex)
+            cell.placeLabel.text = item.place
+        }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        //  跳到 detail 頁面
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
+        let pet = animalDatas[indexPath.item]
+        detailVC.pet = pet
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView.contentSize.height > self.collectionView.frame.height,
+              self.pageStatus == .notLoadingMore else { return }
+        if scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y) <= -10 {
+            self.pageStatus = .loadingMore
+            //            self.collectionView.reloadData {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                self.skip += 100
+                print("skip = \(self.skip)")
+                self.fetchData()
+                self.newAnimalList.append(contentsOf: self.animalDatas)
+                self.pageStatus = .notLoadingMore
+                self.collectionView.reloadData()
+                //                }
+            }
+        }
     }
 }
+
+
+
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
@@ -109,19 +155,19 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         
         return CGSize(width: cellWidth, height: cellHeight)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {

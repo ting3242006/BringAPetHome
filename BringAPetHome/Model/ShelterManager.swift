@@ -11,11 +11,16 @@ class ShelterManager {
     
     static let shared = ShelterManager()
     
-    private init() {}
+    private init() { }
     
-    func fetchData(completion: @escaping (Result<[AnimalData]>) -> Void) {
-        guard let urlString = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL") else { return }
-        var request = URLRequest(url: urlString)
+//    var skip: Int = 100
+    
+    func fetchData(skip: Int?, completion: @escaping (Result<[AnimalData]>) -> Void) {
+        let urlString =  "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=100&$skip=\(skip)"
+        
+        guard let url = URL(string: urlString) else { return }
+
+        var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         

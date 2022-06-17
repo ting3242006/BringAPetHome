@@ -10,6 +10,7 @@ import UIKit
 class HomeCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "\(HomeCollectionViewCell.self)"
+    
     let backgroundImageView = UIImageView()
     let shelterImageView = UIImageView()
     let sexLabel = UILabel()

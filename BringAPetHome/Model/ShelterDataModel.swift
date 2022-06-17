@@ -9,8 +9,7 @@ import Foundation
 
 
 
-struct AnimalData: Codable {
-    
+struct AnimalData: Codable {    
     let animalId: Int
     let place: String
     let kind: String
@@ -26,11 +25,17 @@ struct AnimalData: Codable {
     let shelterAddress: String
     let shelterTel: String
     let animalVariety: String
+    let areaPkid: Int
+    let animalSterilization: String
+    let title: String
+    let cDate: String
+    let albumUpdate: String
     
     enum CodingKeys: String, CodingKey {
         case animalId = "animal_id"
         case place = "animal_place"
         case kind = "animal_kind"
+        case areaPkid = "animal_area_pkid"
         case sex = "animal_sex"
         case bodytype = "animal_bodytype"
         case colour = "animal_colour"
@@ -43,5 +48,9 @@ struct AnimalData: Codable {
         case shelterAddress = "shelter_address"
         case shelterTel = "shelter_tel"
         case animalVariety = "animal_Variety"
+        case animalSterilization = "animal_sterilization"
+        case title = "animal_title"
+        case cDate = "cDate"
+        case albumUpdate = "album_update"
     }
 }
