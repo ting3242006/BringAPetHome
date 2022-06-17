@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		251AF645285C597F007B912D /* HomeFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251AF644285C597F007B912D /* HomeFilterViewController.swift */; };
 		251CF7FB28586FC7004BDEC9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */; };
 		251CF7FD28586FC7004BDEC9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */; };
 		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		251AF644285C597F007B912D /* HomeFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFilterViewController.swift; sourceTree = "<group>"; };
 		251CF7F728586FC7004BDEC9 /* BringAPetHome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BringAPetHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */,
 				252D8085285A170A0076236B /* HomeDetailViewController.swift */,
+				251AF644285C597F007B912D /* HomeFilterViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				252D80842859E67C0076236B /* HTTP.swift in Sources */,
 				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,
 				252D807E285995290076236B /* ShelterDataModel.swift in Sources */,
+				251AF645285C597F007B912D /* HomeFilterViewController.swift in Sources */,
 				251CF7FD28586FC7004BDEC9 /* SceneDelegate.swift in Sources */,
 				252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */,
 				253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */,

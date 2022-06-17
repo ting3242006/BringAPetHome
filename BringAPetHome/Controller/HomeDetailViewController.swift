@@ -11,18 +11,21 @@ import Kingfisher
 class HomeDetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-//    var tableView = UITableView()
     var pet: AnimalData?
-//    var animalDatas = [AnimalData]()
+    //    var animalDatas = [AnimalData]()
     var skip: Int = 100
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.backgroundColor = .orange
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0))
+        tableView.anchor(top: view.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor,
+                         padding: .init(top: 0, left: 0, bottom: 0, right: 0))
     }
 }
 

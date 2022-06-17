@@ -31,6 +31,13 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
+            let resizeImage = resizeImage(image: image, width: 30)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ?? .orange).withRenderingMode(.alwaysOriginal),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTap))
+        }
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -38,7 +45,7 @@ class HomeViewController: UIViewController {
         collectionView.allowsSelection = true
         
         // style
-        collectionView.backgroundColor = .gray
+        collectionView.backgroundColor = .lightGray
         collectionView.showsVerticalScrollIndicator = false
         
         // layout
@@ -47,16 +54,17 @@ class HomeViewController: UIViewController {
         
         collectionView.register(HomeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
+        
         fetchData()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        navigationController?.isNavigationBarHidden = true // 初始畫面不要顯示 NavigationBar
-//    }
-//    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        navigationController?.isNavigationBarHidden = false // 下一頁出現 NavigationBar
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        navigationController?.isNavigationBarHidden = true // 初始畫面不要顯示 NavigationBar
+    //    }
+    //
+    //    override func viewWillDisappear(_ animated: Bool) {
+    //        navigationController?.isNavigationBarHidden = false // 下一頁出現 NavigationBar
+    //    }
     
     private func reloadData() {
         guard Thread.isMainThread == true else {
@@ -78,6 +86,23 @@ class HomeViewController: UIViewController {
             }
         }
     }
+    
+    func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
+        let size = CGSize(width: width, height:
+                            image.size.height * width / image.size.width)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let newImage = renderer.image { (context) in
+            image.draw(in: renderer.format.bounds)
+        }
+        return newImage
+    }
+    
+    // MARK: - Action
+    @objc private func didTap() {
+        let filterVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController")
+        navigationController?.pushViewController(filterVC, animated: true)
+//        navigationController?.popViewController(animated: false)
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -87,11 +112,11 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if newAnimalList.isEmpty {
-//            print(":)))\(animalDatas.count)")
+            //            print(":)))\(animalDatas.count)")
             return animalDatas.count
             
         } else {
-//            print("~~~\(newAnimalList.count)")
+            //            print("~~~\(newAnimalList.count)")
             return newAnimalList.count
             
         }
@@ -133,6 +158,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 print("skip = \(self.skip)")
                 self.fetchData()
                 self.newAnimalList.append(contentsOf: self.animalDatas)
+                // 把沒照片的排到後面
+                self.newAnimalList = self.newAnimalList.filter({ $0.albumFile != ""
+                })
                 self.pageStatus = .notLoadingMore
                 self.collectionView.reloadData()
                 //                }
@@ -140,9 +168,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
 }
-
-
-
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
