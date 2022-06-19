@@ -203,23 +203,20 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
-        var urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=0"
-        if let kind = filter.kind {
-            urlString.append("&animal_kind=\(kind)")
-        }
-        if let sex = filter.sex {
-            urlString.append("&animal_sex=\(sex)")
-        }
-        if let bodytype = filter.bodytype {
-            urlString.append("&animal_bodytype=\(bodytype)")
-        }
-        if let urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-           let url = URL(string: urlString) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let data = data {
-                    print(String(data: data, encoding: .utf8) ?? "")
+        
+        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self] result  in
+            switch result {
+            case .success(let animalDatas):
+                self?.animalDatas = animalDatas
+                // 把沒照片的排到後面
+                self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
+                })
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
                 }
-            }.resume()
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }

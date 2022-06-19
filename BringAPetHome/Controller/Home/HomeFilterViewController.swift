@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import DropDown
 
 struct Filter {
     var kind: String?
@@ -138,31 +137,7 @@ class HomeFilterViewController: UIViewController {
 //    }
     
     @IBAction func sendFilterButton(_ sender: UIButton) {
-        switch sender.currentTitle {
-        case "狗":
-            let filter = Filter(kind: "狗", sex: nil, bodytype: nil)
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "貓":
-            let filter = Filter(kind: "貓", sex: nil, bodytype: nil)
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "M":
-            let filter = Filter(kind: nil, sex: "M", bodytype: nil)
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "F":
-            let filter = Filter(kind: nil, sex: "F", bodytype: nil)
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "SMALL":
-            let filter = Filter(kind: nil, sex: nil, bodytype: "SMALL")
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "MEDIUM":
-            let filter = Filter(kind: nil, sex: nil, bodytype: "MEDIUM")
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        case "BIG":
-            let filter = Filter(kind: nil, sex: nil, bodytype: "BIG")
-            delegate?.selectFilterViewController(self, didSelect: filter)
-        default:
-            break
-        }
+        delegate?.selectFilterViewController(self, didSelect: filter)
         self.navigationController?.popViewController(animated: true)
     }
 }

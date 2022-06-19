@@ -7,11 +7,14 @@
 
 import UIKit
 
+protocol HomeDetailTableViewCellDelegate: AnyObject {
+    func heartButtonTapped()
+}
+
 class HomeDetailTableViewCell: UITableViewCell {
-    
+    weak var delegate: HomeDetailTableViewCellDelegate?
     static let reuseIdentifier = "\(HomeDetailTableViewCell.self)"
-    var link: HomeDetailViewController?
-    
+    var link: HomeDetailViewController?    
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var sexLabel: UILabel!
     @IBOutlet weak var animalIdLabel: UILabel!
@@ -48,9 +51,6 @@ class HomeDetailTableViewCell: UITableViewCell {
         )
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-    }
-    
     func makeTabButton(imageName: String, unselectedImageName: String) -> UIButton {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: imageName), for: .selected)
@@ -63,12 +63,6 @@ class HomeDetailTableViewCell: UITableViewCell {
     @objc func heartButtonTapped() {
         link?.someMethodIWantToCall(cell: self)
         heartButton.isSelected = !heartButton.isSelected
-        if heartButton.isSelected {
-//             Like it
-//            delegate?.like(self)
-        } else {
-//             Unlike it
-//            delegate?.unlike(self)
-        }
+        delegate?.heartButtonTapped()
     }
 }

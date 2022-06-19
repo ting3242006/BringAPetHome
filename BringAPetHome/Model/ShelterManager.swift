@@ -16,10 +16,23 @@ class ShelterManager {
     
 //    var skip: Int = 100
     
-    func fetchData(skip: Int, completion: @escaping (Result<[AnimalData]>) -> Void) {
-        let urlString =  "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=100&$skip=\(skip)"
+    func fetchData(skip: Int, filter: Filter? = nil, completion: @escaping (Result<[AnimalData]>) -> Void) {
         
-        guard let url = URL(string: urlString) else { return }
+        var urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=\(skip)"
+        if let filter = filter {
+            if let kind = filter.kind {
+                urlString.append("&animal_kind=\(kind)")
+            }
+            if let sex = filter.sex {
+                urlString.append("&animal_sex=\(sex)")
+            }
+            if let bodytype = filter.bodytype {
+                urlString.append("&animal_bodytype=\(bodytype)")
+            }
+        }
+            
+        guard let urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: urlString) else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

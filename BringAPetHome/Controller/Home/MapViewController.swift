@@ -7,12 +7,14 @@
 
 import UIKit
 import MapKit
+import Alamofire
 
 class MapViewController: UIViewController {
     
     var myLocationManager :CLLocationManager!
     var cllocation = CLLocationCoordinate2D()
     var titlename = ""
+    let annotation = MKPointAnnotation()
     
     @IBOutlet weak var myMapView: MKMapView!
     
@@ -22,35 +24,21 @@ class MapViewController: UIViewController {
     }
 }
 
-//MARK:取網路api資料
-//func fetchData() {
-//    ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
-//        if let data = response.data {
-//            do {
-//                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
-//                completion(dataList)
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//
-//        }
-//    }
-//}
+//MARK: - 取網路api資料
+func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
+    AF.request(url).responseJSON { response in
+        if let data = response.data {
+            do {
+                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
+                completion(dataList)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+}
 
-//func getData(url:String, completion: @escaping([AnimalData]) ->Void) {
-//    AF.request(url).responseJSON{response in
-//        if let data = response.data {
-//            do {
-//                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
-//                completion(dataList)
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//        }
-//    }
-//}
-
-//MARK:CLGeocoder地理編碼 地址轉換經緯度位置
+//MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
 func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
     CLGeocoder().geocodeAddressString(address) { placemarks, error in
         if let error = error {
@@ -58,7 +46,7 @@ func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Err
             return
         }
         if let placemarks = placemarks {
-            //取得第一個地點標記
+            // 取得第一個地點標記
             let placemark = placemarks[0]
             //加上標記
             let annotation = MKPointAnnotation()
