@@ -21,7 +21,6 @@ class HomeDetailViewController: UIViewController {
     
     func someMethodIWantToCall(cell: UITableViewCell) {
         let indexPathTapped = tableView.indexPath(for: cell)
-        print(indexPathTapped)
 //        let photo = pet[indexPathTapped!.item]
     }
     
@@ -37,6 +36,8 @@ class HomeDetailViewController: UIViewController {
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor,
                          padding: .init(top: 0, left: 0, bottom: 0, right: 0))
+        
+        
     }
     
     @IBAction func clickMapButton(_ sender: Any) {
@@ -69,9 +70,8 @@ class HomeDetailViewController: UIViewController {
     }
     
     @IBAction func shareInfoButton(_ sender: Any) {
-//        guard let image = self.albumFileImageView.image else { return }
-//        let activity = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-//        present(activity , animated: true)
+        let activity = UIActivityViewController(activityItems: [pet?.albumFile, pet?.sex, pet?.kind, pet?.shelterAddress], applicationActivities: nil)
+        present(activity , animated: true)
     }
 }
 
@@ -92,28 +92,24 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate  
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "cat_ref"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.placeLabel.text = "收容所： \(String(describing: pet!.place))"
-//        cell.placeLabel.backgroundColor = .blue
-        cell.sexLabel.text = "性別： \(String(describing: pet!.sex))"
-        cell.statusLabel.text = pet?.status
-        cell.placeLabel.text = pet?.place
-        cell.ageLabel.text = pet?.age
-        cell.animalIdLabel.text = "\(pet?.animalId ?? 0)"
-        cell.animalSterilizationLabel.text = pet?.animalSterilization
-        cell.animalVarietyLabel.text = pet?.animalVariety
-        cell.areaPkidLabel.text = "\(pet?.areaPkid ?? 0)"
-        cell.bodytypeLabel.text = pet?.bodytype
-        cell.cDateLabel.text = pet?.cDate
-        cell.colourLabel.text = pet?.colour
-        cell.ageLabel.text = pet?.age
-        cell.kindLabel.text = pet?.kind
-        cell.remarkLabel.text = pet?.remark ?? "No data"
-        cell.opendateLabel.text = pet?.opendate
-        cell.shelterNameLabel.text = pet?.shelterName
-        cell.shelterTel.text = pet?.shelterTel
-        cell.shelterAddressLabel.text = pet?.shelterAddress
-        cell.animalSterilizationLabel.text = pet?.animalSterilization
-        cell.titleLabel.text = pet?.title
+        cell.placeLabel.text = "動物實際所在地： \(String(describing: pet?.place ?? ""))"
+        cell.sexLabel.text = "性別： \(String(describing: pet?.sex ?? ""))"
+        cell.statusLabel.text = "動物狀態: \(String(describing: pet?.status ?? ""))"
+        cell.ageLabel.text = "年紀: \(String(describing: pet?.age ?? ""))"
+        cell.animalIdLabel.text = "流水編號: \(pet?.animalId ?? 0)"
+        cell.animalVarietyLabel.text = "品種: \(pet?.animalVariety ?? "")"
+        cell.areaPkidLabel.text = "所屬縣市代碼: \(pet?.areaPkid ?? 0)"
+        cell.bodytypeLabel.text = "體型: \(String(describing: pet?.bodytype ?? ""))"
+        cell.cDateLabel.text = "資料更新時間: \(String(describing: pet?.cDate ?? ""))"
+        cell.colourLabel.text = "毛色: \(String(describing: pet?.colour ?? ""))"
+        cell.ageLabel.text = "年紀: \(String(describing: pet?.age ?? ""))"
+        cell.kindLabel.text = "動物類型: \(String(describing: pet?.kind ?? ""))"
+        cell.remarkLabel.text = "資料備註: \(String(describing: pet?.remark ?? ""))"
+        cell.opendateLabel.text = "開放認養時間: \(String(describing: pet?.opendate ?? ""))"
+        cell.shelterNameLabel.text = "動物所屬收容所名稱: \(String(describing: pet?.shelterName ?? ""))"
+        cell.shelterTel.text = "連絡電話: \(String(describing: pet?.shelterTel ?? ""))"
+        cell.shelterAddressLabel.text = "地址: \(String(describing: pet?.shelterAddress ?? ""))"
+        cell.animalSterilizationLabel.text = "是否絕育: \(pet?.animalSterilization ?? "")"
         
         return cell
     }

@@ -10,6 +10,10 @@ import UIKit
 class FavoriteListViewController: UIViewController {
 
     @IBOutlet weak var favoriteTableView: UITableView!
+    
+    // 宣告 Core Data 常數
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var userList:[User] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,11 +25,12 @@ class FavoriteListViewController: UIViewController {
 extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        self.userList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as UITableViewCell
+//        cell.sex.text = self.userList[indexPath.row].like
         return cell
     }
 }

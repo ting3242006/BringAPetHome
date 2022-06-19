@@ -15,13 +15,64 @@ class MapViewController: UIViewController {
     var titlename = ""
     
     @IBOutlet weak var myMapView: MKMapView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "收容所位置"
     }
 }
 
+//MARK:取網路api資料
+//func fetchData() {
+//    ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
+//        if let data = response.data {
+//            do {
+//                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
+//                completion(dataList)
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//
+//        }
+//    }
+//}
+
+//func getData(url:String, completion: @escaping([AnimalData]) ->Void) {
+//    AF.request(url).responseJSON{response in
+//        if let data = response.data {
+//            do {
+//                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
+//                completion(dataList)
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
+//}
+
+//MARK:CLGeocoder地理編碼 地址轉換經緯度位置
+func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
+    CLGeocoder().geocodeAddressString(address) { placemarks, error in
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        if let placemarks = placemarks {
+            //取得第一個地點標記
+            let placemark = placemarks[0]
+            //加上標記
+            let annotation = MKPointAnnotation()
+            if let location = placemark.location {
+                annotation.coordinate = location.coordinate
+                print("~~~\(annotation.coordinate)")
+                
+            }
+            completion(annotation.coordinate, nil)
+        }
+    }
+}
+
+// MARK: - 使用者位置
 extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
     
     func setMap() {
@@ -55,15 +106,15 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
         let latDelta = 0.05
         let longDelta = 0.05
         let currentLocationSpan:MKCoordinateSpan =
-            MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: longDelta)
+        MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: longDelta)
         
         // 設置地圖顯示的範圍與中心點座標
         let center:CLLocation = CLLocation(
             latitude: cllocation.latitude, longitude: cllocation.longitude)
         let currentRegion:MKCoordinateRegion =
-            MKCoordinateRegion(
-                center: center.coordinate,
-                span: currentLocationSpan)
+        MKCoordinateRegion(
+            center: center.coordinate,
+            span: currentLocationSpan)
         myMapView.setRegion(currentRegion, animated: true)
         
         // 請求使用者授權使用定位服務
@@ -84,14 +135,14 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
             // 開始定位自身位置
             myLocationManager.startUpdatingLocation()
         }
-            // 使用者已經拒絕定位自身位置權限
+        // 使用者已經拒絕定位自身位置權限
         else if CLLocationManager.authorizationStatus()
-            == .denied {
+                    == .denied {
             // 提示可至[設定]中開啟權限
             let alertController = UIAlertController(
                 title: "定位權限已關閉",
                 message:
-                "如要變更權限，請至 設定 > 隱私權 > 定位服務 開啟",
+                    "如要變更權限，請至 設定 > 隱私權 > 定位服務 開啟",
                 preferredStyle: .alert)
             let okAction = UIAlertAction(
                 title: "確認", style: .default, handler:nil)
@@ -100,9 +151,9 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
                 alertController,
                 animated: true, completion: nil)
         }
-            // 使用者已經同意定位自身位置權限
+        // 使用者已經同意定位自身位置權限
         else if CLLocationManager.authorizationStatus()
-            == .authorizedWhenInUse {
+                    == .authorizedWhenInUse {
             // 開始定位自身位置
             myLocationManager.startUpdatingLocation()
         }

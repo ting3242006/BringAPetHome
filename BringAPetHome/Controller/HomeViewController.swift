@@ -81,6 +81,11 @@ class HomeViewController: UIViewController {
             switch result {
             case .success(let animalDatas):
                 self?.animalDatas = animalDatas
+                // 把沒照片的排到後面
+                self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
+                })
+                //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
+                //                })
             case .failure(let error):
                 print(error)
             }
@@ -99,9 +104,9 @@ class HomeViewController: UIViewController {
     
     // MARK: - Action
     @objc private func didTap() {
-        let filterVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController")
-        navigationController?.pushViewController(filterVC, animated: true)
-//        navigationController?.popViewController(animated: false)
+        let filterVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController") as? HomeFilterViewController
+        filterVC?.delegate = self
+        navigationController?.pushViewController(filterVC!, animated: true)
     }
 }
 
@@ -158,11 +163,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 print("skip = \(self.skip)")
                 self.fetchData()
                 self.newAnimalList.append(contentsOf: self.animalDatas)
-                // 把沒照片的排到後面
-                self.newAnimalList = self.newAnimalList.filter({ $0.albumFile != ""
-                })
                 self.pageStatus = .notLoadingMore
-                self.collectionView.reloadData()
+                //                self.collectionView.reloadData()
                 //                }
             }
         }
@@ -196,5 +198,28 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
+    }
+}
+
+extension HomeViewController: HomeFilterViewControllerDelegate {
+    func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
+        var urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=0"
+        if let kind = filter.kind {
+            urlString.append("&animal_kind=\(kind)")
+        }
+        if let sex = filter.sex {
+            urlString.append("&animal_sex=\(sex)")
+        }
+        if let bodytype = filter.bodytype {
+            urlString.append("&animal_bodytype=\(bodytype)")
+        }
+        if let urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+           let url = URL(string: urlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    print(String(data: data, encoding: .utf8) ?? "")
+                }
+            }.resume()
+        }
     }
 }
