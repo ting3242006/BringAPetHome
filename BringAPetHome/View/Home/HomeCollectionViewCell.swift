@@ -20,10 +20,10 @@ class HomeCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         backgroundImageView.backgroundColor = .white
-        sexLabel.font = .systemFont(ofSize: 15)
+        sexLabel.font = .systemFont(ofSize: 13)
         sexLabel.textColor = .systemGray
-        placeLabel.font = .systemFont(ofSize: 15)
-        sexLabel.textColor = .systemGray
+        placeLabel.font = .systemFont(ofSize: 12)
+        placeLabel.numberOfLines = 0
         
         contentView.addSubview(backgroundImageView)
         backgroundImageView.addSubview(shelterImageView)
@@ -47,7 +47,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
         placeLabel.anchor(top: sexLabel.bottomAnchor,
                           leading: backgroundImageView.leadingAnchor,
                           trailing: backgroundImageView.trailingAnchor,
-                          padding: .init(top: 8, left: 4, bottom: 0, right: 0),
+                          padding: .init(top: 8, left: 4, bottom: 0, right: 2),
                           height: 22)
     }
     
