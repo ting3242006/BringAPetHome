@@ -26,8 +26,17 @@ class FavoriteListViewController: UIViewController {
         } catch {
             print("error")
         }
-        
     }
+    
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        guard let context = context else { return }
+//        
+//        do {
+//            animalList = try context.fetch(Animal.fetchRequest())
+//        } catch {
+//            print("error")
+//        }
+//    }
 }
 
 extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -40,8 +49,8 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
         let animal = self.animalList[indexPath.row]
-//        cell.sex.text = "\(animal.id)"
-        cell.sex.text = "性別:\(animal.sex ?? "")"
+        cell.sex.text = "\(animal.id)"
+//        cell.sex.text = "性別:\(animal.sex ?? "")"
         cell.opendate.text = "開放領養:\(animal.openDate ?? "")"
         cell.sterilization.text = "是否節育:\(animal.steriization ?? "")"
         cell.place.text = "所在地:\(animal.place ?? "")"
