@@ -50,7 +50,7 @@ class HomeFilterViewController: UIViewController {
 
         view.backgroundColor = .white
         self.navigationItem.title = "搜尋條件"
-        self.tabBarController?.tabBar.isHidden = true
+//        self.tabBarController?.tabBar.isHidden = true
     }
     
     @IBAction func selectDog(_ sender: Any) {

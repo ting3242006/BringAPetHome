@@ -7,7 +7,6 @@
 
 import UIKit
 import MapKit
-import Alamofire
 
 class MapViewController: UIViewController {
     
@@ -25,18 +24,18 @@ class MapViewController: UIViewController {
 }
 
 //MARK: - 取網路api資料
-func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
-    AF.request(url).responseJSON { response in
-        if let data = response.data {
-            do {
-                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
-                completion(dataList)
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-}
+//func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
+//    AF.request(url).responseJSON { response in
+//        if let data = response.data {
+//            do {
+//                let dataList = try JSONDecoder().decode( [AnimalData].self, from: data)
+//                completion(dataList)
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//        }
+//    }
+//}
 
 //MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
 func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
