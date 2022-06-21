@@ -13,7 +13,7 @@ struct Filter {
     var bodytype: String?
 }
 
-protocol HomeFilterViewControllerDelegate {
+protocol HomeFilterViewControllerDelegate: AnyObject {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter)
 }
 
@@ -72,9 +72,11 @@ class HomeFilterViewController: UIViewController {
     @IBAction func selectSmall(_ sender: Any) {
         filter.bodytype = "SMALL"
     }
+    
     @IBAction func selectMedium(_ sender: Any) {
         filter.bodytype = "MEDIUM"
     }
+    
     @IBAction func selectBig(_ sender: Any) {
         filter.bodytype = "BIG"
     }
@@ -116,25 +118,6 @@ class HomeFilterViewController: UIViewController {
                                           width: frames.width, height: 0)
         }, completion: nil)
     }
-    
-//    @IBAction func selectLocation(_ sender: Any) {
-//        dataSource = ["臺北市", "新北市", "基隆市",
-//                      "宜蘭縣", "桃園縣", "新竹縣",
-//                      "新竹市", "苗栗縣", "臺中市",
-//                      "彰化縣", "南投縣", "雲林縣",
-//                      "嘉義縣", "嘉義市", "臺南市",
-//                      "高雄市", "屏東縣", "花蓮縣",
-//                      "臺東縣", "澎湖縣", "金門縣",
-//                      "連江縣"]
-//        selectedButton = locationButton
-//        addTransparentView(frames: locationButton.frame)
-//    }
-//
-//    @IBAction func selectColor(_ sender: Any) {
-//        dataSource = ["黑", "白", "黃"]
-//        selectedButton = colorButton
-//        addTransparentView(frames: colorButton.frame)
-//    }
     
     @IBAction func sendFilterButton(_ sender: UIButton) {
         delegate?.selectFilterViewController(self, didSelect: filter)

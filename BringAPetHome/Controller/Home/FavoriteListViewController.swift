@@ -11,6 +11,10 @@ class FavoriteListViewController: UIViewController {
 
     @IBOutlet weak var favoriteTableView: UITableView!
     
+    static var identifier: String {
+        return String(describing: self)
+    }
+    
     // 宣告 Core Data 常數
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var animalList: [Animal] = []
@@ -28,15 +32,17 @@ class FavoriteListViewController: UIViewController {
         }
     }
     
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        guard let context = context else { return }
-//        
-//        do {
-//            animalList = try context.fetch(Animal.fetchRequest())
-//        } catch {
-//            print("error")
-//        }
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let context = context else { return }
+
+        do {
+            animalList = try context.fetch(Animal.fetchRequest())
+        } catch {
+            print("error")
+        }
+        favoriteTableView.reloadData()
+    }
 }
 
 extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -59,5 +65,15 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         cell.animalImageView.image = UIImage(contentsOfFile: imageUrl.path)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        favoriteTableView.deselectRow(at: indexPath, animated: true)
+        let animal = self.animalList[indexPath.row]
+//        let homeDetailViewController = UIStoryboard.instantiateViewController(
+//            withIdentifier: HomeDetailViewController.identifier)
+//        guard let detailVC = homeDetailViewController as? HomeDetailViewController else { return }
+//        detailVC.pet = animal
+//        show(detailVC, sender: nil)
     }
 }

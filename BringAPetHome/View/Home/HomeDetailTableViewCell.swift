@@ -61,7 +61,7 @@ class HomeDetailTableViewCell: UITableViewCell {
     
     // MARK: - Action
     @objc func heartButtonTapped() {
-        link?.someMethodIWantToCall(cell: self)
+//        link?.someMethodIWantToCall(cell: self)
         heartButton.isSelected = !heartButton.isSelected
         delegate?.heartButtonTapped()
     }
