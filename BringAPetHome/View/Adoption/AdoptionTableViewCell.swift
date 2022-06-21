@@ -9,10 +9,12 @@ import UIKit
 
 class AdoptionTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userPhoto: UIView!
+    @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var adoptionAnimalImage: UIImageView!
     @IBOutlet weak var adoptionTitleLabel: UILabel!
-    @IBOutlet weak var adoptionAnimalView: UIView!
-    
+    @IBOutlet weak var adoptionSex: UILabel!
+    @IBOutlet weak var adoptionLocation: UILabel!
+    @IBOutlet weak var adoptionContext: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,5 +26,12 @@ class AdoptionTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+//    func layout(title: String, author: String, category: String ,date: String, content: String) {
+//        articleTitleLabel.text = title
+//        authorNameLabel.text = author
+//        categoryLabel.text = category
+//        createdTimeLabel.text = "\(date)"
+//        articleContentLabel.text = content
+//    }
 }

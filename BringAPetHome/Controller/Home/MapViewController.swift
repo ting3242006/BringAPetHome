@@ -20,6 +20,12 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "收容所位置"
+        myMapView.showsUserLocation = true
+    }
+    @IBAction func showLocation(_ sender: Any) {
+        let location = myMapView.userLocation
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
+        myMapView.setRegion(region, animated: true)
     }
 }
 

@@ -134,7 +134,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         DispatchQueue.main.async {
             let item = self.animalDatas[indexPath.item]
             let url = item.albumFile
-            cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "cat_ref"))
+            cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
             cell.shelterImageView.contentMode = .scaleAspectFill
             cell.shelterImageView.layer.cornerRadius = 10
             cell.shelterImageView.clipsToBounds = true

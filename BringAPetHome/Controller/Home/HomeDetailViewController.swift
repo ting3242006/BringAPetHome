@@ -99,7 +99,7 @@ class HomeDetailViewController: UIViewController {
     }
 }
 
-extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate  {
+extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
@@ -115,7 +115,7 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate  
         cell.delegate = self
         cell.selectedBackgroundView = selectedBackgroundView
         let urls = pet?.albumFile
-        cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "cat_ref"))
+        cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
         cell.placeLabel.text = "動物實際所在地： \(String(describing: pet?.place ?? ""))"
         cell.sexLabel.text = "性別： \(String(describing: pet?.sex ?? ""))"
