@@ -48,13 +48,13 @@ class FavoriteListViewController: UIViewController {
 extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.animalList.count
+        animalList.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
-        let animal = self.animalList[indexPath.row]
+        let animal = animalList[indexPath.row]
         cell.sex.text = "\(animal.id)"
 //        cell.sex.text = "性別:\(animal.sex ?? "")"
         cell.opendate.text = "開放領養:\(animal.openDate ?? "")"

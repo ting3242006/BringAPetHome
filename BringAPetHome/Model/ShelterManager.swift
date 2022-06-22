@@ -51,6 +51,7 @@ class ShelterManager {
             }
         }.resume()
     }
+    // 拉回 mainThread
     
     //MARK:CLGeocoder地理編碼 地址轉換經緯度位置
     func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
@@ -67,7 +68,6 @@ class ShelterManager {
                 if let location = placemark.location {
                     annotation.coordinate = location.coordinate
                     print("~~~\(annotation.coordinate)")
-                    
                 }
                 completion(annotation.coordinate, nil)
             }

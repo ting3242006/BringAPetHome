@@ -203,9 +203,9 @@
 				252D80812859CC7C0076236B /* ShelterManager.swift */,
 				252D80832859E67C0076236B /* HTTP.swift */,
 				251A7EA4285ED68100FA7E1D /* CaseEN.swift */,
-				251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */,
 				25A215B828607435002CE9BA /* AdoptionFirebaseModel.swift */,
 				25BB098728616F60005E7872 /* AdoptionManager.swift */,
+				251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
