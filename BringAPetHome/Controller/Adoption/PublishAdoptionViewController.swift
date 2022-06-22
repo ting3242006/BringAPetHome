@@ -104,7 +104,9 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         }
     }
     
-    let selectedAge = Age.threeMonthOld.rawValue
+    var selectedSex: Int?
+    var selectedAge: Int?
+    var selectedPetable: Int?
     
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var petableButton: UIButton!
@@ -118,25 +120,26 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
-        //        print(selectedAge)
-        //        dataBase = Firebase.firestore()
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
         dataSource = ["Boy", "Girl"]
         selectedButton = sexButton
+        selectedButton.tag = 0
         addTransparentView(frames: sexButton.frame)
     }
     
     @IBAction func selectAge(_ sender: Any) {
         dataSource = ["三個月內", "三個月到六個月", "六個月到一年", "一歲以上"]
         selectedButton = ageButton
+        selectedButton.tag = 1
         addTransparentView(frames: ageButton.frame)
     }
     
     @IBAction func selectPetable(_ sender: Any) {
         dataSource = ["送養", "已領養"]
         selectedButton = petableButton
+        selectedButton.tag = 2
         addTransparentView(frames: petableButton.frame)
     }
     
@@ -218,32 +221,16 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         }, completion: nil)
     }
     
-    //    func loadFileRepresentation(
-    //        forTypeIdentifier typeIdentifier: String,
-    //        completionHandler: @escaping (URL?, Error?) -> Void
-    //    ) -> Progress
-    
     // MARK: - add data to Firebase
     @IBAction func publishButton(_ sender: Any) {
+        
+        guard let selectedSex = selectedSex,
+              let selectedAge = selectedAge,
+              let selectedPetable = selectedPetable else { return }
+        
         guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.8) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
-        //                let fileReference = Storage.storage().reference().child("Test001.jpg")
-        
-        //        guard let selectedAge = ageButton?.tag,
-        //              let selectedSex = sexButton?.tag,
-        //              let selectedPetable = petableButton?.tag else {
-        //            return
-        //        }
-        //        if inputContentTextField.text == "" || locationTextField.text == "" {
-        //            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
-        //            alert.addAction(UIAlertAction(title: "確認", style: .default))
-        //            self.present(alert, animated: true)
-        //        } else {
-        //            guard let locationText = locationTextField.text else { return }
-        //            addData(content: inputContentTextField.text, location: locationText)
-        //            dismiss(animated: true, completion: nil)
-        //        }
         fileReference.putData(imageData, metadata: nil) { result in
             switch result {
                 
@@ -251,25 +238,22 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                 fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
-                        if self.inputContentTextField.text == "" || locationTextField.text == "" {
+                        if inputContentTextField.text == "" || locationTextField.text == "" || imageView.image == nil {
                             let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
                             alert.addAction(UIAlertAction(title: "確認", style: .default))
                             self.present(alert, animated: true)
                         } else {
-                            let age = self.ageButton.tag
-                            let sex = self.sexButton.tag
-                            let petable = self.petableButton.tag
-                            let createdTime = TimeInterval(Int(Date().timeIntervalSince1970))
+                            let age = selectedAge
+                            let sex = selectedSex
+                            let petable = selectedPetable
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
-                            let userId = "1234"
                             self.adoptionManager.addAdoption(age: age, content: content, imageFileUrl: "\(url)", location: location, sex: sex, petable: petable)
                             dismiss(animated: true, completion: nil)
                         }
                     case .failure(_):
                         break
                     }
-                    
                 }
             case .failure(_):
                 print("失敗！")
@@ -278,16 +262,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             }
         }
     }
-    
-    //    func addData(content: String, location: String) {
-    //        let adoption = Firestore.firestore().collection("Adoption")
-    //        let document = adoption.document()
-    //        let data: [String: Any] = [
-    //            Adoption.content.rawValue: content,
-    //            Adoption.location.rawValue: location
-    //        ]
-    //        document.setData(data)
-    //    }
 }
 
 extension PublishAdoptionViewController: UITableViewDelegate, UITableViewDataSource {
@@ -306,28 +280,15 @@ extension PublishAdoptionViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if selectedButton.tag == 0 {
+            self.selectedSex = indexPath.row
+        } else if selectedButton.tag == 1 {
+            self.selectedAge = indexPath.row
+        } else {
+            self.selectedPetable = indexPath.row
+        }
         
-        let text = dataSource[indexPath.row]
-        
-        print(text)
-        //        selectedButton.self.viewWithTag(indexPath.row + 1)
-        //    selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
-        
-        /*
-         if sexButton == self {
-         selectedButton.self.viewWithTag(indexPath.row + 1)
-         selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
-         
-         removeTransparentView()
-         } else if ageButton == self {
-         selectedButton.self.viewWithTag(indexPath.row + 1)
-         selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
-         removeTransparentView()
-         } else {
-         selectedButton.self.viewWithTag(indexPath.row + 1)
-         selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
-         removeTransparentView()
-         }*/
+        selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
+        removeTransparentView()
     }
 }
-
