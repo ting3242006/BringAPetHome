@@ -130,8 +130,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier, for: indexPath) as? HomeCollectionViewCell
-        else { return UICollectionViewCell() }
-        DispatchQueue.main.async {
+        else { return UICollectionViewCell() } // 要拆開寫
+//        DispatchQueue.main.async {
             let item = self.animalDatas[indexPath.item]
             let url = item.albumFile
             cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
@@ -140,7 +140,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.shelterImageView.clipsToBounds = true
             cell.sexLabel.text = String(item.sex)
             cell.placeLabel.text = item.place
-        }
+//        }
         return cell
     }
     

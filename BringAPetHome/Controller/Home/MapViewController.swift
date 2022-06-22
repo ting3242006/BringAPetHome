@@ -10,7 +10,7 @@ import MapKit
 
 class MapViewController: UIViewController {
     
-    var myLocationManager :CLLocationManager!
+    var myLocationManager: CLLocationManager!
     var cllocation = CLLocationCoordinate2D()
     var titlename = ""
     let annotation = MKPointAnnotation()
@@ -22,6 +22,7 @@ class MapViewController: UIViewController {
         self.navigationItem.title = "收容所位置"
         myMapView.showsUserLocation = true
     }
+    
     @IBAction func showLocation(_ sender: Any) {
         let location = myMapView.userLocation
         let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
@@ -29,7 +30,7 @@ class MapViewController: UIViewController {
     }
 }
 
-//MARK: - 取網路api資料
+// MARK: - 取網路api資料
 //func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
 //    AF.request(url).responseJSON { response in
 //        if let data = response.data {
@@ -43,7 +44,7 @@ class MapViewController: UIViewController {
 //    }
 //}
 
-//MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
+// MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
 func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
     CLGeocoder().geocodeAddressString(address) { placemarks, error in
         if let error = error {
@@ -53,12 +54,11 @@ func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Err
         if let placemarks = placemarks {
             // 取得第一個地點標記
             let placemark = placemarks[0]
-            //加上標記
+            // 加上標記
             let annotation = MKPointAnnotation()
             if let location = placemark.location {
                 annotation.coordinate = location.coordinate
                 print("~~~\(annotation.coordinate)")
-                
             }
             completion(annotation.coordinate, nil)
         }
