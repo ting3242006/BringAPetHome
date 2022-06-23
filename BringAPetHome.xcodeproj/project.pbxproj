@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		251646AD286434CF00D3AF27 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AC286434CF00D3AF27 /* CommentViewController.swift */; };
+		251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */; };
 		251A7EA5285ED68100FA7E1D /* CaseEN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EA4285ED68100FA7E1D /* CaseEN.swift */; };
 		251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */; };
 		251A7EAC285F114100FA7E1D /* AdoptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		251646AC286434CF00D3AF27 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		251A7EA4285ED68100FA7E1D /* CaseEN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseEN.swift; sourceTree = "<group>"; };
 		251A7EA7285EED5000FA7E1D /* UserData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserData.xcdatamodel; sourceTree = "<group>"; };
 		251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 			children = (
 				251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */,
 				25A215BA2860749F002CE9BA /* PublishAdoptionViewController.swift */,
+				251646AC286434CF00D3AF27 /* CommentViewController.swift */,
 			);
 			path = Adoption;
 			sourceTree = "<group>";
@@ -118,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				251A7EAE285F122800FA7E1D /* AdoptionTableViewCell.swift */,
+				251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */,
 			);
 			path = Adoption;
 			sourceTree = "<group>";
@@ -354,12 +360,14 @@
 			files = (
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,
 				251A7EA5285ED68100FA7E1D /* CaseEN.swift in Sources */,
+				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,
 				252D80822859CC7C0076236B /* ShelterManager.swift in Sources */,
 				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
 				252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */,
 				25A215B928607435002CE9BA /* AdoptionFirebaseModel.swift in Sources */,
 				252D80802859A1A40076236B /* UITableViewCell+Extension.swift in Sources */,
 				257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */,
+				251646AD286434CF00D3AF27 /* CommentViewController.swift in Sources */,
 				251CF7FB28586FC7004BDEC9 /* AppDelegate.swift in Sources */,
 				252D80842859E67C0076236B /* HTTP.swift in Sources */,
 				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,

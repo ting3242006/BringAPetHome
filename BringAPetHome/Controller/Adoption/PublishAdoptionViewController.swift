@@ -130,7 +130,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @IBAction func selectAge(_ sender: Any) {
-        dataSource = ["三個月內", "三個月到六個月", "六個月到一年", "一歲以上"]
+        dataSource = ["三個月內", "三個月到六個月", "六個月到一歲", "一歲以上"]
         selectedButton = ageButton
         selectedButton.tag = 1
         addTransparentView(frames: ageButton.frame)
@@ -258,7 +258,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             case .failure(_):
                 print("失敗！")
                 break
-                
             }
         }
     }
@@ -287,7 +286,6 @@ extension PublishAdoptionViewController: UITableViewDelegate, UITableViewDataSou
         } else {
             self.selectedPetable = indexPath.row
         }
-        
         selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
         removeTransparentView()
     }

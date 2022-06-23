@@ -122,8 +122,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else {
             //            print("~~~\(newAnimalList.count)")
-            return newAnimalList.count
-            
+            return newAnimalList.count            
         }
     }
     

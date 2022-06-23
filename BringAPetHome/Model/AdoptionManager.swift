@@ -91,8 +91,6 @@ class AdoptionManager {
         }
     }
     
-    
-    
     static let shared = AdoptionManager()
     var dataBase = Firestore.firestore() // 初始化 Firestore
     let adoptionFirebaseModel = AdoptionFirebaseModel()
