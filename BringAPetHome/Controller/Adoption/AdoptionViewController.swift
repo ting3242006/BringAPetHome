@@ -17,7 +17,7 @@ class AdoptionViewController: UIViewController {
             tableView.reloadData()
         }
     }
-    var adoptionFirebaseModel = AdoptionFirebaseModel()
+    var adoptionFirebaseModel = AdoptionModel()
     
     enum Adoption: String {
         case age = "age"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AdoptionFirebaseModel {
+class AdoptionModel {
     
     enum Adoption: String {
         case age = "age"

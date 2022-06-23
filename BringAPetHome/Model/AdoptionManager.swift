@@ -11,6 +11,8 @@ import FirebaseFirestore
 
 class AdoptionManager {
     
+    static let shared = AdoptionManager()
+    
     enum Adoption: String {
         case age = "age"
         case comment = "comment"
@@ -31,18 +33,30 @@ class AdoptionManager {
         "userId": ""
     ]
     
-//    struct UploadData: Codable {
-//        let age: Age
-//        let sex: Sex
-//        let petable: Petable
-//    }
+    enum Comments: String {
+        case commentText = "commentText"
+        case commentId = "commentId"
+        case time = "time"
+        case creator = "creator"
+    }
+    
+    var creator: [String: Any] = [
+        "id": "",
+        "name": ""
+    ]
+    
+    //    struct UploadData: Codable {
+    //        let age: Age
+    //        let sex: Sex
+    //        let petable: Petable
+    //    }
     
     enum Age: Int {
         case threeMonthOld
         case sixMonthOld
         case oneYearOld
         case biggerThanOneYear
-
+        
         var ageString: String {
             switch self {
             case .threeMonthOld:
@@ -91,9 +105,9 @@ class AdoptionManager {
         }
     }
     
-    static let shared = AdoptionManager()
+    //    static let shared = AdoptionManager()
     var dataBase = Firestore.firestore() // 初始化 Firestore
-    let adoptionFirebaseModel = AdoptionFirebaseModel()
+    let adoptionFirebaseModel = AdoptionModel()
     
     func addAdoption(age: Int, content: String, imageFileUrl: String,
                      location: String, sex: Int, petable: Int) {

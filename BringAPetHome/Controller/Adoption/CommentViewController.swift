@@ -10,26 +10,83 @@ import Firebase
 
 class CommentViewController: UIViewController {
     
+    enum Comments: String {
+        case commentText = "commentText"
+        case commentId = "commentId"
+        case time = "time"
+        case creator = "creator"
+    }
+    
+    var creator: [String: Any] = [
+        "id": "",
+        "name": ""
+    ]
+    
+    let db = Firestore.firestore()
+    var dataBase = Firestore.firestore()
+    var dbModels: [[String: Any]] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var tableView: UITableView!
-    var dataBase = Firestore.firestore()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.dataSource = self
         tableView.delegate = self
         bgView.layer.cornerRadius = 25
-        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @IBAction func sendComment(_ sender: Any) {
+        if commentTextField.text == "" {
+            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "確認", style: .default))
+            self.present(alert, animated: true)
+        } else {
+            addCommend(text: commentTextField.text ?? "")
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     @IBAction func closePopVC(_ sender: Any) {
-        self.tabBarController?.tabBar.isHidden = false
         dismiss(animated: true)
     }
     
-    func sendComment() {
-        
+    func addCommend(text: String) {
+        let comment = Firestore.firestore().collection("Comments")
+        let document = comment.document()
+        let timeInterval = Date()
+        let data: [String: Any] = [
+            Comments.commentId.rawValue: document.documentID,
+            Comments.commentText.rawValue: text,
+            Comments.creator.rawValue: creator,
+            Comments.time.rawValue: NSDate().timeIntervalSince1970
+        ]
+        document.setData(data) { error in
+            if let error = error {
+                print("Error\(error)")
+            } else {
+                print("Document update")
+            }
+        }
+    }
+    
+    func fetchCommetData() {
+        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+            self?.dbModels = []
+            if let error = error {
+                print("Error fetching documents: \(error)")
+            } else {
+                for document in querySnapshot!.documents {
+                    self?.dbModels.insert(document.data(), at: 0)
+                    print("============\(document.data())")
+                }
+            }
+        }
     }
     
     func listen() {
@@ -40,7 +97,7 @@ class CommentViewController: UIViewController {
             }
             snapshot.documentChanges.forEach { diff in
                 if (diff.type == .added) {
-//                    print("New artical: \(diff.document.documentID), \(diff.document.data())")
+                    //                    print("New artical: \(diff.document.documentID), \(diff.document.data())")
                 }
             }
         }
@@ -48,14 +105,26 @@ class CommentViewController: UIViewController {
 }
 
 extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        dbModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell",
                                                        for: indexPath) as? CommentTableViewCell else { return UITableViewCell() }
+        
+        let firebaseData = dbModels[indexPath.row]
+        let text: [String: Any] = firebaseData[Comments.commentText.rawValue] as? [String: Any] ?? [:]
+        let time = firebaseData[Comments.time.rawValue] as? Double ?? 0.0
+        let date = NSDate(timeIntervalSince1970: time)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
         cell.commentUserImage.image = UIImage(named: "cat_ref")
+        cell.layoutComment(name: "\(firebaseData[Comments.creator.rawValue] ?? "")",
+                           text: "\(firebaseData[Comments.commentText.rawValue] ?? "")",
+                           id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
+                           date: formatter.string(from: date as Date))
         
         return cell
     }

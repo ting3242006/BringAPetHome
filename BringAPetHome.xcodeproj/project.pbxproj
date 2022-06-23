@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		251646AD286434CF00D3AF27 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AC286434CF00D3AF27 /* CommentViewController.swift */; };
 		251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */; };
+		251646B12864731500D3AF27 /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646B02864731500D3AF27 /* CommentModel.swift */; };
 		251A7EA5285ED68100FA7E1D /* CaseEN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EA4285ED68100FA7E1D /* CaseEN.swift */; };
 		251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */; };
 		251A7EAC285F114100FA7E1D /* AdoptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */; };
@@ -33,7 +34,7 @@
 		257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 257CA5EC285895620009BE17 /* GoogleService-Info.plist */; };
 		257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5EF28589A780009BE17 /* UIView+Extension.swift */; };
 		257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5F228589B550009BE17 /* UIScreen+Extension.swift */; };
-		25A215B928607435002CE9BA /* AdoptionFirebaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A215B828607435002CE9BA /* AdoptionFirebaseModel.swift */; };
+		25A215B928607435002CE9BA /* AdoptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A215B828607435002CE9BA /* AdoptionModel.swift */; };
 		25A215BB2860749F002CE9BA /* PublishAdoptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A215BA2860749F002CE9BA /* PublishAdoptionViewController.swift */; };
 		25BB098828616F60005E7872 /* AdoptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BB098728616F60005E7872 /* AdoptionManager.swift */; };
 		7954F532F797B975F70B0FAD /* Pods_BringAPetHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		251646AC286434CF00D3AF27 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		251646B02864731500D3AF27 /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		251A7EA4285ED68100FA7E1D /* CaseEN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseEN.swift; sourceTree = "<group>"; };
 		251A7EA7285EED5000FA7E1D /* UserData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserData.xcdatamodel; sourceTree = "<group>"; };
 		251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionViewController.swift; sourceTree = "<group>"; };
@@ -68,7 +70,7 @@
 		257CA5EC285895620009BE17 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		257CA5EF28589A780009BE17 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		257CA5F228589B550009BE17 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
-		25A215B828607435002CE9BA /* AdoptionFirebaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionFirebaseModel.swift; sourceTree = "<group>"; };
+		25A215B828607435002CE9BA /* AdoptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionModel.swift; sourceTree = "<group>"; };
 		25A215BA2860749F002CE9BA /* PublishAdoptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishAdoptionViewController.swift; sourceTree = "<group>"; };
 		25BB098728616F60005E7872 /* AdoptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionManager.swift; sourceTree = "<group>"; };
 		3553C5DC4967E9C811258625 /* Pods-BringAPetHome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.release.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.release.xcconfig"; sourceTree = "<group>"; };
@@ -209,9 +211,10 @@
 				252D80812859CC7C0076236B /* ShelterManager.swift */,
 				252D80832859E67C0076236B /* HTTP.swift */,
 				251A7EA4285ED68100FA7E1D /* CaseEN.swift */,
-				25A215B828607435002CE9BA /* AdoptionFirebaseModel.swift */,
+				25A215B828607435002CE9BA /* AdoptionModel.swift */,
 				25BB098728616F60005E7872 /* AdoptionManager.swift */,
 				251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */,
+				251646B02864731500D3AF27 /* CommentModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -363,8 +366,9 @@
 				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,
 				252D80822859CC7C0076236B /* ShelterManager.swift in Sources */,
 				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
+				251646B12864731500D3AF27 /* CommentModel.swift in Sources */,
 				252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */,
-				25A215B928607435002CE9BA /* AdoptionFirebaseModel.swift in Sources */,
+				25A215B928607435002CE9BA /* AdoptionModel.swift in Sources */,
 				252D80802859A1A40076236B /* UITableViewCell+Extension.swift in Sources */,
 				257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */,
 				251646AD286434CF00D3AF27 /* CommentViewController.swift in Sources */,

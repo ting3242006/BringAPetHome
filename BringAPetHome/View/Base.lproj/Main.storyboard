@@ -138,7 +138,7 @@
                                                         <imageReference key="image" image="message" catalog="system" symbolScale="small"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <segue destination="hOR-No-So3" kind="presentation" id="qPU-DQ-DrH"/>
+                                                        <segue destination="hOR-No-So3" kind="presentation" modalPresentationStyle="overFullScreen" id="qPU-DQ-DrH"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1086,17 +1086,20 @@
                                         </connections>
                                     </tableView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="請輸入訊息" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6iY-8i-l3J">
-                                        <rect key="frame" x="15" y="376" width="333" height="34"/>
+                                        <rect key="frame" x="15" y="376" width="316" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zkB-7T-Ka5">
-                                        <rect key="frame" x="356" y="379" width="53" height="31"/>
+                                        <rect key="frame" x="339" y="379" width="70" height="31"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="53" id="99V-8R-hmV"/>
+                                            <constraint firstAttribute="width" constant="70" id="99V-8R-hmV"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="傳送"/>
+                                        <connections>
+                                            <action selector="sendComment:" destination="hOR-No-So3" eventType="touchUpInside" id="93J-bC-cFk"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1122,6 +1125,7 @@
                     </view>
                     <connections>
                         <outlet property="bgView" destination="rr0-z0-uTe" id="wnT-f1-XnJ"/>
+                        <outlet property="commentTextField" destination="6iY-8i-l3J" id="B3B-q2-kh3"/>
                         <outlet property="tableView" destination="YIE-Sz-W4K" id="hkV-Ma-fBW"/>
                     </connections>
                 </viewController>

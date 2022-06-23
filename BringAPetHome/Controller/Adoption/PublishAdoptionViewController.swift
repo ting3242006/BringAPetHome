@@ -17,7 +17,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     
     //    var dataBase = Firestore.firestore()
     var docRef: DocumentReference? = nil // 建立資料庫參考
-    let adoptionFirebaseModel = AdoptionFirebaseModel()
+    let adoptionFirebaseModel = AdoptionModel()
     let transparentView = UIView()
     let tableView = UITableView()
     var selectedButton = UIButton()
