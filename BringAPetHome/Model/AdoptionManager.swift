@@ -11,6 +11,8 @@ import FirebaseFirestore
 
 class AdoptionManager {
     
+    static let shared = AdoptionManager()
+    
     enum Adoption: String {
         case age = "age"
         case comment = "comment"
@@ -22,27 +24,45 @@ class AdoptionManager {
         case location = "location"
         case petable = "petable"
         case sex = "sex"
+        case postId = "postId"
     }
     
-    var comment: [String: Any] = [
-        "commentContent": "",
+    var comment = [
         "commentId": "",
-        "time": 0,
         "userId": ""
     ]
     
-//    struct UploadData: Codable {
-//        let age: Age
-//        let sex: Sex
-//        let petable: Petable
-//    }
+    enum Comment: String {
+//        case commentContent = ""
+        case commentId = "commentId"
+//        case time = ""
+        case userId = ""
+    }
+    
+    enum Comments: String {
+        case commentText = "commentText"
+        case commentId = "commentId"
+        case time = "time"
+        case creator = "creator"
+    }
+    
+    var creator: [String: Any] = [
+        "id": "",
+        "name": ""
+    ]
+    
+    //    struct UploadData: Codable {
+    //        let age: Age
+    //        let sex: Sex
+    //        let petable: Petable
+    //    }
     
     enum Age: Int {
         case threeMonthOld
         case sixMonthOld
         case oneYearOld
         case biggerThanOneYear
-
+        
         var ageString: String {
             switch self {
             case .threeMonthOld:
@@ -91,14 +111,12 @@ class AdoptionManager {
         }
     }
     
-    
-    
-    static let shared = AdoptionManager()
+    //    static let shared = AdoptionManager()
     var dataBase = Firestore.firestore() // 初始化 Firestore
-    let adoptionFirebaseModel = AdoptionFirebaseModel()
+    let adoptionFirebaseModel = AdoptionModel()
     
     func addAdoption(age: Int, content: String, imageFileUrl: String,
-                     location: String, sex: Int, petable: Int) {
+                     location: String, sex: Int, petable: Int, commentId: String, postId: String) {
         
         let adoptions = Firestore.firestore().collection("Adoption")
         let document = adoptions.document()
@@ -106,14 +124,16 @@ class AdoptionManager {
             Adoption.age.rawValue: age,
             Adoption.comment.rawValue: comment,
             Adoption.content.rawValue: content,
-            Adoption.userId.rawValue: document.documentID,
+            Adoption.postId.rawValue: document.documentID,
             Adoption.createdTime.rawValue: NSDate().timeIntervalSince1970,
             //            Adoption.sendId.rawValue: document.documentID,
             Adoption.imageFileUrl.rawValue: imageFileUrl,
             Adoption.location.rawValue: location,
             Adoption.petable.rawValue: petable,
+            Comment.commentId.rawValue: commentId,
             Adoption.sex.rawValue: sex
         ]
+        
         document.setData(data) { error in
             if let error = error {
                 print("Error\(error)")

@@ -18,6 +18,11 @@ class FavoriteListViewController: UIViewController {
     // 宣告 Core Data 常數
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var animalList: [Animal] = []
+    var animalDatas = [AnimalData]() {
+        didSet {
+            reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +45,16 @@ class FavoriteListViewController: UIViewController {
             animalList = try context.fetch(Animal.fetchRequest())
         } catch {
             print("error")
+        }
+        favoriteTableView.reloadData()
+    }
+    
+    private func reloadData() {
+        guard Thread.isMainThread == true else {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadData()
+            }
+            return
         }
         favoriteTableView.reloadData()
     }
@@ -69,11 +84,14 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         favoriteTableView.deselectRow(at: indexPath, animated: true)
-        let animal = self.animalList[indexPath.row]
-//        let homeDetailViewController = UIStoryboard.instantiateViewController(
-//            withIdentifier: HomeDetailViewController.identifier)
-//        guard let detailVC = homeDetailViewController as? HomeDetailViewController else { return }
+//        let animal = self.animalList[indexPath.row]
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
+//        guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: HomeDetailViewController.identifier) as? HomeDetailViewController else { return }
+        let pet = self.animalDatas[indexPath.row]
+        detailVC.pet = pet
 //        detailVC.pet = animal
+        self.navigationController?.pushViewController(detailVC, animated: true)
 //        show(detailVC, sender: nil)
     }
 }
