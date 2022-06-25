@@ -10,69 +10,69 @@ import Kingfisher
 
 class AdoptionTableViewCell: UITableViewCell {
     
-    struct DownloadData: Codable {
-        let age: Age
-        let sex: Sex
-        let petable: Petable
-    }
+//    struct DownloadData: Codable {
+//        let age: Age
+//        let sex: Sex
+//        let petable: Petable
+//    }
     
-    enum Age: String, Codable {
-        case threeMonthOld = "三個月內"
-        case sixMonthOld = "六個月內"
-        case oneYearOld = "六個月到一年"
-        case biggerThanOneYear = "一歲以上"
-        
-        var ageInt: Int {
-            switch self {
-            case .threeMonthOld:
-                return 0
-            case .sixMonthOld:
-                return 1
-            case .oneYearOld:
-                return 2
-            case .biggerThanOneYear:
-                return 3
-            default:
-                return 0
-            }
-        }
-    }
+//    enum Age: String, Codable {
+//        case threeMonthOld = "三個月內"
+//        case sixMonthOld = "六個月內"
+//        case oneYearOld = "六個月到一年"
+//        case biggerThanOneYear = "一歲以上"
+//
+//        var ageInt: Int {
+//            switch self {
+//            case .threeMonthOld:
+//                return 0
+//            case .sixMonthOld:
+//                return 1
+//            case .oneYearOld:
+//                return 2
+//            case .biggerThanOneYear:
+//                return 3
+//            default:
+//                return 0
+//            }
+//        }
+//    }
     
-    enum Sex: String, Codable {
-        case boy = "Boy"
-        case girl = "Girl"
-        
-        var sexInt: Int {
-            switch self {
-            case .boy:
-                return 0
-            case .girl:
-                return 1
-            default:
-                return 0
-            }
-        }
-    }
+//    enum Sex: String, Codable {
+//        case boy = "Boy"
+//        case girl = "Girl"
+//
+//        var sexInt: Int {
+//            switch self {
+//            case .boy:
+//                return 0
+//            case .girl:
+//                return 1
+//            default:
+//                return 0
+//            }
+//        }
+//    }
     
     var showSex: String?
     var showAge: String?
     var showPetable: String?
     
-    enum Petable: String, Codable {
-        case adopt = "送養"
-        case adopted = "已領養"
-        
-        var petableInt: Int {
-            switch self {
-            case .adopt:
-                return 0
-            case .adopted:
-                return 1
-            default:
-                return 0
-            }
-        }
-    }
+//    enum Petable: String, Codable {
+//        case adopt = "送養"
+//        case adopted = "已領養"
+//
+//        var petableInt: Int {
+//            switch self {
+//            case .adopt:
+//                return 0
+//            case .adopted:
+//                return 1
+//            default:
+//                return 0
+//            }
+//        }
+//    }
 
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var adoptionAnimalImage: UIImageView!
@@ -91,12 +91,15 @@ class AdoptionTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func layout(location: String, date: String, content: String, imageFileUrl: String) {
+    func layout(location: String, date: String, content: String, imageFileUrl: String, age: Age, sex: Sex, petable: Petable) {
         
         adoptionLocation.text = location
         adoptionAnimalImage.kf.setImage(with: URL(string: imageFileUrl))
         createdTimeLabel.text = "\(date)"
         adoptionContent.text = content
+        ageLabel.text = age.title
+        adoptionSexLabel.text = sex.sexTitle
+        petableLabel.text = petable.petableTitle
     }
     
     func setupPetable(petable: Int) -> String {

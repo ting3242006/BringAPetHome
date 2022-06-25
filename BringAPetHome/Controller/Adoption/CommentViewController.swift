@@ -13,6 +13,7 @@ class CommentViewController: UIViewController {
     enum Comments: String {
         case commentText = "commentText"
         case commentId = "commentId"
+//        case postId = "postId"
         case time = "time"
         case creator = "creator"
     }
@@ -29,16 +30,18 @@ class CommentViewController: UIViewController {
             tableView.reloadData()
         }
     }
+//    var postId: String
     
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var bgView: UIView!
     @IBOutlet weak var tableView: UITableView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         bgView.layer.cornerRadius = 25
+        fetchCommetData()
     }
     
     @IBAction func sendComment(_ sender: Any) {
@@ -60,11 +63,12 @@ class CommentViewController: UIViewController {
         let comment = Firestore.firestore().collection("Comments")
         let document = comment.document()
         let timeInterval = Date()
-        let data: [String: Any] = [
+        let data: [String: Any] = [ // postid userid
             Comments.commentId.rawValue: document.documentID,
             Comments.commentText.rawValue: text,
             Comments.creator.rawValue: creator,
-            Comments.time.rawValue: NSDate().timeIntervalSince1970
+            Comments.time.rawValue: NSDate().timeIntervalSince1970,
+//            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
             if let error = error {
@@ -76,7 +80,8 @@ class CommentViewController: UIViewController {
     }
     
     func fetchCommetData() {
-        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+        db.collection("Comments").whereField("commedId", isEqualTo: "4p48Ttk3EiisFGU8FNxl").getDocuments() { [weak self] (querySnapshot, error) in
+//        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
                 print("Error fetching documents: \(error)")

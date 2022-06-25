@@ -30,5 +30,4 @@ class CommentTableViewCell: UITableViewCell {
         commentLabel.text = text
         commentUserId.text = id
     }
-
 }

@@ -12,6 +12,10 @@ import CoreData
 
 class HomeDetailViewController: UIViewController {
     
+    static var identifier: String {
+        return String(describing: self)
+    }
+    
     @IBOutlet weak var tableView: UITableView!
     
     var pet: AnimalData?
@@ -145,6 +149,9 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
     func heartButtonTapped() {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
+        
+        
+        
         if let saveAnimal = saveAnimal {
             context.delete(saveAnimal)
         } else {
@@ -165,6 +172,16 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             let imageUrl = documentsDirectory.appendingPathComponent("\(id)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)
             appDelegate?.saveContext()
+            
+            do {
+                let request = Animal.fetchRequest()
+                let animals = try context.fetch(request)
+                animals.forEach { animal in
+                    print("DEBUG: \(animal.id) \(animal.like)")
+                }
+            } catch {
+                
+            }            
         }
     }
 }

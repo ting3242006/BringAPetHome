@@ -24,14 +24,20 @@ class AdoptionManager {
         case location = "location"
         case petable = "petable"
         case sex = "sex"
+        case postId = "postId"
     }
     
-    var comment: [String: Any] = [
-        "commentContent": "",
+    var comment = [
         "commentId": "",
-        "time": 0,
         "userId": ""
     ]
+    
+    enum Comment: String {
+//        case commentContent = ""
+        case commentId = "commentId"
+//        case time = ""
+        case userId = ""
+    }
     
     enum Comments: String {
         case commentText = "commentText"
@@ -110,7 +116,7 @@ class AdoptionManager {
     let adoptionFirebaseModel = AdoptionModel()
     
     func addAdoption(age: Int, content: String, imageFileUrl: String,
-                     location: String, sex: Int, petable: Int) {
+                     location: String, sex: Int, petable: Int, commentId: String, postId: String) {
         
         let adoptions = Firestore.firestore().collection("Adoption")
         let document = adoptions.document()
@@ -118,14 +124,16 @@ class AdoptionManager {
             Adoption.age.rawValue: age,
             Adoption.comment.rawValue: comment,
             Adoption.content.rawValue: content,
-            Adoption.userId.rawValue: document.documentID,
+            Adoption.postId.rawValue: document.documentID,
             Adoption.createdTime.rawValue: NSDate().timeIntervalSince1970,
             //            Adoption.sendId.rawValue: document.documentID,
             Adoption.imageFileUrl.rawValue: imageFileUrl,
             Adoption.location.rawValue: location,
             Adoption.petable.rawValue: petable,
+            Comment.commentId.rawValue: commentId,
             Adoption.sex.rawValue: sex
         ]
+        
         document.setData(data) { error in
             if let error = error {
                 print("Error\(error)")

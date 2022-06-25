@@ -24,6 +24,26 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     var dataSource = [String]()
     var adoptionManager = AdoptionManager()
     
+//    struct Adoption {
+//        var age: String
+//        var comment: [Comment]
+//        var content: String
+//        var userId: String
+//        var createdTime: Int
+//        var sendId:String
+//        var imageFileUrl:String
+//        var location: Int
+//        var petable: Int
+//        var sex: Int
+//    }
+//
+//    struct Comment {
+//        var commentContent: String
+//        var commentId: String
+//        var time: Timestamp
+//        var userId: String
+//    }
+    
     enum Adoption: String {
         case age = "age"
         case comment = "comment"
@@ -35,6 +55,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         case location = "location"
         case petable = "petable"
         case sex = "sex"
+        case postId = "postId"
     }
     
     var comment: [String: Any] = [
@@ -44,69 +65,71 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         "userId": ""
     ]
     
-    struct UploadData: Codable {
-        let age: Age
-        let sex: Sex
-        let petable: Petable
-    }
+//    struct UploadData: Codable {
+//        let age: Age
+//        let sex: Sex
+//        let petable: Petable
+//    }
+//    
+//    enum Age: Int, Codable {
+//        case threeMonthOld = 0
+//        case sixMonthOld = 1
+//        case oneYearOld = 2
+//        case biggerThanOneYear = 3
+//        
+//        var ageString: String {
+//            switch self {
+//            case .threeMonthOld:
+//                return "三個月內"
+//            case .sixMonthOld:
+//                return "六個月內"
+//            case .oneYearOld:
+//                return "六個月到一年"
+//            case .biggerThanOneYear:
+//                return "一歲以上"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
+//    
+//    enum Sex: Int, Codable {
+//        case boy = 0
+//        case girl = 1
+//        
+//        var sexString: String {
+//            switch self {
+//            case .boy:
+//                return "Boy"
+//            case .girl:
+//                return "Girl"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
+//    
+//    enum Petable: Int, Codable {
+//        case adopt = 0
+//        case adopted = 1
+//        
+//        var petable: String {
+//            switch self {
+//            case .adopt:
+//                return "送養"
+//            case .adopted:
+//                return "已領養"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
     
-    enum Age: Int, Codable {
-        case threeMonthOld = 0
-        case sixMonthOld = 1
-        case oneYearOld = 2
-        case biggerThanOneYear = 3
-        
-        var ageString: String {
-            switch self {
-            case .threeMonthOld:
-                return "三個月內"
-            case .sixMonthOld:
-                return "六個月內"
-            case .oneYearOld:
-                return "六個月到一年"
-            case .biggerThanOneYear:
-                return "一歲以上"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    enum Sex: Int, Codable {
-        case boy = 0
-        case girl = 1
-        
-        var sexString: String {
-            switch self {
-            case .boy:
-                return "Boy"
-            case .girl:
-                return "Girl"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    enum Petable: Int, Codable {
-        case adopt = 0
-        case adopted = 1
-        
-        var petable: String {
-            switch self {
-            case .adopt:
-                return "送養"
-            case .adopted:
-                return "已領養"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    var selectedSex: Int?
-    var selectedAge: Int?
-    var selectedPetable: Int?
+    var selectedSex: Sex?
+    var selectedAge: Age?
+    var selectedPetable: Petable?
+    var commentId: String?
+    var postId: String?
     
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var petableButton: UIButton!
@@ -226,6 +249,8 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         
         guard let selectedSex = selectedSex,
               let selectedAge = selectedAge,
+              let commentId = comment["commentId"],
+//              let postId = postId,
               let selectedPetable = selectedPetable else { return }
         
         guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.8) else { return }
@@ -246,12 +271,20 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             let age = selectedAge
                             let sex = selectedSex
                             let petable = selectedPetable
+                            let postId = postId
+//                            let commentId = commentId
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
-                            self.adoptionManager.addAdoption(age: age, content: content, imageFileUrl: "\(url)", location: location, sex: sex, petable: petable)
+                            self.adoptionManager.addAdoption(age: age.rawValue, content: content,
+                                                             imageFileUrl: "\(url)", location: location,
+                                                             sex: sex.rawValue, petable: petable.rawValue,
+                                                             commentId: commentId as? String ?? "", postId: postId as? String ?? "")
                             dismiss(animated: true, completion: nil)
                         }
                     case .failure(_):
+                        let age = Age(rawValue: 0)
+                        let sex = Sex(rawValue: 0)
+                        let petable = Petable(rawValue: 0)
                         break
                     }
                 }
@@ -280,11 +313,11 @@ extension PublishAdoptionViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if selectedButton.tag == 0 {
-            self.selectedSex = indexPath.row
+            self.selectedSex = Sex(rawValue: indexPath.row)
         } else if selectedButton.tag == 1 {
-            self.selectedAge = indexPath.row
+            self.selectedAge = Age(rawValue: indexPath.row)
         } else {
-            self.selectedPetable = indexPath.row
+            self.selectedPetable = Petable(rawValue: indexPath.row)
         }
         selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
         removeTransparentView()
