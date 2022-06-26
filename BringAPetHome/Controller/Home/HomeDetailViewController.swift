@@ -139,7 +139,7 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         cell.shelterTel.text = "連絡電話: \(String(describing: pet?.shelterTel ?? ""))"
         cell.shelterAddressLabel.text = "地址: \(String(describing: pet?.shelterAddress ?? ""))"
         cell.animalSterilizationLabel.text = "是否絕育: \(pet?.animalSterilization ?? "")"
-        
+        cell.selectedBackgroundView = selectedBackgroundView
         return cell
     }
 }
@@ -149,8 +149,6 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
     func heartButtonTapped() {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
-        
-        
         
         if let saveAnimal = saveAnimal {
             context.delete(saveAnimal)
