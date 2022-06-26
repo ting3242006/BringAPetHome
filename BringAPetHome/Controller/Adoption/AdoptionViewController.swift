@@ -59,22 +59,6 @@ enum Petable: Int, Codable {
     }
 }
 
-//    var ageInt: Int {
-//        switch self {
-//        case .threeMonthOld:
-//            return 0
-//        case .sixMonthOld:
-//            return 1
-//        case .oneYearOld:
-//            return 2
-//        case .biggerThanOneYear:
-//            return 3
-//        default:
-//            return 0
-//        }
-//    }
-//}
-
 class AdoptionViewController: UIViewController {
     
     let db = Firestore.firestore()
@@ -85,6 +69,7 @@ class AdoptionViewController: UIViewController {
         }
     }
     var adoptionFirebaseModel = AdoptionModel()
+    let selectedBackgroundView = UIView()
     
     enum Adoption: String {
         case age = "age"
@@ -119,48 +104,6 @@ class AdoptionViewController: UIViewController {
         "name": ""
     ]
     
-//    struct DownloadData: Codable {
-//        let age: Age
-//        let sex: Sex
-//        let petable: Petable
-//    }
-//
-//
-//    enum Sex: String, Codable {
-//        case boy = "Boy"
-//        case girl = "Girl"
-//
-//        var sexInt: Int {
-//            switch self {
-//            case .boy:
-//                return 0
-//            case .girl:
-//                return 1
-//            default:
-//                return 0
-//            }
-//        }
-//    }
-//
-//    enum Petable: String, Codable {
-//        case adopt = "送養"
-//        case adopted = "已領養"
-//
-//        var petableInt: Int {
-//            switch self {
-//            case .adopt:
-//                return 0
-//            case .adopted:
-//                return 1
-//            default:
-//                return 0
-//            }
-//        }
-//    }
-    //    var showSex: String?
-    //    var showAge: String?
-    //    var showPetable: String?
-    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -170,6 +113,7 @@ class AdoptionViewController: UIViewController {
         tableView.delegate = self
         fetchData()
         tableView.reloadData()
+        selectedBackgroundView.backgroundColor = UIColor.clear
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
@@ -191,6 +135,17 @@ class AdoptionViewController: UIViewController {
             }
         }
     }
+    
+    @IBSegueAction func showComments(_ coder: NSCoder, sender: Any?) -> CommentViewController? {
+        let controller = CommentViewController(coder: coder)
+        let button = sender as? UIButton
+        if let point = button?.convert(CGPoint.zero, to: tableView),
+           let indexPath = tableView.indexPathForRow(at: point) {
+            let firebaseData = dbModels[indexPath.row]
+            controller?.adoptionId = firebaseData[Adoption.userId.rawValue] as? String ?? ""
+        }
+        return controller
+    } 
 }
 
 extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
@@ -199,9 +154,11 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdoptionTableViewCell", for: indexPath) as? AdoptionTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AdoptionTableViewCell",
+                                                       for: indexPath) as? AdoptionTableViewCell
         else { return UITableViewCell()
         }
+        cell.selectedBackgroundView = selectedBackgroundView
         let firebaseData = dbModels[indexPath.row]
         let comment: [String: Any] = firebaseData[Adoption.comment.rawValue] as? [String: Any] ?? [:]
         let createdTime = firebaseData[Adoption.createdTime.rawValue] as? Double ?? 0.0
@@ -219,18 +176,10 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
                     date: formatter.string(from: date as Date),
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
-        //    petable: "\(firebaseData[Adoption.petable.rawValue] ?? "")"),
-        //    age: "\(firebaseData[Adoption.age.rawValue] ?? "")"),
-        //    sex: "\(firebaseData[Adoption.sex.rawValue] ?? "")")
-        //        cell.petableLabel.text = "\(String(describing: firebaseData[Adoption.petable.rawValue]))" ?? ""
-        //        let petable = showPetable
+
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
             cell.setupPetable(petable: petable)
         }
-        
-        //        cell.setupAge(age: "\(firebaseData[Adoption.age.rawValue])")
-        //        cell.setupSex(sex: firebaseData[Adoption.age.rawValue])
-        
         return cell
     }
     

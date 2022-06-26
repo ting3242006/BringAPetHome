@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
         
         if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
             let resizeImage = resizeImage(image: image, width: 30)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ?? .orange).withRenderingMode(.alwaysOriginal),
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
                                                                 style: .plain,
                                                                 target: self,
                                                                 action: #selector(didTap))
@@ -104,7 +104,8 @@ class HomeViewController: UIViewController {
     
     // MARK: - Action
     @objc private func didTap() {
-        let filterVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController") as? HomeFilterViewController
+        let filterVC = UIStoryboard(name: "Main",
+                                    bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController") as? HomeFilterViewController
         filterVC?.delegate = self
         navigationController?.pushViewController(filterVC!, animated: true)
     }
@@ -128,7 +129,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier, for: indexPath) as? HomeCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier,
+                                                            for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() } // 要拆開寫
 //        DispatchQueue.main.async {
             let item = self.animalDatas[indexPath.item]

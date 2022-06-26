@@ -24,26 +24,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     var dataSource = [String]()
     var adoptionManager = AdoptionManager()
     
-//    struct Adoption {
-//        var age: String
-//        var comment: [Comment]
-//        var content: String
-//        var userId: String
-//        var createdTime: Int
-//        var sendId:String
-//        var imageFileUrl:String
-//        var location: Int
-//        var petable: Int
-//        var sex: Int
-//    }
-//
-//    struct Comment {
-//        var commentContent: String
-//        var commentId: String
-//        var time: Timestamp
-//        var userId: String
-//    }
-    
     enum Adoption: String {
         case age = "age"
         case comment = "comment"
@@ -64,66 +44,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         "time": 0,
         "userId": ""
     ]
-    
-//    struct UploadData: Codable {
-//        let age: Age
-//        let sex: Sex
-//        let petable: Petable
-//    }
-//    
-//    enum Age: Int, Codable {
-//        case threeMonthOld = 0
-//        case sixMonthOld = 1
-//        case oneYearOld = 2
-//        case biggerThanOneYear = 3
-//        
-//        var ageString: String {
-//            switch self {
-//            case .threeMonthOld:
-//                return "三個月內"
-//            case .sixMonthOld:
-//                return "六個月內"
-//            case .oneYearOld:
-//                return "六個月到一年"
-//            case .biggerThanOneYear:
-//                return "一歲以上"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
-//    
-//    enum Sex: Int, Codable {
-//        case boy = 0
-//        case girl = 1
-//        
-//        var sexString: String {
-//            switch self {
-//            case .boy:
-//                return "Boy"
-//            case .girl:
-//                return "Girl"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
-//    
-//    enum Petable: Int, Codable {
-//        case adopt = 0
-//        case adopted = 1
-//        
-//        var petable: String {
-//            switch self {
-//            case .adopt:
-//                return "送養"
-//            case .adopted:
-//                return "已領養"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
     
     var selectedSex: Sex?
     var selectedAge: Age?
@@ -279,7 +199,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                                                              imageFileUrl: "\(url)", location: location,
                                                              sex: sex.rawValue, petable: petable.rawValue,
                                                              commentId: commentId as? String ?? "", postId: postId as? String ?? "")
-                            dismiss(animated: true, completion: nil)
+                            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                            guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
+                            self.navigationController?.pushViewController(adoptionViewController, animated: true)
+//                            dismiss(animated: true, completion: nil)
                         }
                     case .failure(_):
                         let age = Age(rawValue: 0)

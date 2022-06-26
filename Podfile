@@ -13,6 +13,7 @@ pod 'Firebase/Firestore'
 pod 'Firebase/Storage'
 pod 'Firebase/Database'
 pod 'Kingfisher'
+pod 'IQKeyboardManagerSwift'
 
 post_install do |installer|
   installer.pods_project.build_configurations.each do |config|

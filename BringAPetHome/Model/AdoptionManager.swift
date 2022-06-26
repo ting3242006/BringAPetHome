@@ -51,67 +51,60 @@ class AdoptionManager {
         "name": ""
     ]
     
-    //    struct UploadData: Codable {
-    //        let age: Age
-    //        let sex: Sex
-    //        let petable: Petable
-    //    }
+//    enum Age: Int {
+//        case threeMonthOld
+//        case sixMonthOld
+//        case oneYearOld
+//        case biggerThanOneYear
+//
+//        var ageString: String {
+//            switch self {
+//            case .threeMonthOld:
+//                return "三個月內"
+//            case .sixMonthOld:
+//                return "六個月內"
+//            case .oneYearOld:
+//                return "六個月到一年"
+//            case .biggerThanOneYear:
+//                return "一歲以上"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
+//
+//    enum Sex: Int {
+//        case boy
+//        case girl
+//
+//        var sexString: String {
+//            switch self {
+//            case .boy:
+//                return "Boy"
+//            case .girl:
+//                return "Girl"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
+//
+//    enum Petable: Int {
+//        case adopt = 0
+//        case adopted = 1
+//
+//        var petable: String {
+//            switch self {
+//            case .adopt:
+//                return "送養"
+//            case .adopted:
+//                return "已領養"
+//            default:
+//                return ""
+//            }
+//        }
+//    }
     
-    enum Age: Int {
-        case threeMonthOld
-        case sixMonthOld
-        case oneYearOld
-        case biggerThanOneYear
-        
-        var ageString: String {
-            switch self {
-            case .threeMonthOld:
-                return "三個月內"
-            case .sixMonthOld:
-                return "六個月內"
-            case .oneYearOld:
-                return "六個月到一年"
-            case .biggerThanOneYear:
-                return "一歲以上"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    enum Sex: Int {
-        case boy
-        case girl
-        
-        var sexString: String {
-            switch self {
-            case .boy:
-                return "Boy"
-            case .girl:
-                return "Girl"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    enum Petable: Int {
-        case adopt = 0
-        case adopted = 1
-        
-        var petable: String {
-            switch self {
-            case .adopt:
-                return "送養"
-            case .adopted:
-                return "已領養"
-            default:
-                return ""
-            }
-        }
-    }
-    
-    //    static let shared = AdoptionManager()
     var dataBase = Firestore.firestore() // 初始化 Firestore
     let adoptionFirebaseModel = AdoptionModel()
     
@@ -133,7 +126,6 @@ class AdoptionManager {
             Comment.commentId.rawValue: commentId,
             Adoption.sex.rawValue: sex
         ]
-        
         document.setData(data) { error in
             if let error = error {
                 print("Error\(error)")

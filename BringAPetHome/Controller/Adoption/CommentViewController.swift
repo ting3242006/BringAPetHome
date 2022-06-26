@@ -9,11 +9,12 @@ import UIKit
 import Firebase
 
 class CommentViewController: UIViewController {
+    var adoptionId: String?
     
     enum Comments: String {
         case commentText = "commentText"
         case commentId = "commentId"
-//        case postId = "postId"
+        case adoptionId = "adoptionId"
         case time = "time"
         case creator = "creator"
     }
@@ -68,6 +69,7 @@ class CommentViewController: UIViewController {
             Comments.commentText.rawValue: text,
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
+            Comments.adoptionId.rawValue: adoptionId ?? ""
 //            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
@@ -80,7 +82,7 @@ class CommentViewController: UIViewController {
     }
     
     func fetchCommetData() {
-        db.collection("Comments").whereField("commedId", isEqualTo: "4p48Ttk3EiisFGU8FNxl").getDocuments() { [weak self] (querySnapshot, error) in
+        db.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
 //        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
@@ -102,7 +104,6 @@ class CommentViewController: UIViewController {
             }
             snapshot.documentChanges.forEach { diff in
                 if (diff.type == .added) {
-                    //                    print("New artical: \(diff.document.documentID), \(diff.document.data())")
                 }
             }
         }
