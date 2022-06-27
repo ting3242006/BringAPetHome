@@ -31,13 +31,10 @@ class HomeDetailViewController: UIViewController {
 //        let photo = pet[indexPathTapped!.item]
     }
     var saveAnimal: Animal?
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         selectedBackgroundView.backgroundColor = UIColor.clear
-        //self.tabBarController?.tabBar.isHidden = true
-        tableView.backgroundColor = .orange
         tableView.dataSource = self
         tableView.delegate = self
         tableView.anchor(top: view.topAnchor,

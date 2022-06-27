@@ -1,27 +1,28 @@
 //
-//  ShareDetailTableViewCell.swift
+//  ShareCommentTableViewCell.swift
 //  BringAPetHome
 //
-//  Created by Ting on 2022/6/26.
+//  Created by Ting on 2022/6/27.
 //
 
 import UIKit
 
-class ShareDetailTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var shareImageView: UIImageView!
-    @IBOutlet weak var userNameLabel: UILabel!
-//    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var contentLabel: UILabel!
+class ShareCommentTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var commentTimeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
+        // Configure the view for the selected state
     }
 
 }

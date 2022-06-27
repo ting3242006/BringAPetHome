@@ -24,7 +24,7 @@ class CommentViewController: UIViewController {
         "name": ""
     ]
     
-    let db = Firestore.firestore()
+//    let db = Firestore.firestore()
     var dataBase = Firestore.firestore()
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -82,7 +82,7 @@ class CommentViewController: UIViewController {
     }
     
     func fetchCommetData() {
-        db.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
+        dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
 //        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {

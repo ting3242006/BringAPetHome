@@ -61,7 +61,7 @@ enum Petable: Int, Codable {
 
 class AdoptionViewController: UIViewController {
     
-    let db = Firestore.firestore()
+    let database = Firestore.firestore()
     var databaseRef: DatabaseReference!
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -123,7 +123,7 @@ class AdoptionViewController: UIViewController {
     }
     
     func fetchData() {
-        db.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+        database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
                 print("Error fetching documents: \(error)")
@@ -142,10 +142,10 @@ class AdoptionViewController: UIViewController {
         if let point = button?.convert(CGPoint.zero, to: tableView),
            let indexPath = tableView.indexPathForRow(at: point) {
             let firebaseData = dbModels[indexPath.row]
-            controller?.adoptionId = firebaseData[Adoption.userId.rawValue] as? String ?? ""
+            controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
         }
         return controller
-    } 
+    }
 }
 
 extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {

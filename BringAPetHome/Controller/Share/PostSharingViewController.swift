@@ -23,11 +23,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        shareTextView.backgroundColor = .systemGray6
         addSharIngImageButton.layer.cornerRadius = 15
     }
-    
-    
+        
     @IBAction func sentSharingPost(_ sender: Any) {
         guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.8) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
@@ -35,8 +34,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         fileReference.putData(imageData, metadata: nil) { result in
             switch result {
             case .success:
-                fileReference.downloadURL { [self]
-                    result in
+                fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
                         shareManager.addSharing(shareContent: shareTextView.text, image: "\(url)")

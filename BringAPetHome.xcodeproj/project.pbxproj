@@ -42,6 +42,8 @@
 		25A215B928607435002CE9BA /* AdoptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A215B828607435002CE9BA /* AdoptionModel.swift */; };
 		25A215BB2860749F002CE9BA /* PublishAdoptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25A215BA2860749F002CE9BA /* PublishAdoptionViewController.swift */; };
 		25BB098828616F60005E7872 /* AdoptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25BB098728616F60005E7872 /* AdoptionManager.swift */; };
+		25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E5732E2869746F009348A0 /* ShareCommentViewController.swift */; };
+		25E5733128699EA0009348A0 /* ShareCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E5733028699EA0009348A0 /* ShareCommentTableViewCell.swift */; };
 		7954F532F797B975F70B0FAD /* Pods_BringAPetHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +85,8 @@
 		25A215B828607435002CE9BA /* AdoptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionModel.swift; sourceTree = "<group>"; };
 		25A215BA2860749F002CE9BA /* PublishAdoptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishAdoptionViewController.swift; sourceTree = "<group>"; };
 		25BB098728616F60005E7872 /* AdoptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionManager.swift; sourceTree = "<group>"; };
+		25E5732E2869746F009348A0 /* ShareCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCommentViewController.swift; sourceTree = "<group>"; };
+		25E5733028699EA0009348A0 /* ShareCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCommentTableViewCell.swift; sourceTree = "<group>"; };
 		3553C5DC4967E9C811258625 /* Pods-BringAPetHome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.release.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.release.xcconfig"; sourceTree = "<group>"; };
 		6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BringAPetHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88403816CC320A23BF606720 /* Pods-BringAPetHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.debug.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.debug.xcconfig"; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 				2511F47028670A5800E59FB0 /* SharePetCollectionViewController.swift */,
 				251AAA8B28686F840074F094 /* ShareDetailViewController.swift */,
 				2511F472286725A800E59FB0 /* PostSharingViewController.swift */,
+				25E5732E2869746F009348A0 /* ShareCommentViewController.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 			children = (
 				254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */,
 				251AAA8D286875A90074F094 /* ShareDetailTableViewCell.swift */,
+				25E5733028699EA0009348A0 /* ShareCommentTableViewCell.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -392,6 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */,
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,
 				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,
 				251AAA8E286875A90074F094 /* ShareDetailTableViewCell.swift in Sources */,
@@ -400,6 +407,7 @@
 				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
 				252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */,
 				2511F47128670A5800E59FB0 /* SharePetCollectionViewController.swift in Sources */,
+				25E5733128699EA0009348A0 /* ShareCommentTableViewCell.swift in Sources */,
 				25A215B928607435002CE9BA /* AdoptionModel.swift in Sources */,
 				2511F47728674AE900E59FB0 /* ShareManager.swift in Sources */,
 				252D80802859A1A40076236B /* UITableViewCell+Extension.swift in Sources */,
@@ -569,7 +577,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -586,7 +594,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -602,7 +610,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
@@ -618,7 +626,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.0;
+				MARKETING_VERSION = 0.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

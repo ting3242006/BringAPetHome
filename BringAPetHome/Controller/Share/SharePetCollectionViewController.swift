@@ -35,7 +35,6 @@ class SharePetCollectionViewController: UICollectionViewController {
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
         // 計算 cell 寬度，利用畫面的寬減去要的間距然後再除以要拆分成幾格
         let width = floor((collectionView.bounds.width - itemSpace * (columnCount-1)) / columnCount)
-//                let width = (collectionView.bounds.width - 1 * 2) / 3
         // 設定cell的大小
         flowLayout?.itemSize = CGSize(width: width, height: width)
         // 設成 zero 才會根據 itemSize 來設定 cell 大小，不然會被 autoLayout 條件影響(如果有額外設定 cell autoLayout)
@@ -45,7 +44,6 @@ class SharePetCollectionViewController: UICollectionViewController {
         // 定義 colume 間的間距(上下間距)
         flowLayout?.minimumLineSpacing = itemSpace
         // 定義 cell 到邊框間的間距(上下左右)
-//        flowLayout?.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
     }
     
     // MARK: UICollectionViewDataSource

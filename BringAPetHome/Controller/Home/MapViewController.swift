@@ -31,7 +31,7 @@ class MapViewController: UIViewController {
 }
 
 // MARK: - 取網路api資料
-//func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
+// func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
 //    AF.request(url).responseJSON { response in
 //        if let data = response.data {
 //            do {
@@ -42,10 +42,9 @@ class MapViewController: UIViewController {
 //            }
 //        }
 //    }
-//}
-
+// }
 // MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
-func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
+func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> Void) {
     CLGeocoder().geocodeAddressString(address) { placemarks, error in
         if let error = error {
             print(error.localizedDescription)
@@ -66,7 +65,7 @@ func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Err
 }
 
 // MARK: - 使用者位置
-extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
+extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate {
     
     func setMap() {
         // 建立一個 CLLocationManager
@@ -98,13 +97,13 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
         // 地圖預設顯示的範圍大小 (數字越小越精確)
         let latDelta = 0.05
         let longDelta = 0.05
-        let currentLocationSpan:MKCoordinateSpan =
+        let currentLocationSpan: MKCoordinateSpan =
         MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: longDelta)
         
         // 設置地圖顯示的範圍與中心點座標
-        let center:CLLocation = CLLocation(
+        let center: CLLocation = CLLocation(
             latitude: cllocation.latitude, longitude: cllocation.longitude)
-        let currentRegion:MKCoordinateRegion =
+        let currentRegion: MKCoordinateRegion =
         MKCoordinateRegion(
             center: center.coordinate,
             span: currentLocationSpan)
@@ -138,7 +137,7 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
                     "如要變更權限，請至 設定 > 隱私權 > 定位服務 開啟",
                 preferredStyle: .alert)
             let okAction = UIAlertAction(
-                title: "確認", style: .default, handler:nil)
+                title: "確認", style: .default, handler: nil)
             alertController.addAction(okAction)
             self.present(
                 alertController,
@@ -152,11 +151,11 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
         }
     }
     
-    //取得位置並顯示
+    // 取得位置並顯示
     func MKpoint() {
         let objectAnnotation = MKPointAnnotation()
         objectAnnotation.title = "\(titlename)"
-        objectAnnotation.coordinate = CLLocation(latitude: cllocation.latitude,longitude: cllocation.longitude).coordinate
+        objectAnnotation.coordinate = CLLocation(latitude: cllocation.latitude, longitude: cllocation.longitude).coordinate
         self.myMapView.showAnnotations([objectAnnotation], animated: true)
         self.myMapView.selectAnnotation(objectAnnotation, animated: true)
         
@@ -168,7 +167,7 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
         print("點擊大頭針")
     }
     
-    //繪製路徑
+    // 繪製路徑
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
         renderer.strokeColor = UIColor.blue
@@ -177,7 +176,7 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate{
         return renderer
     }
     
-    //自定義大頭針樣式
+    // 自定義大頭針樣式
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyPin"
         

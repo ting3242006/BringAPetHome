@@ -14,6 +14,13 @@ class ShareManager {
     var dataBase = Firestore.firestore()
     static let shared = ShareManager()
     var shareList = [ShareModel]()
+    var postId: String?
+    var dbModels: [[String: Any]] = []
+//    {
+//        didSet {
+//            tableView.reloadData()
+//        }
+//    }
     
     func addSharing(shareContent: String, image: String) {
         let share = dataBase.collection("Share")
@@ -30,10 +37,10 @@ class ShareManager {
                 "id": "ting",
                 "name": Auth.auth().currentUser?.displayName],
             "postId": "\(postId)",
-//            "comment": [
-//                "commentId": document.documentID,
-//                "text": ""
-//            ],
+            //            "comment": [
+            //                "commentId": document.documentID,
+            //                "text": ""
+            //            ],
             "image": image,
             "createdTime": timeInterval,
             "shareContent": shareContent
@@ -48,7 +55,7 @@ class ShareManager {
     }
     
     func fetchSharing(completion: @escaping ([ShareModel]?) -> Void) {
-        dataBase.collection("Share").getDocuments { (querySnapshot, _) in
+        dataBase.collection("Share").order(by: "createdTime", descending: true).getDocuments { (querySnapshot, _) in
             guard let querySnapshot = querySnapshot else {
                 return
             }
@@ -65,6 +72,48 @@ class ShareManager {
                 self.shareList.append(share)
             }
             completion(self.shareList)
+        }
+    }
+    
+    func addComments(id: String, comments: String) {
+        let comment = dataBase.collection("ShareComment")
+        let document = comment.document()
+        let timeInterval = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
+        formatter.timeZone = TimeZone.init(secondsFromGMT: 0)
+        let dates = formatter.string(from: timeInterval)
+        
+        let data: [String: Any] = [
+            "user": [
+                "id": "ting3242006",
+                "name": Auth.auth().currentUser?.displayName],
+            "comments": [
+                "commentId": document.documentID,
+                "text": "\(comments)"],
+            "time": timeInterval,
+            "postId": id
+        ]
+        document.setData(data) { error in
+            if let error = error {
+                print("Error\(error)")
+            } else {
+                print("Comment update!")
+            }
+        }
+    }
+    
+    func fetchCommetData() {
+        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
+            self?.dbModels = []
+            if let error = error {
+                print("Error fetching documents: \(error)")
+            } else {
+                for document in querySnapshot!.documents {
+                    self?.dbModels.insert(document.data(), at: 0)
+                    print("============\(document.data())")
+                }
+            }
         }
     }
 }
