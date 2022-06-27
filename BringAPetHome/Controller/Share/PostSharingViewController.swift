@@ -38,6 +38,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     switch result {
                     case .success(let url):
                         shareManager.addSharing(shareContent: shareTextView.text, image: "\(url)")
+                        dismiss(animated: true)
                     case .failure:
                         break
                     }
