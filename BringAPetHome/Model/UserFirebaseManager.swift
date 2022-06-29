@@ -18,19 +18,20 @@ class UserFirebaseManager {
     var currentUser: UserModel?
     var userData: UserModel?
     
-    func addUser(name: String, uid: String, email: String) {
+    func addUser(name: String, uid: String, email: String, image: String) {
         let user = dataBase.collection("User")
-        let document = user.document()
+        let document = user.document(uid)
         let timeInterval = Date()
-        let userId = document.documentID
+//        let userId = document.documentID
         let data: [String: Any] = [
             "email": email,
-//            "auth": Auth.auth().currentUser?.displayName ?? "",
+            //            "auth": Auth.auth().currentUser?.displayName ?? "",
             "auth": currentUser,
             //            "auth": Auth.auth().currentUser?.displayName ?? "nil",
             "id": uid,
             "name": name,
-            "createdTime": timeInterval
+            "createdTime": timeInterval,
+            "image": image
         ]
         document.setData(data) { error in
             if let error = error {
@@ -57,5 +58,13 @@ class UserFirebaseManager {
             }
             completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", imageURLString: "")))
         }
+    }
+    
+    func updateUserInfo(id: String, image: String, name: String, completion: @escaping (Result<Void>) -> Void) {
+        let docRef = dataBase.collection("User").document(id).updateData([
+            "name": name,
+            "image": image
+        ])
+        completion(.success(()))
     }
 }

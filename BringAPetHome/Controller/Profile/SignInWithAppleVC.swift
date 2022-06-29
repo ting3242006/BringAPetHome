@@ -32,14 +32,14 @@ class SignInWithAppleVC: UIViewController {
            }
         }
         let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
-        changeRequest?.displayName = "帥哥"
+//        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
+//        changeRequest?.displayName = "帥哥"
         changeRequest?.commitChanges(completion: { error in
            guard error == nil else {
                print(error?.localizedDescription)
                return
            }
-                            
+
         })
 //        if let user = Auth.auth().currentUser {
 //           print(user.uid, user.email, user.displayName, user.photoURL)
@@ -180,11 +180,12 @@ extension SignInWithAppleVC {
             CustomFunc.customAlert(title: "無法取得使用者資料！", message: "", vc: self, actionHandler: nil)
             return
         }
-        let name = user.displayName
+//        let name = user.displayName
         let uid = user.uid
         let email = user.email
+//        let image = user.
 //        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
-        UserFirebaseManager.shared.addUser(name: name ?? "", uid: uid, email: email ?? "")
+        UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
         userUid = uid
         print("~~~~~\(userUid)")
     }

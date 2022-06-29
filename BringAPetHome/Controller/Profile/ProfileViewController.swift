@@ -36,6 +36,12 @@ class ProfileViewController: UIViewController {
         userImageView.layer.cornerRadius = 40
 //        userImageView.layer.bounds = true
     }
+    
+    @IBAction func editProfileInfo(_ sender: Any) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let editVC = mainStoryboard.instantiateViewController(withIdentifier: "EditProfileViewController") as? EditProfileViewController else { return }
+        self.navigationController?.pushViewController(editVC, animated: true)
+    }
         
     @IBAction func logOutButton(_ sender: Any) {
         let controller = UIAlertController(title: "登出提醒", message: "確定要登出嗎?", preferredStyle: .alert)

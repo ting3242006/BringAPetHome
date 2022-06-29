@@ -1608,6 +1608,9 @@
                                 <rect key="frame" x="93" y="277" width="43" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="pencil" catalog="system"/>
+                                <connections>
+                                    <action selector="editProfileInfo:" destination="ed8-Ql-9B4" eventType="touchUpInside" id="QcE-hQ-IaS"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vZU-uu-iYB"/>
@@ -1659,13 +1662,83 @@
                     <view key="view" contentMode="scaleToFill" id="yx3-87-KgY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COF-dL-yGg">
+                                <rect key="frame" x="155" y="84" width="104.5" height="33"/>
+                                <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="28"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dketch-9" translatesAutoresizingMaskIntoConstraints="NO" id="WLu-vh-Gmj">
+                                <rect key="frame" x="10" y="142" width="394" height="280"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="sK5-wQ-mUL"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jbq-Wr-Ysy">
+                                <rect key="frame" x="20" y="528" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uPt-AH-HLl">
+                                <rect key="frame" x="20" y="495" width="71" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" name="DavysGrey"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GIO-z2-ZXg">
+                                <rect key="frame" x="86" y="432" width="242" height="31"/>
+                                <color key="backgroundColor" name="DarkGreen"/>
+                                <color key="tintColor" name="CulturedWhite"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Upload image"/>
+                                <connections>
+                                    <action selector="addPicButton:" destination="jzM-6c-3Ox" eventType="touchUpInside" id="28c-Uz-QtY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9v-y3-hdF">
+                                <rect key="frame" x="86" y="806" width="242" height="31"/>
+                                <color key="backgroundColor" name="DarkGreen"/>
+                                <color key="tintColor" name="CulturedWhite"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Send"/>
+                                <connections>
+                                    <action selector="uploadInfo:" destination="jzM-6c-3Ox" eventType="touchUpInside" id="QxB-On-e0H"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="GxL-lC-662"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="COF-dL-yGg" firstAttribute="centerX" secondItem="yx3-87-KgY" secondAttribute="centerX" id="8Bj-49-PJT"/>
+                            <constraint firstItem="GIO-z2-ZXg" firstAttribute="leading" secondItem="GxL-lC-662" secondAttribute="leading" constant="86" id="DKr-Q3-1dF"/>
+                            <constraint firstItem="WLu-vh-Gmj" firstAttribute="leading" secondItem="GxL-lC-662" secondAttribute="leading" constant="10" id="EqJ-BK-Ds4"/>
+                            <constraint firstItem="GxL-lC-662" firstAttribute="trailing" secondItem="WLu-vh-Gmj" secondAttribute="trailing" constant="10" id="F84-gg-dNN"/>
+                            <constraint firstItem="Jbq-Wr-Ysy" firstAttribute="top" secondItem="uPt-AH-HLl" secondAttribute="bottom" constant="15" id="Hva-EO-98h"/>
+                            <constraint firstItem="GIO-z2-ZXg" firstAttribute="top" secondItem="WLu-vh-Gmj" secondAttribute="bottom" constant="10" id="JjM-GD-Vkl"/>
+                            <constraint firstItem="COF-dL-yGg" firstAttribute="top" secondItem="GxL-lC-662" secondAttribute="top" constant="40" id="Ljd-ln-wLh"/>
+                            <constraint firstItem="uPt-AH-HLl" firstAttribute="leading" secondItem="GxL-lC-662" secondAttribute="leading" constant="20" id="O62-Mv-Hqr"/>
+                            <constraint firstItem="GxL-lC-662" firstAttribute="trailing" secondItem="H9v-y3-hdF" secondAttribute="trailing" constant="86" id="Qkz-Kc-ZP3"/>
+                            <constraint firstItem="GxL-lC-662" firstAttribute="trailing" secondItem="GIO-z2-ZXg" secondAttribute="trailing" constant="86" id="YLc-6v-psd"/>
+                            <constraint firstItem="GIO-z2-ZXg" firstAttribute="centerX" secondItem="yx3-87-KgY" secondAttribute="centerX" id="df0-bi-L3p"/>
+                            <constraint firstItem="WLu-vh-Gmj" firstAttribute="top" secondItem="COF-dL-yGg" secondAttribute="bottom" constant="25" id="foF-sp-aJc"/>
+                            <constraint firstItem="uPt-AH-HLl" firstAttribute="top" secondItem="GIO-z2-ZXg" secondAttribute="bottom" constant="32" id="iBE-Fb-2Pv"/>
+                            <constraint firstItem="H9v-y3-hdF" firstAttribute="leading" secondItem="GxL-lC-662" secondAttribute="leading" constant="86" id="iMo-Iw-BRy"/>
+                            <constraint firstItem="Jbq-Wr-Ysy" firstAttribute="leading" secondItem="GxL-lC-662" secondAttribute="leading" constant="20" id="lo9-5I-8BW"/>
+                            <constraint firstItem="GxL-lC-662" firstAttribute="trailing" secondItem="Jbq-Wr-Ysy" secondAttribute="trailing" constant="20" id="mgc-D4-8gB"/>
+                            <constraint firstItem="GxL-lC-662" firstAttribute="bottom" secondItem="H9v-y3-hdF" secondAttribute="bottom" constant="25" id="xzB-m8-JYW"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="sendInfoButton" destination="H9v-y3-hdF" id="k7K-ex-9D4"/>
+                        <outlet property="uploadImageButton" destination="GIO-z2-ZXg" id="PzS-sq-YIc"/>
+                        <outlet property="userImageView" destination="WLu-vh-Gmj" id="UTc-zc-fkD"/>
+                        <outlet property="usernameTextField" destination="Jbq-Wr-Ysy" id="9k7-Uc-2so"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="03f-7D-Pfj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="900" y="2133"/>
+            <point key="canvasLocation" x="900.00000000000011" y="2132.8125"/>
         </scene>
         <!--分享-->
         <scene sceneID="sAl-bt-Kyj">
@@ -1800,6 +1873,9 @@
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
         <image name="photo.on.rectangle.angled" catalog="system" width="128" height="100"/>
+        <namedColor name="CulturedWhite">
+            <color red="0.95686274509803926" green="0.96862745098039216" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="DarkGreen">
             <color red="0.13333333333333333" green="0.15686274509803921" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

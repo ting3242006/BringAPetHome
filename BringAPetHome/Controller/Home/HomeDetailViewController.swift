@@ -162,7 +162,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             saveAnimal?.openDate = openDate
             saveAnimal?.place = place
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
-            let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.9)
+            let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let imageUrl = documentsDirectory.appendingPathComponent("\(id)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)
