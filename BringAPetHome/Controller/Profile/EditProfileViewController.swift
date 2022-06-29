@@ -10,15 +10,36 @@ import Firebase
 import FirebaseStorage
 
 class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
-
+    
     @IBOutlet weak var sendInfoButton: UIButton!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var uploadImageButton: UIButton!
+    @IBOutlet weak var deleteAccountButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
+    }
+    
+    @IBAction func deleteAccount(_ sender: Any) {
+        let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
+               let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
+                   self.deleteAccount()
+               }
+               let noAction = UIAlertAction(title: "Cancel", style: .cancel)
+
+               alert.addAction(noAction)
+               alert.addAction(yesAction)
+
+               present(alert, animated: true, completion: nil)
+    }
+    
+    func deleteAccount() {
+        UserFirebaseManager.shared.deleteAccount()
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
+        self.navigationController?.pushViewController(homeVC, animated: true)
     }
     
     @IBAction func uploadInfo(_ sender: Any) {
@@ -48,9 +69,9 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 break
             }
         }
-//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
-//        self.navigationController?.pushViewController(profileVC, animated: true)
+        //        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        //        guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
+        //        self.navigationController?.pushViewController(profileVC, animated: true)
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -69,7 +90,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
-
+    
     //  指定 data source / delegate 選取相簿照片或照相
     func selectPhoto(sourceType: UIImagePickerController.SourceType) {
         let controller = UIImagePickerController()
@@ -92,5 +113,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         uploadImageButton.layer.cornerRadius = 10
         uploadImageButton.clipsToBounds = true
         sendInfoButton.layer.cornerRadius = 10
+        deleteAccountButton.layer.cornerRadius = 10
     }
 }

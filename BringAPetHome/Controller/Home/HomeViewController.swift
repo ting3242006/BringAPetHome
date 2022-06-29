@@ -149,7 +149,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.placeLabel.text = item.place
         cell.layer.shadowColor = UIColor.lightGray.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-        cell.layer.shadowRadius = 5
+        cell.layer.shadowRadius = 3
         cell.layer.shadowOpacity = 0.3
         //        }
         return cell

@@ -67,4 +67,15 @@ class UserFirebaseManager {
         ])
         completion(.success(()))
     }
+    
+    func deleteAccount() {
+        let user = Auth.auth().currentUser
+        user?.delete { error in
+          if let error = error {
+            // An error happened.
+          } else {
+            // Account deleted.
+          }
+        }
+    }
 }

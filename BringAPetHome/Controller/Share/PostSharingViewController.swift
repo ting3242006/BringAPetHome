@@ -23,7 +23,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        shareTextView.backgroundColor = .systemGray6
+        setLayout()
         addSharIngImageButton.layer.cornerRadius = 15
     }
         
@@ -81,5 +81,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             self.shareImageView.image = image
         }
         dismiss(animated: true, completion: nil)
+    }
+    
+    func setLayout() {
+        shareTextView.layer.borderColor = UIColor.systemGray3.cgColor
+        shareTextView.layer.borderWidth = 0.5
     }
 }

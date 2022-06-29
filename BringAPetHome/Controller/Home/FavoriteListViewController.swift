@@ -70,11 +70,11 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
         let animal = animalList[indexPath.row]
-        cell.sex.text = "\(animal.id)"
+        cell.sex.text = "ID:\(animal.id)"
 //        cell.sex.text = "性別:\(animal.sex ?? "")"
         cell.opendate.text = "開放領養:\(animal.openDate ?? "")"
-        cell.sterilization.text = "是否節育:\(animal.steriization ?? "")"
-        cell.place.text = "所在地:\(animal.place ?? "")"
+        cell.sterilization.text = "\(animal.steriization ?? "")"
+        cell.place.text = "\(animal.place ?? "")"
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let imageUrl = documentsDirectory.appendingPathComponent("\(animal.id)").appendingPathExtension("jpg")
         cell.animalImageView.image = UIImage(contentsOfFile: imageUrl.path)
