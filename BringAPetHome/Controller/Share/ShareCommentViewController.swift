@@ -14,6 +14,7 @@ class ShareCommentViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var postId: String?
+    var shareModel: ShareModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +37,8 @@ class ShareCommentViewController: UIViewController {
     }
     
     @IBAction func sendShareComment(_ sender: Any) {
-        ShareManager.shared.addComments(id: postId ?? "", comments: commentTextField.text ?? "")
+        ShareManager.shared.addComments(postId: shareModel?.postId ?? "", comments: commentTextField.text ?? "")
     }
-    
 }
 
 extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource {

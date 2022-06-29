@@ -31,13 +31,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
-            let resizeImage = resizeImage(image: image, width: 30)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
-                                                                style: .plain,
-                                                                target: self,
-                                                                action: #selector(didTap))
-        }
+        setupNavigationItem()
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -45,7 +39,7 @@ class HomeViewController: UIViewController {
         collectionView.allowsSelection = true
         
         // style
-        collectionView.backgroundColor = .lightGray
+        collectionView.backgroundColor = UIColor(red: 244/255, green: 247/255, blue: 245/255, alpha: 1)
         collectionView.showsVerticalScrollIndicator = false
         
         // layout
@@ -74,6 +68,17 @@ class HomeViewController: UIViewController {
             return
         }
         collectionView.reloadData()
+    }
+    
+    func setupNavigationItem() {
+        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
+            let resizeImage = resizeImage(image: image, width: 30)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTap))
+        }
+        
     }
     
     func fetchData() {
@@ -123,7 +128,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else {
             //            print("~~~\(newAnimalList.count)")
-            return newAnimalList.count            
+            return newAnimalList.count
         }
     }
     
@@ -132,16 +137,21 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() } // 要拆開寫
-//        DispatchQueue.main.async {
-            let item = self.animalDatas[indexPath.item]
-            let url = item.albumFile
-            cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
-            cell.shelterImageView.contentMode = .scaleAspectFill
-            cell.shelterImageView.layer.cornerRadius = 10
-            cell.shelterImageView.clipsToBounds = true
-            cell.sexLabel.text = String(item.sex)
-            cell.placeLabel.text = item.place
-//        }
+        //        DispatchQueue.main.async {
+        let item = self.animalDatas[indexPath.item]
+        let url = item.albumFile
+        cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
+        cell.shelterImageView.contentMode = .scaleAspectFill
+        cell.shelterImageView.layer.cornerRadius = 10
+        cell.shelterImageView.clipsToBounds = true
+        cell.sexLabel.text = String(item.sex)
+        cell.placeLabel.textColor = UIColor(named: "RichBlack")
+        cell.placeLabel.text = item.place
+        cell.layer.shadowColor = UIColor.lightGray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
+        cell.layer.shadowRadius = 5
+        cell.layer.shadowOpacity = 0.3
+        //        }
         return cell
     }
     

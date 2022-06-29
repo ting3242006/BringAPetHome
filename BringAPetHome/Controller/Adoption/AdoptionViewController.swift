@@ -114,6 +114,7 @@ class AdoptionViewController: UIViewController {
         fetchData()
         tableView.reloadData()
         selectedBackgroundView.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.backgroundColor = .clear
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {

@@ -51,34 +51,70 @@ class HomeFilterViewController: UIViewController {
         view.backgroundColor = .white
         self.navigationItem.title = "搜尋條件"
 //        self.tabBarController?.tabBar.isHidden = true
+        layoutButton()
     }
     
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
+        self.dogButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.dogButton.tintColor = .white
+//        self.dogButton.imageView?.contentMode = .scaleAspectFit
+        self.catButton.backgroundColor = .clear
+        self.catButton.tintColor = .darkGray
     }
     
     @IBAction func selectCat(_ sender: Any) {
         filter.kind = "貓"
+        self.catButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.catButton.tintColor = .white
+        self.dogButton.backgroundColor = .clear
+        self.dogButton.tintColor = .darkGray
     }
     
     @IBAction func selectBoy(_ sender: Any) {
         filter.sex = "M"
+        self.boyButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.boyButton.tintColor = .white
+        self.girlButton.backgroundColor = .clear
+        self.girlButton.tintColor = .darkGray
     }
     
     @IBAction func selectGirl(_ sender: Any) {
         filter.sex = "F"
+        self.girlButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.girlButton.tintColor = .white
+        self.boyButton.backgroundColor = .clear
+        self.boyButton.tintColor = .darkGray
     }
     
     @IBAction func selectSmall(_ sender: Any) {
         filter.bodytype = "SMALL"
+        self.smallButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.smallButton.tintColor = .white
+        self.mediumButton.backgroundColor = .clear
+        self.mediumButton.tintColor = .darkGray
+        self.bigButton.backgroundColor = .clear
+        self.bigButton.tintColor = .darkGray
     }
     
     @IBAction func selectMedium(_ sender: Any) {
         filter.bodytype = "MEDIUM"
+        self.mediumButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.mediumButton.tintColor = .white
+        self.smallButton.backgroundColor = .clear
+        self.smallButton.tintColor = .darkGray
+        self.bigButton.backgroundColor = .clear
+        self.bigButton.tintColor = .darkGray
     }
     
     @IBAction func selectBig(_ sender: Any) {
         filter.bodytype = "BIG"
+        self.bigButton.backgroundColor = UIColor(named: "HoneyYellow")
+        self.bigButton.tintColor = .white
+        self.mediumButton.backgroundColor = .clear
+        self.mediumButton.tintColor = .darkGray
+        self.smallButton.backgroundColor = .clear
+        self.smallButton.tintColor = .darkGray
     }
     
     func addTransparentView(frames: CGRect) {
@@ -122,6 +158,33 @@ class HomeFilterViewController: UIViewController {
     @IBAction func sendFilterButton(_ sender: UIButton) {
         delegate?.selectFilterViewController(self, didSelect: filter)
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func layoutButton() {
+        dogButton.layer.cornerRadius = 15
+        dogButton.layer.borderColor = UIColor.lightGray.cgColor
+        dogButton.layer.borderWidth = 0.3
+        catButton.layer.cornerRadius = 15
+        catButton.layer.borderColor = UIColor.lightGray.cgColor
+        catButton.layer.borderWidth = 0.3
+        boyButton.layer.cornerRadius = 15
+        boyButton.layer.borderColor = UIColor.lightGray.cgColor
+        boyButton.layer.borderWidth = 0.3
+        girlButton.layer.cornerRadius = 15
+        girlButton.layer.borderColor = UIColor.lightGray.cgColor
+        girlButton.layer.borderWidth = 0.3
+        girlButton.layer.cornerRadius = 15
+        girlButton.layer.borderColor = UIColor.lightGray.cgColor
+        girlButton.layer.borderWidth = 0.3
+        smallButton.layer.cornerRadius = 15
+        smallButton.layer.borderColor = UIColor.lightGray.cgColor
+        smallButton.layer.borderWidth = 0.3
+        mediumButton.layer.cornerRadius = 15
+        mediumButton.layer.borderColor = UIColor.lightGray.cgColor
+        mediumButton.layer.borderWidth = 0.3
+        bigButton.layer.cornerRadius = 15
+        bigButton.layer.borderColor = UIColor.lightGray.cgColor
+        bigButton.layer.borderWidth = 0.3
     }
 }
 

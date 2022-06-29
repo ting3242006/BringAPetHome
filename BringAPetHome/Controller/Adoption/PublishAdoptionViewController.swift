@@ -63,6 +63,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
+        setupButton()
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
@@ -216,6 +217,27 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                 break
             }
         }
+    }
+    
+    func setupButton() {
+        inputContentTextField.layer.borderWidth = 0.5
+        inputContentTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        inputContentTextField.layer.cornerRadius = 5
+        sexButton.backgroundColor = UIColor(named: "CulturedWhite")
+//        sexButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        sexButton.layer.borderWidth = 0.5
+        sexButton.layer.cornerRadius = 5
+//        sexButton.tintColor = .white
+//        ageButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        ageButton.layer.borderWidth = 0.5
+        ageButton.backgroundColor = UIColor(named: "CulturedWhite")
+        ageButton.layer.cornerRadius = 5
+//        ageButton.tintColor = .white
+//        petableButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        petableButton.layer.borderWidth = 0.5
+        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
+        petableButton.layer.cornerRadius = 5
+//        petableButton.tintColor = .white
     }
 }
 

@@ -13,6 +13,8 @@
 		2511F47728674AE900E59FB0 /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F47628674AE900E59FB0 /* ShareManager.swift */; };
 		251646AD286434CF00D3AF27 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AC286434CF00D3AF27 /* CommentViewController.swift */; };
 		251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */; };
+		25178BA0286AA6DB008126A9 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25178B9F286AA6DB008126A9 /* UserModel.swift */; };
+		25178BA2286AA79C008126A9 /* UserFirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25178BA1286AA79C008126A9 /* UserFirebaseManager.swift */; };
 		251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */; };
 		251A7EAC285F114100FA7E1D /* AdoptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */; };
 		251A7EAF285F122800FA7E1D /* AdoptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251A7EAE285F122800FA7E1D /* AdoptionTableViewCell.swift */; };
@@ -34,6 +36,7 @@
 		252D80822859CC7C0076236B /* ShelterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80812859CC7C0076236B /* ShelterManager.swift */; };
 		252D80842859E67C0076236B /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80832859E67C0076236B /* HTTP.swift */; };
 		252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D8085285A170A0076236B /* HomeDetailViewController.swift */; };
+		25349ABD286C484A00C5F76B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25349ABC286C484A00C5F76B /* EditProfileViewController.swift */; };
 		253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */; };
 		254861B62865AE7B00A4C177 /* ShareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */; };
 		257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 257CA5EC285895620009BE17 /* GoogleService-Info.plist */; };
@@ -58,6 +61,8 @@
 		2511F47628674AE900E59FB0 /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
 		251646AC286434CF00D3AF27 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		251646AE28643FD400D3AF27 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		25178B9F286AA6DB008126A9 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		25178BA1286AA79C008126A9 /* UserFirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFirebaseManager.swift; sourceTree = "<group>"; };
 		251A7EA7285EED5000FA7E1D /* UserData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserData.xcdatamodel; sourceTree = "<group>"; };
 		251A7EAB285F114100FA7E1D /* AdoptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionViewController.swift; sourceTree = "<group>"; };
 		251A7EAE285F122800FA7E1D /* AdoptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptionTableViewCell.swift; sourceTree = "<group>"; };
@@ -81,6 +86,7 @@
 		252D80812859CC7C0076236B /* ShelterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterManager.swift; sourceTree = "<group>"; };
 		252D80832859E67C0076236B /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		252D8085285A170A0076236B /* HomeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewController.swift; sourceTree = "<group>"; };
+		25349ABC286C484A00C5F76B /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailTableViewCell.swift; sourceTree = "<group>"; };
 		254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCollectionViewCell.swift; sourceTree = "<group>"; };
 		257CA5EC285895620009BE17 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -264,6 +270,8 @@
 				25BB098728616F60005E7872 /* AdoptionManager.swift */,
 				2511F4742867413B00E59FB0 /* ShareModel.swift */,
 				2511F47628674AE900E59FB0 /* ShareManager.swift */,
+				25178B9F286AA6DB008126A9 /* UserModel.swift */,
+				25178BA1286AA79C008126A9 /* UserFirebaseManager.swift */,
 				251A7EA6285EED5000FA7E1D /* AnimalData.xcdatamodeld */,
 			);
 			path = Model;
@@ -274,6 +282,7 @@
 			children = (
 				25E573382869B6A8009348A0 /* SignInWithAppleVC.swift */,
 				25E573332869B20E009348A0 /* ProfileViewController.swift */,
+				25349ABC286C484A00C5F76B /* EditProfileViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -436,6 +445,7 @@
 				254861B62865AE7B00A4C177 /* ShareCollectionViewCell.swift in Sources */,
 				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
 				252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */,
+				25349ABD286C484A00C5F76B /* EditProfileViewController.swift in Sources */,
 				25E573362869B26D009348A0 /* ProfileTableViewCell.swift in Sources */,
 				2511F47128670A5800E59FB0 /* SharePetCollectionViewController.swift in Sources */,
 				25E5733128699EA0009348A0 /* ShareCommentTableViewCell.swift in Sources */,
@@ -448,6 +458,7 @@
 				251AAA8C28686F840074F094 /* ShareDetailViewController.swift in Sources */,
 				252D80842859E67C0076236B /* HTTP.swift in Sources */,
 				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,
+				25178BA2286AA79C008126A9 /* UserFirebaseManager.swift in Sources */,
 				251C9982285DC74E00E46457 /* FavoriteListViewController.swift in Sources */,
 				251C9984285DCA2D00E46457 /* FavoriteListTableViewCell.swift in Sources */,
 				25BB098828616F60005E7872 /* AdoptionManager.swift in Sources */,
@@ -462,6 +473,7 @@
 				25A215BB2860749F002CE9BA /* PublishAdoptionViewController.swift in Sources */,
 				253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */,
 				25E573392869B6A8009348A0 /* SignInWithAppleVC.swift in Sources */,
+				25178BA0286AA6DB008126A9 /* UserModel.swift in Sources */,
 				2511F4752867413B00E59FB0 /* ShareModel.swift in Sources */,
 				251AF647285CB0EF007B912D /* MapViewController.swift in Sources */,
 				251A7EAF285F122800FA7E1D /* AdoptionTableViewCell.swift in Sources */,
