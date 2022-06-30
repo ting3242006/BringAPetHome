@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     
@@ -30,10 +31,15 @@ class ProfileViewController: UIViewController {
         tableView.delegate = self
         //        tableView.backgroundColor = .orange
         showLoginVC()
+        getUserProfile()
         shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
-        userImageView.layer.cornerRadius = 40
+        userImageView.layer.cornerRadius = 50
+        userImageView.layer.borderWidth = 3
+        userImageView.layer.borderColor = UIColor.lightGray.cgColor
+        userNameLabel.textAlignment = .center
+//        userImageView.layer.borderColor = UIColor(named: "DavysGrey")?.cgColor
 //        userImageView.layer.bounds = true
     }
     
@@ -53,6 +59,7 @@ class ProfileViewController: UIViewController {
                 let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
                 self.navigationController?.pushViewController(homeVC, animated: true)
+                userUid = ""
                 print("sign out")
             } catch let signOutError as NSError {
                print("Error signing out: (signOutError)")
@@ -63,30 +70,22 @@ class ProfileViewController: UIViewController {
         controller.addAction(cancelAction)
         present(controller, animated: true, completion: nil)
     }
-  
-//        do {
-//            try Auth.auth().signOut()
-//            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//            guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-//            self.navigationController?.pushViewController(homeVC, animated: true)
-//        } catch {
-//            print(error)
-//        }
-//    }
     
     override func viewWillAppear(_ animated: Bool) {
-        UserFirebaseManager.shared.fetchUser(userId: userUid) { result in
+        getUserProfile()
+//        UserFirebaseManager.shared.fetchUser(userId: userUid) { result in
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
             switch result {
             case let .success(user):
                 self.userData = user
                 print("~~~~~\(self.userData)")
                 self.userIdLabel.text = self.userData?.email
-                self.userIdLabel.textColor = .white
+                self.userIdLabel.textColor = .lightGray
             case .failure(_):
                 print("Error")
             }
         }
-        shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
+        shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
 //        showLoginVC()
@@ -112,6 +111,21 @@ class ProfileViewController: UIViewController {
         gradient.locations = [1, 0.2, 0]
         coverImageView.layer.addSublayer(gradient)
     }
+    
+    func getUserProfile() {
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                print("~~~~~\(self.userData)")
+                let urls = self.userData?.imageURLString
+                self.userImageView.kf.setImage(with: URL(string: urls ?? ""), placeholder: UIImage(named: "dketch-4"))
+                self.userNameLabel.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
@@ -128,10 +142,18 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? ProfileTableViewCell else {
             return UITableViewCell()
         }
+        
+        // 陰影跑不出來
+        cell.profileImageView.layer.shadowColor = UIColor.darkGray.cgColor
+        cell.profileImageView.layer.shadowOffset = CGSize(width: 3, height: 3)
+        cell.profileImageView.layer.shadowRadius = 3
+        cell.profileImageView.layer.shadowOpacity = 0.5
+        cell.profileImageView.layer.masksToBounds = false
         let urls = shareList[indexPath.row].shareImageUrl
         cell.profileImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
         cell.profileContent.text = shareList[indexPath.row].shareContent
         cell.selectedBackgroundView = selectedBackgroundView
+        
         return cell
     }
 }

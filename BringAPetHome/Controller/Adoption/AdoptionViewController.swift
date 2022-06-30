@@ -70,6 +70,7 @@ class AdoptionViewController: UIViewController {
     }
     var adoptionFirebaseModel = AdoptionModel()
     let selectedBackgroundView = UIView()
+    var userData: UserModel?
     
     enum Adoption: String {
         case age = "age"
@@ -180,6 +181,18 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
 
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
             cell.setupPetable(petable: petable)
+        }
+        
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                let url = self.userData?.imageURLString
+                cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.usernameLabel.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
         }
         return cell
     }

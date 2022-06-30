@@ -82,9 +82,13 @@ class AdoptionTableViewCell: UITableViewCell {
     @IBOutlet weak var adoptionContent: UILabel!
     @IBOutlet weak var createdTimeLabel: UILabel!
     @IBOutlet weak var ageLabel: UILabel!
+    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var usernameLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        userImageView.layer.cornerRadius = 15
+        userImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

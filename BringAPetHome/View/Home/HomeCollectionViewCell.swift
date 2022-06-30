@@ -33,7 +33,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
                                    leading: contentView.leadingAnchor,
                                    bottom: contentView.bottomAnchor,
                                    trailing: contentView.leadingAnchor,
-                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 160, height: 230)
+                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 160, height: 245)
         shelterImageView.anchor(top: backgroundImageView.topAnchor,
                                 leading: backgroundImageView.leadingAnchor,
                                 trailing: backgroundImageView.trailingAnchor,

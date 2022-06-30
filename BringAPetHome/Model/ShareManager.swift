@@ -40,7 +40,8 @@ class ShareManager {
             "image": image,
             "createdTime": timeInterval,
             "shareContent": shareContent,
-            "userUid": uid
+            "userUid": Auth.auth().currentUser?.uid
+//            "userUid": uid
         ]
         document.setData(data) { error in
             if let error = error {

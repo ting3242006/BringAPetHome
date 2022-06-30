@@ -10,6 +10,7 @@ import Firebase
 
 class CommentViewController: UIViewController {
     var adoptionId: String?
+    var userData: UserModel?
     
     enum Comments: String {
         case commentText = "commentText"
@@ -17,6 +18,7 @@ class CommentViewController: UIViewController {
         case adoptionId = "adoptionId"
         case time = "time"
         case creator = "creator"
+        case userUid = "userUid"
     }
     
     var creator: [String: Any] = [
@@ -69,7 +71,9 @@ class CommentViewController: UIViewController {
             Comments.commentText.rawValue: text,
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
-            Comments.adoptionId.rawValue: adoptionId ?? ""
+            Comments.adoptionId.rawValue: adoptionId ?? "",
+            Comments.userUid.rawValue: userData?.id
+            
 //            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
@@ -82,7 +86,7 @@ class CommentViewController: UIViewController {
     }
     
     func fetchCommetData() {
-        dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
+        dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").order(by: "time", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
 //        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
@@ -90,7 +94,7 @@ class CommentViewController: UIViewController {
             } else {
                 for document in querySnapshot!.documents {
                     self?.dbModels.insert(document.data(), at: 0)
-                    print("============\(document.data())")
+
                 }
             }
         }
@@ -132,6 +136,17 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                let url = self.userData?.imageURLString
+                cell.commentUserImage.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.commentUserId.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
+        }
         return cell
     }
 }

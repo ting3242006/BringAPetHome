@@ -25,6 +25,7 @@ class HomeFilterViewController: UIViewController {
     var filter = Filter()
     var delegate: HomeFilterViewControllerDelegate?
     
+    @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var dogButton: UIButton!
     @IBOutlet weak var catButton: UIButton!
     
@@ -49,26 +50,43 @@ class HomeFilterViewController: UIViewController {
         tableView.dataSource = self
 
         view.backgroundColor = .white
-        self.navigationItem.title = "搜尋條件"
-//        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.title = "Search Filters"
+        self.tabBarController?.tabBar.isHidden = true
         layoutButton()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
     }
+    
+        override func viewWillDisappear(_ animated: Bool) {
+            self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+        }
     
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
-        self.dogButton.backgroundColor = UIColor(named: "HoneyYellow")
-        self.dogButton.tintColor = .white
+//        self.dogButton.backgroundColor = UIColor(named: "HoneyYellow")
+//        self.dogButton.tintColor = .white
+        self.dogButton.layer.borderColor = UIColor(named: "RichBlack")?.cgColor
+        self.dogButton.tintColor = UIColor(named: "RichBlack")
 //        self.dogButton.imageView?.contentMode = .scaleAspectFit
-        self.catButton.backgroundColor = .clear
-        self.catButton.tintColor = .darkGray
+//        self.catButton.backgroundColor = .clear
+        self.catButton.tintColor = .lightGray
+        self.catButton.layer.borderColor = UIColor.lightGray.cgColor
     }
     
     @IBAction func selectCat(_ sender: Any) {
         filter.kind = "貓"
-        self.catButton.backgroundColor = UIColor(named: "HoneyYellow")
-        self.catButton.tintColor = .white
-        self.dogButton.backgroundColor = .clear
-        self.dogButton.tintColor = .darkGray
+//        self.catButton.backgroundColor = UIColor(named: "HoneyYellow")
+//        self.catButton.tintColor = .white
+//        self.dogButton.backgroundColor = .clear
+        self.catButton.layer.borderColor = UIColor(named: "RichBlack")?.cgColor
+        self.catButton.tintColor = UIColor(named: "RichBlack")
+        self.dogButton.layer.borderColor = UIColor.lightGray.cgColor
+        self.dogButton.tintColor = .lightGray
     }
     
     @IBAction func selectBoy(_ sender: Any) {
@@ -143,6 +161,10 @@ class HomeFilterViewController: UIViewController {
         }, completion: nil)
     }
     
+    @objc private func didTapClose() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @objc func removeTransparentView() {
         let frames = selectedButton.frame
         UIView.animate(withDuration: 0.4,
@@ -163,28 +185,32 @@ class HomeFilterViewController: UIViewController {
     func layoutButton() {
         dogButton.layer.cornerRadius = 15
         dogButton.layer.borderColor = UIColor.lightGray.cgColor
-        dogButton.layer.borderWidth = 0.3
+        dogButton.layer.borderWidth = 1
+        dogButton.tintColor = UIColor(named: "DarkGreen")
         catButton.layer.cornerRadius = 15
         catButton.layer.borderColor = UIColor.lightGray.cgColor
-        catButton.layer.borderWidth = 0.3
+        catButton.layer.borderWidth = 1
+        catButton.tintColor = UIColor(named: "DarkGreen")
         boyButton.layer.cornerRadius = 15
         boyButton.layer.borderColor = UIColor.lightGray.cgColor
-        boyButton.layer.borderWidth = 0.3
+        boyButton.layer.borderWidth = 1
         girlButton.layer.cornerRadius = 15
         girlButton.layer.borderColor = UIColor.lightGray.cgColor
-        girlButton.layer.borderWidth = 0.3
+        girlButton.layer.borderWidth = 1
         girlButton.layer.cornerRadius = 15
         girlButton.layer.borderColor = UIColor.lightGray.cgColor
-        girlButton.layer.borderWidth = 0.3
+        girlButton.layer.borderWidth = 1
         smallButton.layer.cornerRadius = 15
         smallButton.layer.borderColor = UIColor.lightGray.cgColor
-        smallButton.layer.borderWidth = 0.3
+        smallButton.layer.borderWidth = 1
         mediumButton.layer.cornerRadius = 15
         mediumButton.layer.borderColor = UIColor.lightGray.cgColor
-        mediumButton.layer.borderWidth = 0.3
+        mediumButton.layer.borderWidth = 1
         bigButton.layer.cornerRadius = 15
         bigButton.layer.borderColor = UIColor.lightGray.cgColor
-        bigButton.layer.borderWidth = 0.3
+        bigButton.layer.borderWidth = 1
+        filterButton.layer.cornerRadius = 15
+        filterButton.clipsToBounds = true
     }
 }
 

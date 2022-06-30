@@ -52,7 +52,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
-                        UserFirebaseManager.shared.updateUserInfo(id: userUid, image: "\(url)", name: usernameTextField.text ?? "") { result in
+                        UserFirebaseManager.shared.updateUserInfo(id: userUid, image: "\(url)",
+                                                                  name: usernameTextField.text ?? "") { result in
                             switch result {
                             case .success:
                                 print("~~~~~Success")

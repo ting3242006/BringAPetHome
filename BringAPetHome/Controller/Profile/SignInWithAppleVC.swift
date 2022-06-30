@@ -25,25 +25,37 @@ class SignInWithAppleVC: UIViewController {
         self.checkAppleIDCredentialState(userID: appleUserID ?? "")
         
         Auth.auth().addStateDidChangeListener { auth, user in
-           if let user = user {
-               print("\(user.uid) login")
-           } else {
-               print("not login")
-           }
+            if let user = user {
+                print("\(user.uid) login")
+            } else {
+                print("not login")
+            }
         }
         let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-//        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
-//        changeRequest?.displayName = "帥哥"
+        //        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
+        //        changeRequest?.displayName = "帥哥"
         changeRequest?.commitChanges(completion: { error in
-           guard error == nil else {
-               print(error?.localizedDescription)
-               return
-           }
-
+            guard error == nil else {
+                print(error?.localizedDescription)
+                return
+            }
+            
         })
-//        if let user = Auth.auth().currentUser {
-//           print(user.uid, user.email, user.displayName, user.photoURL)
-//        }
+        //        if let user = Auth.auth().currentUser {
+        //           print(user.uid, user.email, user.displayName, user.photoURL)
+        //        }
+        // Do any additional setup after loading the view.
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            if user != nil {
+                guard let vc = self.storyboard?.instantiateViewController(
+                    withIdentifier: "HomeViewController") as? HomeViewController else {
+                    fatalError("can't find HomeViewController")
+                }
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else {
+                return
+            }
+        }
     }
     
     // MARK: - 監聽目前的 Apple ID 的登入狀況
@@ -57,8 +69,8 @@ class SignInWithAppleVC: UIViewController {
                 CustomFunc.customAlert(title: "使用者憑證已被註銷！",
                                        message: "請到\n「設定 → Apple ID → 密碼與安全性 → 使用 Apple ID 的 App」\n將此 App 停止使用 Apple ID\n並再次使用 Apple ID 登入本 App！",
                                        vc: self, actionHandler: nil)
-//            case .notFound:
-//                CustomFunc.customAlert(title: "", message: "使用者尚未使用過 Apple ID 登入！", vc: self, actionHandler: nil)
+                //            case .notFound:
+                //                CustomFunc.customAlert(title: "", message: "使用者尚未使用過 Apple ID 登入！", vc: self, actionHandler: nil)
             case .transferred:
                 CustomFunc.customAlert(title: "請與開發者團隊進行聯繫，以利進行使用者遷移！", message: "", vc: self, actionHandler: nil)
             default:
@@ -148,11 +160,11 @@ class SignInWithAppleVC: UIViewController {
         }.joined()
         return hashString
     }
-//    @IBAction func closeLogin(_ sender: Any) {
-//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-//        self.navigationController?.pushViewController(homeVC, animated: true)
-//    }
+    //    @IBAction func closeLogin(_ sender: Any) {
+    //        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    //        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
+    //        self.navigationController?.pushViewController(homeVC, animated: true)
+    //    }
 }
 
 extension SignInWithAppleVC {
@@ -172,7 +184,7 @@ extension SignInWithAppleVC {
             self.navigationController?.pushViewController(homeVC, animated: true)
         }
     }
-
+    
     // MARK: - Firebase 取得登入使用者的資訊
     func getFirebaseUserInfo() {
         let currentUser = Auth.auth().currentUser
@@ -180,11 +192,11 @@ extension SignInWithAppleVC {
             CustomFunc.customAlert(title: "無法取得使用者資料！", message: "", vc: self, actionHandler: nil)
             return
         }
-//        let name = user.displayName
+        //        let name = user.displayName
         let uid = user.uid
         let email = user.email
-//        let image = user.
-//        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
+        //        let image = user.
+        //        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
         UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
         userUid = uid
         print("~~~~~\(userUid)")

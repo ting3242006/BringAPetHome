@@ -144,7 +144,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.shelterImageView.contentMode = .scaleAspectFill
         cell.shelterImageView.layer.cornerRadius = 10
         cell.shelterImageView.clipsToBounds = true
-        cell.sexLabel.text = String(item.sex)
+//        cell.sexLabel.text = String(item.sex)
+        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.text = item.place
         cell.layer.shadowColor = UIColor.lightGray.cgColor

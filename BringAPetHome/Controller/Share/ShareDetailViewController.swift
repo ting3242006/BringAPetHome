@@ -16,17 +16,19 @@ class ShareDetailViewController: UIViewController {
     var dataBase = Firestore.firestore()
     var shareList = [ShareModel]()
     var shareItem: ShareModel?
+    var userData: UserModel?
     let selectedBackgroundView = UIView()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         selectedBackgroundView.backgroundColor = UIColor.clear
+        
         tableView.delegate = self
         tableView.dataSource = self
         shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
-//        refresh()
+        //        refresh()
     }
     
     @IBAction func showComment(_ sender: Any) {
@@ -49,9 +51,9 @@ class ShareDetailViewController: UIViewController {
         })
     }
 }
-    // DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-    //    refreshControl.endRefreshing()
-    // } 要寫停止refresh
+// DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//    refreshControl.endRefreshing()
+// } 要寫停止refresh
 
 extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,11 +69,25 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
                                                        for: indexPath) as? ShareDetailTableViewCell else { return UITableViewCell() }
         let urls = shareList[indexPath.row].shareImageUrl
         cell.shareImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
-        cell.userNameLabel.text = "Ting"
-//        cell.timeLabel.text = shareList[indexPath.row].createdTime
+        //        cell.userNameLabel.text = "Ting"
+        //        cell.timeLabel.text = shareList[indexPath.row].createdTime
         cell.contentLabel.text = shareList[indexPath.row].shareContent
-        cell.userImageView.image = UIImage(named: "dketch-1")
+        //        cell.userImageView.image = UIImage(named: "dketch-1")
+        
         cell.selectedBackgroundView = selectedBackgroundView
+        cell.userImageView.layer.cornerRadius = 15
+        
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                let url = self.userData?.imageURLString
+                cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.userNameLabel.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
+        }
         return cell
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */; };
 		2511F47128670A5800E59FB0 /* SharePetCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F47028670A5800E59FB0 /* SharePetCollectionViewController.swift */; };
 		2511F473286725A800E59FB0 /* PostSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F472286725A800E59FB0 /* PostSharingViewController.swift */; };
 		2511F4752867413B00E59FB0 /* ShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F4742867413B00E59FB0 /* ShareModel.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		2511F47028670A5800E59FB0 /* SharePetCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePetCollectionViewController.swift; sourceTree = "<group>"; };
 		2511F472286725A800E59FB0 /* PostSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSharingViewController.swift; sourceTree = "<group>"; };
 		2511F4742867413B00E59FB0 /* ShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareModel.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				257CA5EF28589A780009BE17 /* UIView+Extension.swift */,
 				257CA5F228589B550009BE17 /* UIScreen+Extension.swift */,
 				252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */,
+				250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */,
 				25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */,
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,
 				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,

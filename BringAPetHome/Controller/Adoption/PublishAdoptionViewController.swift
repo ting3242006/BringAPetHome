@@ -64,6 +64,18 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         tableView.dataSource = self
         tableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
         setupButton()
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
@@ -107,6 +119,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             // 開啟相機
             present(imagePicker, animated: true)
         }
+    }
+    
+    @objc private func didTapClose() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController,

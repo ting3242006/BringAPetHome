@@ -38,7 +38,7 @@ class ShelterManager {
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(error!))
                 return
@@ -53,17 +53,17 @@ class ShelterManager {
     }
     // 拉回 mainThread
     
-    //MARK:CLGeocoder地理編碼 地址轉換經緯度位置
-    func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> ())  {
+    // MARK:CLGeocoder地理編碼 地址轉換經緯度位置
+    func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> Void)  {
         CLGeocoder().geocodeAddressString(address) { placemarks, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
             if let placemarks = placemarks {
-                //取得第一個地點標記
+                // 取得第一個地點標記
                 let placemark = placemarks[0]
-                //加上標記
+                // 加上標記
                 let annotation = MKPointAnnotation()
                 if let location = placemark.location {
                     annotation.coordinate = location.coordinate
@@ -128,9 +128,9 @@ class ShelterManager {
     func sexCh(sex: String) -> String {
         switch sex {
         case "M":
-            return "男生"
+            return "男"
         case "F":
-            return "女生"
+            return "女"
         case "N":
             return "未輸入"
         default:
@@ -162,7 +162,7 @@ class ShelterManager {
         }
     }
     
-    func sterilization(sterilization: String) -> String{
+    func sterilization(sterilization: String) -> String {
         switch sterilization {
         case "T":
             return "已絕育"
