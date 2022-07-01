@@ -15,6 +15,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     let shelterImageView = UIImageView()
     let sexLabel = UILabel()
     let placeLabel = UILabel()
+    let sexImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +30,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
         backgroundImageView.addSubview(shelterImageView)
         backgroundImageView.addSubview(sexLabel)
         backgroundImageView.addSubview(placeLabel)
+        backgroundImageView.addSubview(sexImageView)
         backgroundImageView.anchor(top: contentView.topAnchor,
                                    leading: contentView.leadingAnchor,
                                    bottom: contentView.bottomAnchor,
@@ -49,6 +51,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
                           trailing: backgroundImageView.trailingAnchor,
                           padding: .init(top: 8, left: 4, bottom: 0, right: 2),
                           height: 22)
+        sexImageView.anchor(bottom: backgroundImageView.bottomAnchor, trailing: backgroundImageView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 16, right: 5), width: 20, height: 20)
     }
     
     required init?(coder: NSCoder) {

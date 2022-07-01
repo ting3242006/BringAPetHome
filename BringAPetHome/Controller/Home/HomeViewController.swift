@@ -147,7 +147,17 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 //        cell.sexLabel.text = String(item.sex)
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
-        cell.placeLabel.text = item.place
+        cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
+//        cell.sexImageView.image = UIImage(named:
+//                                            switch fileExtension {
+//        case "男":
+//            "boy"
+//        case "女":
+//            "girl"
+//        default:
+//            "paws"
+//        }
+//        )
         cell.layer.shadowColor = UIColor.lightGray.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 5)
         cell.layer.shadowRadius = 3

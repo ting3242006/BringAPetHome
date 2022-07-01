@@ -30,45 +30,22 @@ class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         //        tableView.backgroundColor = .orange
+        if Auth.auth().currentUser == nil {
         showLoginVC()
+        } else {
+            return
+        }
         getUserProfile()
         shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
         userImageView.layer.cornerRadius = 50
+        userImageView.clipsToBounds = true
         userImageView.layer.borderWidth = 3
         userImageView.layer.borderColor = UIColor.lightGray.cgColor
-        userNameLabel.textAlignment = .center
+//        userNameLabel.textAlignment = .center
 //        userImageView.layer.borderColor = UIColor(named: "DavysGrey")?.cgColor
-//        userImageView.layer.bounds = true
-    }
-    
-    @IBAction func editProfileInfo(_ sender: Any) {
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let editVC = mainStoryboard.instantiateViewController(withIdentifier: "EditProfileViewController") as? EditProfileViewController else { return }
-        self.navigationController?.pushViewController(editVC, animated: true)
-    }
         
-    @IBAction func logOutButton(_ sender: Any) {
-        let controller = UIAlertController(title: "登出提醒", message: "確定要登出嗎?", preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "確定", style: .default) { _ in
-            do {
-                try Auth.auth().signOut()
-//                self.navigationController?.popToRootViewController(animated: true)
-//                self.tableView.reloadData()
-                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-                self.navigationController?.pushViewController(homeVC, animated: true)
-                userUid = ""
-                print("sign out")
-            } catch let signOutError as NSError {
-               print("Error signing out: (signOutError)")
-            }
-        }
-        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-        controller.addAction(okAction)
-        controller.addAction(cancelAction)
-        present(controller, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,6 +74,34 @@ class ProfileViewController: UIViewController {
         } else {
             return
         }
+    }
+    
+    @IBAction func editProfileInfo(_ sender: Any) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let editVC = mainStoryboard.instantiateViewController(withIdentifier: "EditProfileViewController") as? EditProfileViewController else { return }
+        self.navigationController?.pushViewController(editVC, animated: true)
+    }
+        
+    @IBAction func logOutButton(_ sender: Any) {
+        let controller = UIAlertController(title: "登出提醒", message: "確定要登出嗎?", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "確定", style: .default) { _ in
+            do {
+                try Auth.auth().signOut()
+//                self.navigationController?.popToRootViewController(animated: true)
+//                self.tableView.reloadData()
+                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
+                self.navigationController?.pushViewController(homeVC, animated: true)
+                userUid = ""
+                print("sign out")
+            } catch let signOutError as NSError {
+               print("Error signing out: (signOutError)")
+            }
+        }
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        controller.addAction(okAction)
+        controller.addAction(cancelAction)
+        present(controller, animated: true, completion: nil)
     }
     
     func showLoginVC() {

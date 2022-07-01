@@ -8,6 +8,8 @@
 import Foundation
 import MapKit
 
+// swiftlint:enable identifier_name
+
 class ShelterManager {
     
     static let shared = ShelterManager()
@@ -74,56 +76,58 @@ class ShelterManager {
         }
     }
     
-//    func areaName(pkid: Int) -> String {
-//        switch pkid {
-//        case 2:
-//            return  "台北市"
-//        case 3:
-//            return  "新北市"
-//        case 4:
-//            return  "基隆市"
-//        case 5:
-//            return  "宜蘭縣"
-//        case 6:
-//            return  "桃園縣"
-//        case 7:
-//            return  "新竹縣"
-//        case 8:
-//            return  "新竹市"
-//        case 9:
-//            return  "苗栗縣"
-//        case 10:
-//            return  "臺中市"
-//        case 11:
-//            return "彰化縣"
-//        case 12:
-//            return  "南投縣"
-//        case 13:
-//            return  "雲林縣"
-//        case 14:
-//            return  "嘉義縣"
-//        case 15:
-//            return  "嘉義市"
-//        case 16:
-//            return  "臺南市"
-//        case 17:
-//            return  "高雄市"
-//        case 18:
-//            return  "屏東縣"
-//        case 19:
-//            return  "花蓮縣"
-//        case 20:
-//            return  "臺東縣"
-//        case 21:
-//            return  "澎湖縣"
-//        case 22:
-//            return  "金門縣"
-//        case 23:
-//            return  "連江縣"
-//        default:
-//            return ""
-//        }
-//    }
+    // swiftlint:disable all
+    func areaName(pkid: Int) -> String {
+        switch pkid {
+        case 2:
+            return  "台北市"
+        case 3:
+            return  "新北市"
+        case 4:
+            return  "基隆市"
+        case 5:
+            return  "宜蘭縣"
+        case 6:
+            return  "桃園縣"
+        case 7:
+            return  "新竹縣"
+        case 8:
+            return  "新竹市"
+        case 9:
+            return  "苗栗縣"
+        case 10:
+            return  "臺中市"
+        case 11:
+            return  "彰化縣"
+        case 12:
+            return  "南投縣"
+        case 13:
+            return  "雲林縣"
+        case 14:
+            return  "嘉義縣"
+        case 15:
+            return  "嘉義市"
+        case 16:
+            return  "臺南市"
+        case 17:
+            return  "高雄市"
+        case 18:
+            return  "屏東縣"
+        case 19:
+            return  "花蓮縣"
+        case 20:
+            return  "臺東縣"
+        case 21:
+            return  "澎湖縣"
+        case 22:
+            return  "金門縣"
+        case 23:
+            return  "連江縣"
+        default:
+            return ""
+        }
+    }
+    // swiftlint:ensable all
     
     func sexCh(sex: String) -> String {
         switch sex {
@@ -144,6 +148,8 @@ class ShelterManager {
             return "幼年"
         case "ADULT":
             return "成年"
+        case "F":
+            return "年齡不詳"
         default:
             return "年齡不詳"
         }

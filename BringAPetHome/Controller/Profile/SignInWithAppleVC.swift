@@ -197,7 +197,9 @@ extension SignInWithAppleVC {
         let email = user.email
         //        let image = user.
         //        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
-        UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
+//        UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
+        UserFirebaseManager.shared.checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        }
         userUid = uid
         print("~~~~~\(userUid)")
     }

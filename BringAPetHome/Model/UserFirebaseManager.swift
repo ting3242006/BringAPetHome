@@ -68,24 +68,24 @@ class UserFirebaseManager {
         completion(.success(()))
     }
     
-//    func fetchUserInfo(uid: String, completion: @escaping ([UserModel]?) -> Void) {
-//        dataBase.collection("User").whereField("id", isEqualTo: uid).getDocuments { (querySnapshot, _) in
-//            guard let querySnapshot = querySnapshot else {
-//                return
-//            }
-//            //            self.shareList.removeAll()
-//            for data in querySnapshot.documents {
-//                let userData = data.data(with: ServerTimestampBehavior.none)
-//                let userName = userData["name"] as? String ?? ""
-//                let userEmail = userData["email"] as? String ?? ""
-//                let userId = userData["id"] as? String ?? ""
-//                let userImage = userData["userImage"] as? String ?? ""
-//                let user = UserModel(id: userId, name: userName, email: userEmail, imageURLString: userImage)
-//                self.userData = user
-//            }
-//            completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", imageURLString: "")))
-//        }
-//    }
+    //    func fetchUserInfo(uid: String, completion: @escaping ([UserModel]?) -> Void) {
+    //        dataBase.collection("User").whereField("id", isEqualTo: uid).getDocuments { (querySnapshot, _) in
+    //            guard let querySnapshot = querySnapshot else {
+    //                return
+    //            }
+    //            //            self.shareList.removeAll()
+    //            for data in querySnapshot.documents {
+    //                let userData = data.data(with: ServerTimestampBehavior.none)
+    //                let userName = userData["name"] as? String ?? ""
+    //                let userEmail = userData["email"] as? String ?? ""
+    //                let userId = userData["id"] as? String ?? ""
+    //                let userImage = userData["userImage"] as? String ?? ""
+    //                let user = UserModel(id: userId, name: userName, email: userEmail, imageURLString: userImage)
+    //                self.userData = user
+    //            }
+    //            completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", imageURLString: "")))
+    //        }
+    //    }
     
     
     func deleteAccount() {
@@ -95,6 +95,19 @@ class UserFirebaseManager {
                 // An error happened.
             } else {
                 // Account deleted.
+            }
+        }
+    }
+    
+    func checkUserEmail(userId: String, completion: @escaping (Result<UserModel>) -> Void) {
+        dataBase.collection("User").whereField("id", isEqualTo: userId).getDocuments { querySnapshot, _ in
+            if let querySnapshot = querySnapshot {
+                if let document = querySnapshot.documents.first {
+                }
+                print("Account is exist")
+                
+            } else {
+                UserFirebaseManager.shared.addUser(name: "name", uid: Auth.auth().currentUser?.uid ?? "", email: Auth.auth().currentUser?.email ?? "", image: "image")
             }
         }
     }

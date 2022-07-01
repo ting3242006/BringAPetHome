@@ -47,7 +47,6 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
         3
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShareCommentTableViewCell",
                                                        for: indexPath) as? ShareCommentTableViewCell else { return UITableViewCell() }
