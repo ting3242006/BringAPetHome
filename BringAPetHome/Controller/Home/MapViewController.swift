@@ -7,10 +7,12 @@
 
 import UIKit
 import MapKit
+import CoreLocation
+import Alamofire
 
 class MapViewController: UIViewController {
     
-    var myLocationManager: CLLocationManager!
+    let myLocationManager = CLLocationManager()
     var cllocation = CLLocationCoordinate2D()
     var titlename = ""
     let annotation = MKPointAnnotation()
@@ -20,7 +22,37 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "收容所位置"
-        myMapView.showsUserLocation = true
+        myLocationManager.requestWhenInUseAuthorization()
+//        myMapView.showsUserLocation = true
+//        myLocationManager.startUpdatingLocation()
+        myPosition()
+        setMap()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+//        myPosition()
+        MKpoint()
+        let location = myMapView.userLocation
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
+        myMapView.setRegion(region, animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 開啟APP會詢問使用權限
+        if CLLocationManager.authorizationStatus()  == .notDetermined {
+            // 取得定位服務授權
+            myLocationManager.requestWhenInUseAuthorization()
+            // 開始定位自身位置
+            myLocationManager.startUpdatingLocation()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // 停止定位自身位置
+        myLocationManager.stopUpdatingLocation()
     }
     
     @IBAction func showLocation(_ sender: Any) {
@@ -28,9 +60,30 @@ class MapViewController: UIViewController {
         let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
         myMapView.setRegion(region, animated: true)
     }
+    
+    // MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
+    func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> Void) {
+        CLGeocoder().geocodeAddressString(address) { placemarks, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            if let placemarks = placemarks {
+                // 取得第一個地點標記
+                let placemark = placemarks[0]
+                // 加上標記
+                let annotation = MKPointAnnotation()
+                if let location = placemark.location {
+                    annotation.coordinate = location.coordinate
+                    print("~~~\(annotation.coordinate)")
+                }
+                completion(annotation.coordinate, nil)
+            }
+        }
+    }
 }
 
-// MARK: - 取網路api資料
+//// MARK: - 取網路api資料
 // func getData(url:String, completion: @escaping([AnimalData]) -> Void) {
 //    AF.request(url).responseJSON { response in
 //        if let data = response.data {
@@ -43,40 +96,22 @@ class MapViewController: UIViewController {
 //        }
 //    }
 // }
-// MARK: - CLGeocoder地理編碼 地址轉換經緯度位置
-func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> Void) {
-    CLGeocoder().geocodeAddressString(address) { placemarks, error in
-        if let error = error {
-            print(error.localizedDescription)
-            return
-        }
-        if let placemarks = placemarks {
-            // 取得第一個地點標記
-            let placemark = placemarks[0]
-            // 加上標記
-            let annotation = MKPointAnnotation()
-            if let location = placemark.location {
-                annotation.coordinate = location.coordinate
-                print("~~~\(annotation.coordinate)")
-            }
-            completion(annotation.coordinate, nil)
-        }
-    }
-}
+
 
 // MARK: - 使用者位置
 extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate {
     
     func setMap() {
+       
         // 建立一個 CLLocationManager
-        myLocationManager = CLLocationManager()
+//        myLocationManager = CLLocationManager()
         
         // 設置委任對象
         myLocationManager.delegate = self
         
         // 距離篩選器 用來設置移動多遠距離才觸發委任方法更新位置
-        myLocationManager.distanceFilter =
-        kCLLocationAccuracyNearestTenMeters
+//        myLocationManager.distanceFilter =
+//        kCLLocationAccuracyNearestTenMeters
         
         // 取得自身定位位置的精確度
         myLocationManager.desiredAccuracy =
@@ -94,6 +129,20 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate {
         // 允許縮放地圖
         myMapView.isZoomEnabled = true
         
+        // 用户位置追蹤
+        myMapView.userTrackingMode = .none
+        
+        // 地圖是否可滾動
+        myMapView.isScrollEnabled = true
+        
+        // 請求使用者授權使用定位服務
+        
+//        let status = CLLocationManager.authorizationStatus()
+//        if status == CLAuthorizationStatus.authorizedWhenInUse {
+//
+//        }
+//        myMapView.showsUserLocation = true
+        
         // 地圖預設顯示的範圍大小 (數字越小越精確)
         let latDelta = 0.05
         let longDelta = 0.05
@@ -109,12 +158,7 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate {
             span: currentLocationSpan)
         myMapView.setRegion(currentRegion, animated: true)
         
-        // 請求使用者授權使用定位服務
-        myLocationManager.requestWhenInUseAuthorization()
-        let status = CLLocationManager.authorizationStatus()
-        if status == CLAuthorizationStatus.authorizedWhenInUse {
-            myMapView.showsUserLocation = true
-        }
+        
     }
     
     func myPosition() {

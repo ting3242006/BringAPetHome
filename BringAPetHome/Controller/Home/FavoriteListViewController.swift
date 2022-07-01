@@ -82,16 +82,18 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         return cell
     }
     
+    // swiftlint:disable all
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         favoriteTableView.deselectRow(at: indexPath, animated: true)
-//        let animal = self.animalList[indexPath.row]
+        let animal = self.animalList[indexPath.row]
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
-//        guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: HomeDetailViewController.identifier) as? HomeDetailViewController else { return }
-        let pet = self.animalDatas[indexPath.row]
-        detailVC.pet = pet
+//        let animalData = AnimalData(animalId: Int, place: <#T##String#>, kind: <#T##String#>, sex: <#T##String#>, bodytype: <#T##String#>, colour: <#T##String#>, age: <#T##String#>, status: <#T##String#>, remark: <#T##String#>, opendate: <#T##String#>, shelterName: <#T##String#>, albumFile: <#T##String#>, shelterAddress: <#T##String#>, shelterTel: <#T##String#>, animalVariety: <#T##String#>, areaPkid: <#T##Int#>, animalSterilization: <#T##String#>, title: <#T##String#>, cDate: <#T##String#>, albumUpdate: <#T##String#>)
+//        let pet = self.animalDatas[indexPath.row]
+//        detailVC.pet = animalData
 //        detailVC.pet = animal
         self.navigationController?.pushViewController(detailVC, animated: true)
 //        show(detailVC, sender: nil)
     }
+    // swiftlint:ensable all
 }

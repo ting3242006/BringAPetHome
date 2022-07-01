@@ -69,7 +69,6 @@ class ShelterManager {
                 let annotation = MKPointAnnotation()
                 if let location = placemark.location {
                     annotation.coordinate = location.coordinate
-                    print("~~~\(annotation.coordinate)")
                 }
                 completion(annotation.coordinate, nil)
             }
@@ -176,6 +175,15 @@ class ShelterManager {
             return "未絕育"
         case "N":
             return "未確認"
+        default:
+            return ""
+        }
+    }
+    
+    func status(status: String) -> String {
+        switch status {
+        case "OPEN":
+            return "開放領養"
         default:
             return ""
         }

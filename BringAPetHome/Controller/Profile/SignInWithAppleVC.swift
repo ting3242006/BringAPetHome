@@ -58,6 +58,9 @@ class SignInWithAppleVC: UIViewController {
         }
     }
     
+    @IBAction func closeButton(_ sender: Any) {
+        dismiss(animated: true)
+    }
     // MARK: - 監聽目前的 Apple ID 的登入狀況
     // 主動監聽
     func checkAppleIDCredentialState(userID: String) {

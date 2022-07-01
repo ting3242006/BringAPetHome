@@ -69,15 +69,31 @@ class HomeDetailViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(didTapClose))
+//        tableView.automaticallyAdjustsScrollIndicatorInsets =
+        let barAppearance = UINavigationBarAppearance()
+        barAppearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
+        
+        tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    @IBAction func backButton(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func clickMapButton(_ sender: Any) {
         guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
-        mapVC.cllocation = self.cllocation
+//        mapVC.cllocation = self.cllocation
 //        mapVC.titlename = (pet?.shelterName != nil)
             self.navigationController?.pushViewController(mapVC, animated: true)
     }
@@ -134,9 +150,9 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.placeLabel.text = "\(String(describing: pet?.place ?? ""))"
+        cell.placeLabel.text = ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0)
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: pet?.sex ?? "")
-        cell.statusLabel.text = "\(String(describing: pet?.status ?? ""))"
+        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
         cell.ageLabel.text = ShelterManager.shared.ageCh(age: pet?.age ?? "")
         cell.animalIdLabel.text = " \(pet?.animalId ?? 0)"
         cell.animalVarietyLabel.text = "\(pet?.animalVariety ?? "")"

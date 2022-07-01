@@ -234,6 +234,7 @@
 				257CA5F228589B550009BE17 /* UIScreen+Extension.swift */,
 				252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */,
 				250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */,
+				25E5733B2869D343009348A0 /* CustomFunc.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -266,7 +267,6 @@
 			isa = PBXGroup;
 			children = (
 				252D80832859E67C0076236B /* HTTP.swift */,
-				25E5733B2869D343009348A0 /* CustomFunc.swift */,
 				252D807D285995290076236B /* ShelterDataModel.swift */,
 				252D80812859CC7C0076236B /* ShelterManager.swift */,
 				25A215B828607435002CE9BA /* AdoptionModel.swift */,
@@ -633,9 +633,10 @@
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要您的同意，才能開啟相機";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要您的同意，才能寫入相簿";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要您的同意，才能使用相簿";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "需要你的同意，才能開啟定位";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -666,9 +667,10 @@
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要您的同意，才能開啟相機";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要您的同意，才能寫入相簿";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要您的同意，才能使用相簿";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "需要你的同意，才能開啟定位";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

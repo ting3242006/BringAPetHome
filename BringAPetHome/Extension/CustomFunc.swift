@@ -24,6 +24,7 @@ class CustomFunc {
                                             style: .default) { action in
                 actionHandler?()
             }
+            closeAction.setValue(UIColor.darkGray, forKey: "titleTextColor")
             alertController.addAction(closeAction)
             vc.present(alertController, animated: true)
         }

@@ -32,7 +32,17 @@ class ShareDetailViewController: UIViewController {
     }
     
     @IBAction func showComment(_ sender: Any) {
-        
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+        } else {
+            return
+        }
+    }
+    
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        self.navigationController?.present(loginVC, animated: true)
     }
     
     func refresh() {

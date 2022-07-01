@@ -139,6 +139,11 @@ class AdoptionViewController: UIViewController {
     }
     
     @IBSegueAction func showComments(_ coder: NSCoder, sender: Any?) -> CommentViewController? {
+//        if Auth.auth().currentUser == nil {
+//            showLoginVC()
+//        } else {
+//            return nil
+//        }
         let controller = CommentViewController(coder: coder)
         let button = sender as? UIButton
         if let point = button?.convert(CGPoint.zero, to: tableView),
@@ -147,6 +152,12 @@ class AdoptionViewController: UIViewController {
             controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
         }
         return controller
+    }
+    
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        self.navigationController?.present(loginVC, animated: true)
     }
 }
 
