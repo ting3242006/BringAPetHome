@@ -50,16 +50,15 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     switch result {
                     case .success(let url):
                         shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
-                        dismiss(animated: true)
                     case .failure:
                         break
                     }
+                    navigationController?.popToRootViewController(animated: true)
                 }
             case .failure:
                 break
             }
         }
-        navigationController?.popToRootViewController(animated: true)
     }
     
     @IBAction func addImageButton(_ sender: Any) {
@@ -81,6 +80,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
     }
+    
     
     //  指定 data source / delegate 選取相簿照片或照相
     func selectPhoto(sourceType: UIImagePickerController.SourceType) {

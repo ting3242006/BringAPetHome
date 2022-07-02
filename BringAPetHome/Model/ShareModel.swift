@@ -30,6 +30,7 @@ struct ShareComment: Codable {
 //    var userName: String
     var time: Int
     var text: String
+    var userId: String
 }
 
 struct User: Codable {

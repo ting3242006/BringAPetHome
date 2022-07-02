@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SharePetCollectionViewController: UICollectionViewController {
     
@@ -24,6 +25,22 @@ class SharePetCollectionViewController: UICollectionViewController {
         shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
             self.collectionView.reloadData()
         })
+    }
+    
+    @IBAction func goSharingPost(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let postSharingVC = mainStoryboard.instantiateViewController(withIdentifier: "PostSharingViewController") as? PostSharingViewController else { return }
+        self.navigationController?.pushViewController(postSharingVC, animated: true)
+    }
+    
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        present(loginVC, animated: true)
     }
     
     func configureCellSize() {

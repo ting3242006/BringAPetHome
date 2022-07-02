@@ -72,9 +72,9 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         let animal = animalList[indexPath.row]
         cell.sex.text = "ID:\(animal.id)"
 //        cell.sex.text = "性別:\(animal.sex ?? "")"
-        cell.opendate.text = "開放領養:\(animal.openDate ?? "")"
-        cell.sterilization.text = "\(animal.steriization ?? "")"
-        cell.place.text = "\(animal.place ?? "")"
+        cell.opendate.text = "\(animal.openDate ?? "")"
+        cell.sterilization.text = ShelterManager.shared.sterilization(sterilization: animal.steriization ?? "")
+        cell.place.text = animal.place
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let imageUrl = documentsDirectory.appendingPathComponent("\(animal.id)").appendingPathExtension("jpg")
         cell.animalImageView.image = UIImage(contentsOfFile: imageUrl.path)
@@ -88,9 +88,28 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         let animal = self.animalList[indexPath.row]
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
-//        let animalData = AnimalData(animalId: Int, place: <#T##String#>, kind: <#T##String#>, sex: <#T##String#>, bodytype: <#T##String#>, colour: <#T##String#>, age: <#T##String#>, status: <#T##String#>, remark: <#T##String#>, opendate: <#T##String#>, shelterName: <#T##String#>, albumFile: <#T##String#>, shelterAddress: <#T##String#>, shelterTel: <#T##String#>, animalVariety: <#T##String#>, areaPkid: <#T##Int#>, animalSterilization: <#T##String#>, title: <#T##String#>, cDate: <#T##String#>, albumUpdate: <#T##String#>)
-//        let pet = self.animalDatas[indexPath.row]
-//        detailVC.pet = animalData
+        let animalData = AnimalData(animalId: Int(animal.animalId),
+                                    place: animal.place ?? "", kind: animal.kind ?? "",
+                                    sex: animal.sex ?? "",
+                                    bodytype: animal.bodytype ?? "",
+                                    colour: animal.colour ?? "",
+                                    age: animal.age ?? "",
+                                    status: animal.status ?? "",
+                                    remark: animal.remark ?? "",
+                                    opendate: animal.opendate ?? "",
+                                    shelterName: animal.shelterName ?? "",
+                                    albumFile: animal.albumFile ?? "",
+                                    shelterAddress: animal.shelterAddress ?? "",
+                                    shelterTel: animal.shelterTel ?? "",
+                                    animalVariety: animal.animalVariety ?? "",
+                                    areaPkid: Int(animal.areaPkid),
+                                    animalSterilization: animal.animalSterilization ?? "",
+                                    title: animal.title ?? "",
+                                    cDate: animal.cDate ?? "",
+                                    albumUpdate: "")
+        
+        detailVC.pet = animalData
+        print(detailVC.pet)
 //        detailVC.pet = animal
         self.navigationController?.pushViewController(detailVC, animated: true)
 //        show(detailVC, sender: nil)

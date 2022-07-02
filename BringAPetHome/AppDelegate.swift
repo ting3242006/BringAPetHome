@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         IQKeyboardManager.shared.enable = true
         FirebaseApp.configure()
+        
         return true
     }
 
@@ -65,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    func saveContext () {
+    func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {

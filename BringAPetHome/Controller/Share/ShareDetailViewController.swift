@@ -25,8 +25,15 @@ class ShareDetailViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
+        shareManager.fetchSharing(completion: { shareList in
+            self.shareList = shareList ?? []
             self.tableView.reloadData()
+            let index = self.shareList.firstIndex {
+                $0.postId == self.shareItem?.postId
+            }
+            if let index = index {
+                self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
+            }
         })
         //        refresh()
     }
@@ -39,6 +46,17 @@ class ShareDetailViewController: UIViewController {
         }
     }
     
+    @IBSegueAction func sentCommentData(_ coder: NSCoder, sender: Any?) -> ShareCommentViewController? {
+        let controller = ShareCommentViewController(coder: coder)
+        let button = sender as? UIButton
+        if let point = button?.convert(CGPoint.zero, to: tableView),
+           let indexPath = tableView.indexPathForRow(at: point) {
+            let shareModel = shareList[indexPath.row]
+            controller?.postId = shareModel.postId
+        }
+        return controller
+    }
+       
     func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }

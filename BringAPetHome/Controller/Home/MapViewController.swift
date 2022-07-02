@@ -11,43 +11,64 @@ import CoreLocation
 import Alamofire
 
 class MapViewController: UIViewController {
-    
+    var address: String?
     let myLocationManager = CLLocationManager()
     var cllocation = CLLocationCoordinate2D()
     var titlename = ""
-    let annotation = MKPointAnnotation()
+    let petAnnotation = MKPointAnnotation()
     
     @IBOutlet weak var myMapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "收容所位置"
-        myLocationManager.requestWhenInUseAuthorization()
+        //myLocationManager.requestWhenInUseAuthorization()
 //        myMapView.showsUserLocation = true
 //        myLocationManager.startUpdatingLocation()
-        myPosition()
+        //myPosition()
         setMap()
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-//        myPosition()
-        MKpoint()
-        let location = myMapView.userLocation
-        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
-        myMapView.setRegion(region, animated: true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // 開啟APP會詢問使用權限
-        if CLLocationManager.authorizationStatus()  == .notDetermined {
-            // 取得定位服務授權
-            myLocationManager.requestWhenInUseAuthorization()
-            // 開始定位自身位置
-            myLocationManager.startUpdatingLocation()
+        guard let address = address else {
+            return
         }
+
+        CLGeocoder().geocodeAddressString(address) { placemarks, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            if let placemarks = placemarks {
+                // 取得第一個地點標記
+                let placemark = placemarks[0]
+                // 加上標記
+                if let location = placemark.location {
+                    self.petAnnotation.coordinate = location.coordinate
+                    print("location.coordinate", location.coordinate)
+                    self.myMapView.addAnnotation(self.petAnnotation)
+                    self.myMapView.region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                }
+            }
+        }
+
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+////        myPosition()
+//        MKpoint()
+//        let location = myMapView.userLocation
+//        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 300, longitudinalMeters: 300)
+//        myMapView.setRegion(region, animated: true)
+//    }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        // 開啟APP會詢問使用權限
+//        if CLLocationManager.authorizationStatus()  == .notDetermined {
+//            // 取得定位服務授權
+//            myLocationManager.requestWhenInUseAuthorization()
+//            // 開始定位自身位置
+//            myLocationManager.startUpdatingLocation()
+//        }
+//    }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -223,43 +244,47 @@ extension MapViewController: CLLocationManagerDelegate, MKMapViewDelegate {
     // 自定義大頭針樣式
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "MyPin"
-        
+
         if annotation.isKind(of: MKUserLocation.self) {
             return nil
         }
-        
+
         // Reuse the annotation if possible
         var annotationView: MKAnnotationView?
-        
+
         if #available(iOS 11.0, *) {
             var markerAnnotationView: MKMarkerAnnotationView? = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-            
+
             if markerAnnotationView == nil {
                 markerAnnotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 markerAnnotationView?.canShowCallout = true
             }
-            
-            markerAnnotationView?.glyphText = "🐶"
-            markerAnnotationView?.markerTintColor = UIColor.orange
-            
+
+            markerAnnotationView?.glyphText = "🐾"
+            markerAnnotationView?.markerTintColor = UIColor(named: "HoneyYellow")
+
             annotationView = markerAnnotationView
-            
+
         } else {
-            
+
             var pinAnnotationView: MKPinAnnotationView? = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
-            
+
             if pinAnnotationView == nil {
                 pinAnnotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 pinAnnotationView?.canShowCallout = true
-                pinAnnotationView?.pinTintColor = UIColor.orange
+                pinAnnotationView?.pinTintColor = UIColor(named: "HoneyYellow")
             }
-            
+
             annotationView = pinAnnotationView
         }
-        
+
         let leftIconView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 53, height: 53))
         leftIconView.image = UIImage(named: "browser")
         annotationView?.leftCalloutAccessoryView = leftIconView
+
+
+        print("annotationView", annotationView)
+
         return annotationView
     }
 }

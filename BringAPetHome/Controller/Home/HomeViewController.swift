@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.tabBarController?.tabBar.barTintColor = .white
         setupNavigationItem()
         // setup
         collectionView.delegate = self
@@ -145,19 +145,21 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.shelterImageView.layer.cornerRadius = 10
         cell.shelterImageView.clipsToBounds = true
 //        cell.sexLabel.text = String(item.sex)
+        cell.colorLabel.text = item.colour
+        cell.sexLabel.textColor = .clear
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
-//        cell.sexImageView.image = UIImage(named:
-//                                            switch fileExtension {
-//        case "男":
-//            "boy"
-//        case "女":
-//            "girl"
-//        default:
-//            "paws"
-//        }
-//        )
+        var name = ""
+        switch cell.sexLabel.text {
+        case "男":
+            name = "boy"
+        case "女":
+            name = "girl"
+        default:
+            name = "paws"
+        }
+        cell.sexImageView.image = UIImage(named: name)
         cell.layer.shadowColor = UIColor.lightGray.cgColor
         cell.layer.shadowOffset = CGSize(width: 0, height: 5)
         cell.layer.shadowRadius = 3

@@ -93,6 +93,7 @@ class HomeDetailViewController: UIViewController {
     
     @IBAction func clickMapButton(_ sender: Any) {
         guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
+        mapVC.address = pet?.shelterAddress 
 //        mapVC.cllocation = self.cllocation
 //        mapVC.titlename = (pet?.shelterName != nil)
             self.navigationController?.pushViewController(mapVC, animated: true)
@@ -150,24 +151,23 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.placeLabel.text = ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0)
+        cell.areaPkidLabel.text = ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0)
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: pet?.sex ?? "")
         cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
         cell.ageLabel.text = ShelterManager.shared.ageCh(age: pet?.age ?? "")
         cell.animalIdLabel.text = " \(pet?.animalId ?? 0)"
         cell.animalVarietyLabel.text = "\(pet?.animalVariety ?? "")"
-        cell.areaPkidLabel.text = "\(pet?.areaPkid ?? 0)"
         cell.bodytypeLabel.text = ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? "")
         cell.cDateLabel.text = "\(String(describing: pet?.cDate ?? ""))"
         cell.colourLabel.text = " \(String(describing: pet?.colour ?? ""))"
-        cell.ageLabel.text = " \(String(describing: pet?.age ?? ""))"
+        cell.ageLabel.text = ShelterManager.shared.ageCh(age: pet?.age ?? "")
         cell.kindLabel.text = "\(String(describing: pet?.kind ?? ""))"
         cell.remarkLabel.text = " \(String(describing: pet?.remark ?? ""))"
         cell.opendateLabel.text = " \(String(describing: pet?.opendate ?? ""))"
         cell.shelterNameLabel.text = "\(String(describing: pet?.shelterName ?? ""))"
         cell.shelterTel.text = "\(String(describing: pet?.shelterTel ?? ""))"
         cell.shelterAddressLabel.text = "\(String(describing: pet?.shelterAddress ?? ""))"
-        cell.animalSterilizationLabel.text = "\(pet?.animalSterilization ?? "")"
+        cell.animalSterilizationLabel.text = ShelterManager.shared.sterilization(sterilization: pet?.animalSterilization ?? "")
         cell.selectedBackgroundView = selectedBackgroundView
         return cell
     }
@@ -188,11 +188,39 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             let sterilization = pet?.animalSterilization ?? ""
             let openDate = pet?.opendate ?? ""
             let place = pet?.place ?? ""
+            let kind = pet?.kind ?? ""
+            let animalVariety = pet?.animalVariety ?? ""
+            let bodytype = pet?.bodytype ?? ""
+            let shelterTel = pet?.shelterTel
+            let areaPkid = pet?.areaPkid ?? 0
+            let colour = pet?.colour ?? ""
+            let albumFile = pet?.albumFile ?? ""
+            let remark = pet?.remark ?? ""
+            let cDate = pet?.cDate ?? ""
+            let shelterAddress = pet?.shelterAddress ?? ""
+            let shelterName = pet?.shelterName
+            let age = pet?.age
+            let opendate = pet?.opendate
+            
             saveAnimal?.id = Int64(id)
             saveAnimal?.sex = sex
             saveAnimal?.steriization = sterilization
             saveAnimal?.openDate = openDate
             saveAnimal?.place = place
+            saveAnimal?.bodytype = bodytype
+            saveAnimal?.animalVariety = animalVariety
+            saveAnimal?.shelterTel = shelterTel
+            saveAnimal?.areaPkid = Int64(areaPkid)
+            saveAnimal?.kind = kind
+            saveAnimal?.colour = colour
+            saveAnimal?.albumFile = albumFile
+            saveAnimal?.remark = remark
+            saveAnimal?.cDate = cDate
+            saveAnimal?.shelterAddress = shelterAddress
+            saveAnimal?.shelterName = shelterName
+            saveAnimal?.age = age
+            saveAnimal?.opendate = opendate
+            
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
             let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

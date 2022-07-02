@@ -15,6 +15,7 @@ class FavoriteListTableViewCell: UITableViewCell {
     @IBOutlet weak var opendate: UILabel!
     @IBOutlet weak var place: UILabel!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var bgView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,7 +24,7 @@ class FavoriteListTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        bgView.layer.cornerRadius = 20
 //        animalImageView.layer.borderColor = #colorLiteral(red: 0.02589932643, green: 0.02589932643, blue: 0.02589932643, alpha: 0.7178938356).cgColor
 //        animalImageView.layer.borderWidth = 0.5
         animalImageView.clipsToBounds = true

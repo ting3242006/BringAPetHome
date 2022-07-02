@@ -48,6 +48,10 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func sendComment(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
         if commentTextField.text == "" {
             let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "確認", style: .default))
@@ -60,6 +64,13 @@ class CommentViewController: UIViewController {
     
     @IBAction func closePopVC(_ sender: Any) {
         dismiss(animated: true)
+    }
+    
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        //self.navigationController?.present(loginVC, animated: true)
+        present(loginVC, animated: true)
     }
     
     func addCommend(text: String) {
