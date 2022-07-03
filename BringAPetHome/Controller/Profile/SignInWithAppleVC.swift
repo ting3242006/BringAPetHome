@@ -10,7 +10,6 @@ import FirebaseAuth // 用來與 Firebase Auth 進行串接用的
 import AuthenticationServices // Sign in with Apple 的主體框架
 import CryptoKit // 用來產生隨機字串 (Nonce) 的
 
-public var userUid: String = ""
 
 class SignInWithAppleVC: UIViewController {
     
@@ -182,9 +181,14 @@ extension SignInWithAppleVC {
                 return
             }
             CustomFunc.customAlert(title: "登入成功！", message: "", vc: self, actionHandler: self.getFirebaseUserInfo)
-            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-            self.navigationController?.pushViewController(homeVC, animated: true)
+            let tabController =  self.view.window?.rootViewController as? UITabBarController
+            self.dismiss(animated: false) {
+                tabController?.selectedIndex = 0
+            }
+            
+//            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//            guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
+//            self.navigationController?.pushViewController(homeVC, animated: true)
         }
     }
     
@@ -203,8 +207,6 @@ extension SignInWithAppleVC {
 //        UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
         UserFirebaseManager.shared.checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "") { result in
         }
-        userUid = uid
-        print("~~~~~\(userUid)")
     }
 }
 

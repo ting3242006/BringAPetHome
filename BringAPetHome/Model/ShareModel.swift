@@ -28,9 +28,9 @@ struct ShareComment: Codable {
     var commentId: String
 //    var userId: String
 //    var userName: String
-    var time: Int
+    var time: Date
     var text: String
-    var userId: String
+    var userUid: String
 }
 
 struct User: Codable {

@@ -37,6 +37,7 @@ class ProfileViewController: UIViewController {
             return
         }
         getUserProfile()
+        let userUid = Auth.auth().currentUser?.uid ?? ""
         shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
@@ -94,7 +95,6 @@ class ProfileViewController: UIViewController {
                 let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
                 self.navigationController?.pushViewController(homeVC, animated: true)
-                userUid = ""
                 print("sign out")
             } catch let signOutError as NSError {
                 print("Error signing out: (signOutError)")

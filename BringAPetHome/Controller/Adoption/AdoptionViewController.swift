@@ -218,7 +218,7 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
         formatter.dateFormat = "yyyy.MM.dd HH:mm"
         
         cell.layout(location: "\(firebaseData[Adoption.location.rawValue] ?? "")",
-                    date: formatter.string(from: date as Date),
+                    date: "刊登日期：\(formatter.string(from: date as Date))",
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
 

@@ -27,12 +27,13 @@ class FavoriteListTableViewCell: UITableViewCell {
         bgView.layer.cornerRadius = 15
 //        animalImageView.layer.borderColor = #colorLiteral(red: 0.02589932643, green: 0.02589932643, blue: 0.02589932643, alpha: 0.7178938356).cgColor
 //        animalImageView.layer.borderWidth = 0.5
-        animalImageView.clipsToBounds = true
+//        animalImageView.clipsToBounds = true
 //        containerView.layer.shadowColor = UIColor.darkGray.cgColor
 //        containerView.layer.shadowOffset = CGSize(width: 0, height: 5)
 //        containerView.layer.shadowRadius = 3
 //        containerView.layer.shadowOpacity = 0.3
-        animalImageView.layer.cornerRadius = 20
+        animalImageView.layer.cornerRadius = 15
+        animalImageView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
 //        animalImageView.applyshadowWithCorner(containerView: contentView, cornerRadious: 25)
 //        sex.backgroundColor = #colorLiteral(red: 0.1162804135, green: 0.8456138959, blue: 0.4789697292, alpha: 0.3300000131)
 //        sex.clipsToBounds = true

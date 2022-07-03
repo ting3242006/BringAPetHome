@@ -49,6 +49,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                 fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
+                        let userUid = Auth.auth().currentUser?.uid ?? ""
                         shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
                     case .failure:
                         break
@@ -80,7 +81,6 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
     }
-    
     
     //  指定 data source / delegate 選取相簿照片或照相
     func selectPhoto(sourceType: UIImagePickerController.SourceType) {

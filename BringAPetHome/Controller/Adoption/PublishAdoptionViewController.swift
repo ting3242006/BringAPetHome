@@ -183,14 +183,15 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     
     // MARK: - add data to Firebase
     @IBAction func publishButton(_ sender: Any) {
-        
+        print("publishButton")
         guard let selectedSex = selectedSex,
               let selectedAge = selectedAge,
-              let commentId = comment["commentId"],
-//              let postId = postId,
-              let selectedPetable = selectedPetable else { return }
-        
+              let commentId = comment["commentId"]
+            else { return }
         guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.5) else { return }
+        
+
+        
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
         fileReference.putData(imageData, metadata: nil) { result in
@@ -205,6 +206,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             alert.addAction(UIAlertAction(title: "確認", style: .default))
                             self.present(alert, animated: true)
                         } else {
+                            let userUid = Auth.auth().currentUser?.uid ?? ""
                             let age = selectedAge
                             let sex = selectedSex
                             let petable = selectedPetable
@@ -213,9 +215,12 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
                             self.adoptionManager.addAdoption(age: age.rawValue, content: content,
-                                                             imageFileUrl: "\(url)", location: location,
-                                                             sex: sex.rawValue, petable: petable.rawValue,
-                                                             commentId: commentId as? String ?? "", postId: postId as? String ?? "")
+                                                             imageFileUrl: "\(url)",
+                                                             location: location,
+                                                             sex: sex.rawValue,
+                                                             commentId: commentId as? String ?? "",
+                                                             postId: postId ?? "",
+                                                             userId: userUid)
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
                             self.navigationController?.pushViewController(adoptionViewController, animated: true)

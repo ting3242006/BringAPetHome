@@ -159,7 +159,7 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
         cell.bodytypeLabel.text = "品種：\( ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))"
         cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
-        cell.colourLabel.text = " 毛色：\(String(describing: pet?.colour ?? ""))"
+        cell.colourLabel.text = "毛色：\(String(describing: pet?.colour ?? ""))"
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
         cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
         cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"

@@ -44,6 +44,10 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBAction func uploadInfo(_ sender: Any) {
         guard let imageData = self.userImageView.image?.jpegData(compressionQuality: 0.5) else { return }
+        let currentUser = Auth.auth().currentUser
+        guard let user = currentUser else {
+            return
+        }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
         fileReference.putData(imageData, metadata: nil) { result in
@@ -52,7 +56,10 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
-                        UserFirebaseManager.shared.updateUserInfo(id: userUid, image: "\(url)",
+                        
+                        //        let name = user.displayName
+                        
+                        UserFirebaseManager.shared.updateUserInfo(id: user.uid, image: "\(url)",
                                                                   name: usernameTextField.text ?? "") { result in
                             switch result {
                             case .success:
@@ -61,7 +68,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                                 print("Error")
                             }
                         }
-                        dismiss(animated: true)
+                        navigationController?.popToRootViewController(animated: true)
                     case .failure:
                         break
                     }
@@ -73,7 +80,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         //        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         //        guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
         //        self.navigationController?.pushViewController(profileVC, animated: true)
-        navigationController?.popToRootViewController(animated: true)
     }
     
     @IBAction func addPicButton(_ sender: Any) {

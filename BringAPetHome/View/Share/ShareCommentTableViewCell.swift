@@ -17,6 +17,7 @@ class ShareCommentTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        userImageView.layer.cornerRadius = 30
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -24,5 +25,4 @@ class ShareCommentTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
 }

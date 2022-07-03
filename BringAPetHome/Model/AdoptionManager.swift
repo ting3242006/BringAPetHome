@@ -25,6 +25,7 @@ class AdoptionManager {
         case petable = "petable"
         case sex = "sex"
         case postId = "postId"
+//        case userUid = "userUid"
     }
     
     var comment = [
@@ -107,10 +108,11 @@ class AdoptionManager {
     
     var dataBase = Firestore.firestore() // 初始化 Firestore
     let adoptionFirebaseModel = AdoptionModel()
-    
+    // swiftlint:disable all
     func addAdoption(age: Int, content: String, imageFileUrl: String,
-                     location: String, sex: Int, petable: Int, commentId: String, postId: String) {
-        
+                     location: String, sex: Int, commentId: String,
+                     postId: String, userId: String) {
+        print("addAdoption")
         let adoptions = Firestore.firestore().collection("Adoption")
         let document = adoptions.document()
         let data: [String: Any] = [
@@ -122,9 +124,9 @@ class AdoptionManager {
             //            Adoption.sendId.rawValue: document.documentID,
             Adoption.imageFileUrl.rawValue: imageFileUrl,
             Adoption.location.rawValue: location,
-            Adoption.petable.rawValue: petable,
             Comment.commentId.rawValue: commentId,
-            Adoption.sex.rawValue: sex
+            Adoption.sex.rawValue: sex,
+            Adoption.userId.rawValue : userId
         ]
         document.setData(data) { error in
             if let error = error {
@@ -134,4 +136,5 @@ class AdoptionManager {
             }
         }
     }
+    // swiftlint:ensable all
 }

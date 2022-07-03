@@ -107,24 +107,25 @@ class ShareManager {
     }
     
     func fetchSharingComment(postId: String ,completion: @escaping(Result<[ShareComment]>) -> Void) {
-        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId ?? "").getDocuments { (querySnapshot, error) in
+        print("postId", postId)
+        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId).getDocuments { (querySnapshot, error) in
             if let error = error {
-                print(LocalizedError.self)
+                print("fetchSharingComment", LocalizedError.self)
                 completion(.failure(error))
             } else {
-                var shareComments = [ShareComment]()
-                for document in querySnapshot!.documents {
+                print("fetchSharingComment", querySnapshot!.documents.count)
+                
+                guard let snapshot = querySnapshot else { return }
+                let shareComments: [ShareComment] = snapshot.documents.compactMap { snapshot in
                     do {
-                        print(document)
-                        if let shareComment = try document.data(as: ShareComment?.self,
-                           decoder: Firestore.Decoder()) {
-                            shareComments.append(shareComment)
-                        }
-                        print("55555\(shareComments)")
+                        let comment = try snapshot.data(as: ShareComment.self)
+                        return comment
                     } catch {
-                        completion(.failure(error))
+                        print(error)
+                        return  nil
                     }
                 }
+                
                 completion(.success(shareComments))
             }
         }

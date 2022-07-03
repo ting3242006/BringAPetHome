@@ -30,6 +30,7 @@
 		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
 		251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80028586FC7004BDEC9 /* Main.storyboard */; };
 		251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */; };
+		2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2529E4F82871E4BB00373C90 /* Time+Extension.swift */; };
 		252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */; };
 		252D807E285995290076236B /* ShelterDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807D285995290076236B /* ShelterDataModel.swift */; };
 		252D80802859A1A40076236B /* UITableViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */; };
@@ -81,6 +82,7 @@
 		251CF80128586FC7004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		251CF80628586FC8004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		251CF80828586FC8004BDEC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2529E4F82871E4BB00373C90 /* Time+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time+Extension.swift"; sourceTree = "<group>"; };
 		252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		252D807D285995290076236B /* ShelterDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterDataModel.swift; sourceTree = "<group>"; };
 		252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */,
 				250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */,
 				25E5733B2869D343009348A0 /* CustomFunc.swift */,
+				2529E4F82871E4BB00373C90 /* Time+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,
 				25178BA2286AA79C008126A9 /* UserFirebaseManager.swift in Sources */,
 				251C9982285DC74E00E46457 /* FavoriteListViewController.swift in Sources */,
+				2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */,
 				251C9984285DCA2D00E46457 /* FavoriteListTableViewCell.swift in Sources */,
 				25BB098828616F60005E7872 /* AdoptionManager.swift in Sources */,
 				252D807E285995290076236B /* ShelterDataModel.swift in Sources */,
