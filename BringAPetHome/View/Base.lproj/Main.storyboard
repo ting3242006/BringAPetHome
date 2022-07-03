@@ -177,6 +177,16 @@
                                                         <constraint firstAttribute="width" constant="20" id="pGo-es-8dN"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1TF-Xu-KbD">
+                                                    <rect key="frame" x="30" y="357" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="20" id="VgP-J7-PE2"/>
+                                                        <constraint firstAttribute="height" constant="20" id="tLs-gn-s46"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Dmd-Dr-fNC" firstAttribute="top" secondItem="0Lh-a9-2cL" secondAttribute="bottom" constant="17" id="3tN-8O-H0y"/>
@@ -188,10 +198,12 @@
                                                 <constraint firstItem="7Po-2x-r1O" firstAttribute="leading" secondItem="tyh-Df-d3O" secondAttribute="leading" constant="35" id="GQH-HM-pN1"/>
                                                 <constraint firstAttribute="trailing" secondItem="Owv-Gs-J5J" secondAttribute="trailing" constant="30" id="Lef-hg-U6l"/>
                                                 <constraint firstItem="YxT-UO-OzB" firstAttribute="leading" secondItem="a6K-7A-9k0" secondAttribute="trailing" constant="10" id="MBt-GW-Uze"/>
+                                                <constraint firstItem="1TF-Xu-KbD" firstAttribute="leading" secondItem="tyh-Df-d3O" secondAttribute="leading" constant="30" id="SK6-yS-tDN"/>
                                                 <constraint firstItem="SdP-v6-qAb" firstAttribute="leading" secondItem="tyh-Df-d3O" secondAttribute="leading" constant="30" id="T7Z-ul-SwX"/>
                                                 <constraint firstItem="0Lh-a9-2cL" firstAttribute="top" secondItem="SdP-v6-qAb" secondAttribute="bottom" constant="20" id="ToM-S0-rs8"/>
                                                 <constraint firstAttribute="trailing" secondItem="0Lh-a9-2cL" secondAttribute="trailing" constant="30" id="Ywp-EM-AeR"/>
                                                 <constraint firstAttribute="bottom" secondItem="Owv-Gs-J5J" secondAttribute="bottom" constant="15" id="cfb-1R-z7s"/>
+                                                <constraint firstItem="1TF-Xu-KbD" firstAttribute="top" secondItem="0Lh-a9-2cL" secondAttribute="bottom" constant="17" id="dE8-cz-pzB"/>
                                                 <constraint firstItem="Dmd-Dr-fNC" firstAttribute="leading" secondItem="YxT-UO-OzB" secondAttribute="trailing" constant="15" id="doV-im-bDN"/>
                                                 <constraint firstItem="3bY-XS-eRW" firstAttribute="top" secondItem="tyh-Df-d3O" secondAttribute="top" constant="20" id="dtF-i0-0Bq"/>
                                                 <constraint firstItem="a6K-7A-9k0" firstAttribute="leading" secondItem="QFS-bJ-BCy" secondAttribute="trailing" constant="15" id="eH0-oM-ARW"/>
@@ -219,6 +231,7 @@
                                             <outlet property="ageLabel" destination="yux-MS-lWH" id="iOd-a5-AWo"/>
                                             <outlet property="commentButton" destination="Owv-Gs-J5J" id="Ari-fr-URM"/>
                                             <outlet property="createdTimeLabel" destination="NnN-BB-qXZ" id="FNp-NS-gxa"/>
+                                            <outlet property="sexIconImage" destination="BoV-CY-FDB" id="27h-HY-llB"/>
                                             <outlet property="userImageView" destination="SdP-v6-qAb" id="KV9-du-5jc"/>
                                             <outlet property="usernameLabel" destination="3bY-XS-eRW" id="HrH-YG-HYt"/>
                                         </connections>
@@ -414,42 +427,42 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="FavoriteListTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteListTableViewCell" rowHeight="270" id="isU-8H-gkG" customClass="FavoriteListTableViewCell" customModule="BringAPetHome" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="270"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="FavoriteListTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteListTableViewCell" rowHeight="220" id="isU-8H-gkG" customClass="FavoriteListTableViewCell" customModule="BringAPetHome" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="220"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="isU-8H-gkG" id="5rs-FU-0Ik">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="270"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="220"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GpS-5g-r1h">
-                                                    <rect key="frame" x="30" y="20" width="354" height="230"/>
+                                                    <rect key="frame" x="30" y="20" width="354" height="180"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0DQ-EV-3Lx">
-                                                            <rect key="frame" x="0.0" y="0.0" width="220" height="230"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="180"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="220" id="O6V-q0-T1M"/>
+                                                                <constraint firstAttribute="width" constant="200" id="O6V-q0-T1M"/>
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXL-ba-0nj">
-                                                            <rect key="frame" x="230" y="181.5" width="109" height="13.5"/>
+                                                            <rect key="frame" x="210" y="131.5" width="129" height="13.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" systemColor="systemGray2Color"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSQ-Mh-3mO">
-                                                            <rect key="frame" x="230" y="112" width="109" height="13.5"/>
+                                                            <rect key="frame" x="210" y="112" width="129" height="13.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" systemColor="systemGray2Color"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJc-pJ-eSa">
-                                                            <rect key="frame" x="230" y="42" width="109" height="18"/>
+                                                            <rect key="frame" x="210" y="42" width="129" height="18"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                             <color key="textColor" name="DarkGreen"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibD-6f-eGS">
-                                                            <rect key="frame" x="230" y="78" width="109" height="16"/>
+                                                            <rect key="frame" x="210" y="78" width="129" height="16"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <color key="textColor" name="DavysGrey"/>
                                                             <nil key="highlightedColor"/>
@@ -967,26 +980,24 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4af-2n-mN2">
                                         <rect key="frame" x="0.0" y="0.0" width="167" height="90"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="90" id="IJd-pH-yAu"/>
                                         </constraints>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Dog" image="Group 38 (1)"/>
+                                        <state key="normal" image="Group 38-1"/>
                                         <connections>
                                             <action selector="selectDog:" destination="0iP-dd-Ans" eventType="touchUpInside" id="2NM-iq-gmG"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I4f-t9-i0E">
                                         <rect key="frame" x="187" y="0.0" width="167" height="90"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="90" id="wo1-0V-0cZ"/>
                                         </constraints>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Cat" image="Group 39 (1)"/>
+                                        <state key="normal" image="Group 39-1"/>
                                         <connections>
                                             <action selector="selectCat:" destination="0iP-dd-Ans" eventType="touchUpInside" id="1AT-AK-s7D"/>
                                         </connections>
@@ -998,26 +1009,24 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ur5-mc-Daa">
                                         <rect key="frame" x="0.0" y="0.0" width="167" height="60"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="lfA-wh-ioG"/>
                                         </constraints>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Boy" image="Group 40"/>
+                                        <state key="normal" image="Group 40"/>
                                         <connections>
                                             <action selector="selectBoy:" destination="0iP-dd-Ans" eventType="touchUpInside" id="U1f-Fa-5SY"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yD0-kC-Qts">
                                         <rect key="frame" x="187" y="0.0" width="167" height="60"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="TMw-oS-q6V"/>
                                         </constraints>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Girl" image="Group 41"/>
+                                        <state key="normal" image="Group 41"/>
                                         <connections>
                                             <action selector="selectGirl:" destination="0iP-dd-Ans" eventType="touchUpInside" id="9Wo-kW-ypG"/>
                                         </connections>
@@ -1047,7 +1056,7 @@
                                         </constraints>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="小型" image="Group 44"/>
+                                        <state key="normal" image="Group 42"/>
                                         <connections>
                                             <action selector="selectSmall:" destination="0iP-dd-Ans" eventType="touchUpInside" id="UzU-58-PlT"/>
                                         </connections>
@@ -1057,7 +1066,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="中型" image="Group 43"/>
+                                        <state key="normal" image="Group 43"/>
                                         <connections>
                                             <action selector="selectMedium:" destination="0iP-dd-Ans" eventType="touchUpInside" id="G7L-f4-T7D"/>
                                         </connections>
@@ -1067,7 +1076,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" name="DarkGreen"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="大型" image="Group 42"/>
+                                        <state key="normal" image="Group 44"/>
                                         <connections>
                                             <action selector="selectBig:" destination="0iP-dd-Ans" eventType="touchUpInside" id="iVM-mu-2zQ"/>
                                         </connections>
@@ -2086,13 +2095,13 @@
         <image name="Component 7 – 1" width="21" height="21"/>
         <image name="Component 8 – 1" width="21" height="21"/>
         <image name="GIRL-1" width="51" height="51"/>
-        <image name="Group 38 (1)" width="254" height="134"/>
-        <image name="Group 39 (1)" width="254" height="134"/>
-        <image name="Group 40" width="254" height="88"/>
-        <image name="Group 41" width="254" height="88"/>
-        <image name="Group 42" width="158" height="88"/>
-        <image name="Group 43" width="158" height="88"/>
-        <image name="Group 44" width="158" height="88"/>
+        <image name="Group 38-1" width="127" height="67"/>
+        <image name="Group 39-1" width="127" height="67"/>
+        <image name="Group 40" width="127" height="44"/>
+        <image name="Group 41" width="127" height="44"/>
+        <image name="Group 42" width="79" height="44"/>
+        <image name="Group 43" width="79" height="44"/>
+        <image name="Group 44" width="79" height="44"/>
         <image name="LocalIcon" width="68" height="68"/>
         <image name="Scroll Group 3" width="20.5" height="17.5"/>
         <image name="Scroll Group 7" width="22" height="21"/>

@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBarController?.tabBar.barTintColor = .white
+//        self.tabBarController?.tabBar.barTintColor = .white
         setupNavigationItem()
         // setup
         collectionView.delegate = self
@@ -50,6 +50,7 @@ class HomeViewController: UIViewController {
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
+        
     }
     
     //    override func viewWillAppear(_ animated: Bool) {

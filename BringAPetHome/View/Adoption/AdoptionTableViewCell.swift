@@ -85,6 +85,7 @@ class AdoptionTableViewCell: UITableViewCell {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var sexIconImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
