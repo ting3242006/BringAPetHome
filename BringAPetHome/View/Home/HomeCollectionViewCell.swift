@@ -36,15 +36,17 @@ class HomeCollectionViewCell: UICollectionViewCell {
         backgroundImageView.addSubview(placeLabel)
         backgroundImageView.addSubview(sexImageView)
         backgroundImageView.addSubview(colorLabel)
+        backgroundImageView.layer.cornerRadius = 10
+        backgroundImageView.clipsToBounds = true
         backgroundImageView.anchor(top: contentView.topAnchor,
                                    leading: contentView.leadingAnchor,
                                    bottom: contentView.bottomAnchor,
                                    trailing: contentView.leadingAnchor,
-                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 160, height: 245)
+                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 170, height: 245)
         shelterImageView.anchor(top: backgroundImageView.topAnchor,
                                 leading: backgroundImageView.leadingAnchor,
                                 trailing: backgroundImageView.trailingAnchor,
-                                padding: .init(top: 5, left: 5, bottom: 0, right: 5),
+                                padding: .init(top: 10, left: 10, bottom: 0, right: 10),
                                 height: 150)
         sexLabel.anchor(top: shelterImageView.bottomAnchor,
                         leading: shelterImageView.leadingAnchor,
@@ -54,12 +56,12 @@ class HomeCollectionViewCell: UICollectionViewCell {
         colorLabel.anchor(top: shelterImageView.bottomAnchor,
                         leading: shelterImageView.leadingAnchor,
                         trailing: shelterImageView.trailingAnchor,
-                        padding: .init(top: 12, left: 0, bottom: 0, right: 0),
+                        padding: .init(top: 12, left: 2, bottom: 0, right: 0),
                         height: 22)
         placeLabel.anchor(top: sexLabel.bottomAnchor,
                           leading: backgroundImageView.leadingAnchor,
                           trailing: backgroundImageView.trailingAnchor,
-                          padding: .init(top: 8, left: 4, bottom: 0, right: 2),
+                          padding: .init(top: 8, left: 12, bottom: 0, right: 2),
                           height: 22)
         sexImageView.anchor(bottom: backgroundImageView.bottomAnchor,
                             trailing: backgroundImageView.trailingAnchor,

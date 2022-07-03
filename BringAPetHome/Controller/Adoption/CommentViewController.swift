@@ -107,7 +107,7 @@ class CommentViewController: UIViewController {
                     self?.dbModels.insert(document.data(), at: 0)
                     print("3333\(self?.dbModels.count)")
                 }
-                print("3433\(self?.dbModels.count)")
+                print("4444\(self?.dbModels.count)")
             }
         }
     }

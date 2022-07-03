@@ -15,7 +15,9 @@ class ShareCommentViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var commentList = [ShareComment]()
-    var postId: String?
+    var postId: String? = ""
+    var cooo: String? = ""
+    
     //var shareModel: ShareModel?
     // segue or prepare 傳值
    
@@ -39,7 +41,7 @@ class ShareCommentViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        fetchSharingComment()
 //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
 //
 //            self.tableView.reloadData()
@@ -59,10 +61,12 @@ class ShareCommentViewController: UIViewController {
     }
     
     func fetchSharingComment() {
-        ShareManager.shared.fetchSharingComment { [weak self] result in
+        ShareManager.shared.fetchSharingComment(postId: postId ?? "") { [weak self] result in
             switch result {
             case .success(let shareComments):
                 self?.commentList = shareComments
+                print("111111\(shareComments)")
+                print("222222\(self?.postId)")
                 self?.tableView.reloadData()
             case .failure:
                 print("Can't fetch data")
@@ -80,7 +84,6 @@ class ShareCommentViewController: UIViewController {
 extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        print(commentList)
         return commentList.count
         
     }

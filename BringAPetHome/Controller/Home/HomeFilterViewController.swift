@@ -62,7 +62,7 @@ class HomeFilterViewController: UIViewController {
             target: self,
             action: #selector(didTapClose))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "multiply.circle")?
+            image: UIImage(named: "fluent_filter-dismiss")?
                 .withTintColor(UIColor.darkGray)
                 .withRenderingMode(.alwaysOriginal),
             style: .plain,
@@ -76,7 +76,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
-        self.dogButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.dogButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.dogButton.tintColor = UIColor(named: "DarkGreen")
         self.catButton.layer.borderColor = UIColor.lightGray.cgColor
         self.catButton.tintColor = .lightGray
@@ -84,7 +84,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectCat(_ sender: Any) {
         filter.kind = "貓"
-        self.catButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.catButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.catButton.tintColor = UIColor(named: "DarkGreen")
         self.dogButton.layer.borderColor = UIColor.lightGray.cgColor
         self.dogButton.tintColor = .lightGray
@@ -92,7 +92,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectBoy(_ sender: Any) {
         filter.sex = "M"
-        self.boyButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.boyButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.boyButton.tintColor = UIColor(named: "DarkGreen")
         self.girlButton.layer.borderColor = UIColor.lightGray.cgColor
         self.girlButton.tintColor = .lightGray
@@ -100,7 +100,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectGirl(_ sender: Any) {
         filter.sex = "F"
-        self.girlButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.girlButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.girlButton.tintColor = UIColor(named: "DarkGreen")
         self.boyButton.layer.borderColor = UIColor.lightGray.cgColor
         self.boyButton.tintColor = .lightGray
@@ -108,7 +108,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectSmall(_ sender: Any) {
         filter.bodytype = "SMALL"
-        self.smallButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.smallButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.smallButton.tintColor = UIColor(named: "DarkGreen")
         self.mediumButton.layer.borderColor = UIColor.lightGray.cgColor
         self.mediumButton.tintColor = .lightGray
@@ -118,7 +118,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectMedium(_ sender: Any) {
         filter.bodytype = "MEDIUM"
-        self.mediumButton.layer.borderColor = UIColor(named: "DarkGreen")?.cgColor
+        self.mediumButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.mediumButton.tintColor = UIColor(named: "DarkGreen")
         self.smallButton.layer.borderColor = UIColor.lightGray.cgColor
         self.smallButton.tintColor = .lightGray
@@ -128,7 +128,7 @@ class HomeFilterViewController: UIViewController {
     
     @IBAction func selectBig(_ sender: Any) {
         filter.bodytype = "BIG"
-        self.bigButton.layer.borderColor = UIColor(named: "RichBlack")?.cgColor
+        self.bigButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
         self.bigButton.tintColor = UIColor(named: "RichBlack")
         self.smallButton.layer.borderColor = UIColor.lightGray.cgColor
         self.smallButton.tintColor = .lightGray
@@ -194,30 +194,30 @@ class HomeFilterViewController: UIViewController {
     func layoutButton() {
         dogButton.layer.cornerRadius = 15
         dogButton.layer.borderColor = UIColor.lightGray.cgColor
-        dogButton.layer.borderWidth = 2
+        dogButton.layer.borderWidth = 1
         dogButton.tintColor = UIColor(named: "DarkGreen")
         catButton.layer.cornerRadius = 15
         catButton.layer.borderColor = UIColor.lightGray.cgColor
-        catButton.layer.borderWidth = 2
+        catButton.layer.borderWidth = 1
         catButton.tintColor = UIColor(named: "DarkGreen")
         boyButton.layer.cornerRadius = 15
         boyButton.layer.borderColor = UIColor.lightGray.cgColor
-        boyButton.layer.borderWidth = 2
+        boyButton.layer.borderWidth = 1
         girlButton.layer.cornerRadius = 15
         girlButton.layer.borderColor = UIColor.lightGray.cgColor
-        girlButton.layer.borderWidth = 2
+        girlButton.layer.borderWidth = 1
         girlButton.layer.cornerRadius = 15
         girlButton.layer.borderColor = UIColor.lightGray.cgColor
-        girlButton.layer.borderWidth = 2
+        girlButton.layer.borderWidth = 1
         smallButton.layer.cornerRadius = 15
         smallButton.layer.borderColor = UIColor.lightGray.cgColor
-        smallButton.layer.borderWidth = 2
+        smallButton.layer.borderWidth = 1
         mediumButton.layer.cornerRadius = 15
         mediumButton.layer.borderColor = UIColor.lightGray.cgColor
-        mediumButton.layer.borderWidth = 2
+        mediumButton.layer.borderWidth = 1
         bigButton.layer.cornerRadius = 15
         bigButton.layer.borderColor = UIColor.lightGray.cgColor
-        bigButton.layer.borderWidth = 2
+        bigButton.layer.borderWidth = 1
         filterButton.layer.cornerRadius = 15
         filterButton.clipsToBounds = true
     }

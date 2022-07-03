@@ -16,6 +16,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var coverImageView: UIImageView!
+    @IBOutlet weak var editButton: UIButton!
     
     var gradient = CAGradientLayer()
     let selectedBackgroundView = UIView()
@@ -44,8 +45,8 @@ class ProfileViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         userImageView.layer.cornerRadius = 50
         userImageView.clipsToBounds = true
-        userImageView.layer.borderWidth = 3
-        userImageView.layer.borderColor = UIColor.lightGray.cgColor
+        userImageView.layer.borderWidth = 4
+        userImageView.layer.borderColor = UIColor.white.cgColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,8 +56,8 @@ class ProfileViewController: UIViewController {
             switch result {
             case let .success(user):
                 self.userData = user
-                self.userIdLabel.text = self.userData?.email
-                self.userIdLabel.textColor = .lightGray
+                //                self.userIdLabel.text = self.userData?.email
+                //                self.userIdLabel.textColor = .lightGray
             case .failure(_):
                 print("Error")
             }
@@ -73,9 +74,14 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func editProfileInfo(_ sender: Any) {
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let editVC = mainStoryboard.instantiateViewController(withIdentifier: "EditProfileViewController") as? EditProfileViewController else { return }
-        self.navigationController?.pushViewController(editVC, animated: true)
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        } else {
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let editVC = mainStoryboard.instantiateViewController(withIdentifier: "EditProfileViewController") as? EditProfileViewController else { return }
+            self.navigationController?.pushViewController(editVC, animated: true)
+        }
     }
     
     @IBAction func logOutButton(_ sender: Any) {
@@ -95,8 +101,8 @@ class ProfileViewController: UIViewController {
             }
         }
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
-//        okAction.setValue(UIColor.darkGray, forKey: "okTextColor")
-//        cancelAction.setValue(UIColor.darkGray, forKey: "cancleTextColor")
+        //        okAction.setValue(UIColor.darkGray, forKey: "okTextColor")
+        //        cancelAction.setValue(UIColor.darkGray, forKey: "cancleTextColor")
         controller.addAction(okAction)
         controller.addAction(cancelAction)
         present(controller, animated: true, completion: nil)
@@ -150,7 +156,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.profileImageView.layer.shadowOffset = CGSize(width: 3, height: 3)
         cell.profileImageView.layer.shadowRadius = 3
         cell.profileImageView.layer.shadowOpacity = 0.5
-//        cell.profileImageView.layer.masksToBounds = false
+        //        cell.profileImageView.layer.masksToBounds = false
         let urls = shareList[indexPath.row].shareImageUrl
         cell.profileImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
         cell.profileContent.text = shareList[indexPath.row].shareContent

@@ -106,8 +106,8 @@ class ShareManager {
         }
     }
     
-    func fetchSharingComment(completion: @escaping(Result<[ShareComment]>) -> Void) {
-        dataBase.collection("ShareComment").getDocuments { (querySnapshot, error) in
+    func fetchSharingComment(postId: String ,completion: @escaping(Result<[ShareComment]>) -> Void) {
+        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId ?? "").getDocuments { (querySnapshot, error) in
             if let error = error {
                 print(LocalizedError.self)
                 completion(.failure(error))
@@ -120,7 +120,7 @@ class ShareManager {
                            decoder: Firestore.Decoder()) {
                             shareComments.append(shareComment)
                         }
-                        print(shareComments)
+                        print("55555\(shareComments)")
                     } catch {
                         completion(.failure(error))
                     }
@@ -160,7 +160,8 @@ class ShareManager {
 //    }
     
     func fetchUserSharing(uid: String, completion: @escaping ([ShareModel]?) -> Void) {
-        dataBase.collection("Share").whereField("userUid", isEqualTo: uid).getDocuments { (querySnapshot, _) in
+        dataBase.collection("Share").whereField("userUid", isEqualTo: uid).order(by: "createdTime", descending: true).getDocuments { (querySnapshot, _) in
+//        dataBase.collection("Share").whereField("userUid", isEqualTo: uid).getDocuments { (querySnapshot, _) in
             guard let querySnapshot = querySnapshot else {
                 return
             }

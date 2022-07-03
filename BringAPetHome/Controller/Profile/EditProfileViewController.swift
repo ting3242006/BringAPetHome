@@ -115,5 +115,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         uploadImageButton.clipsToBounds = true
         sendInfoButton.layer.cornerRadius = 10
         deleteAccountButton.layer.cornerRadius = 10
+        uploadImageButton.layer.cornerRadius = 20
     }
 }

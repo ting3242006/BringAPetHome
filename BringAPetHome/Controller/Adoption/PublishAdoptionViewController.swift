@@ -79,7 +79,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
-        dataSource = ["Boy", "Girl"]
+        dataSource = ["男", "女"]
         selectedButton = sexButton
         selectedButton.tag = 0
         addTransparentView(frames: sexButton.frame)
@@ -251,8 +251,8 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
 //        ageButton.tintColor = .white
 //        petableButton.layer.borderColor = UIColor.systemGray5.cgColor
 //        petableButton.layer.borderWidth = 0.5
-        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
-        petableButton.layer.cornerRadius = 5
+//        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
+//        petableButton.layer.cornerRadius = 5
 //        petableButton.tintColor = .white
     }
 }

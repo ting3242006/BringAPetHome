@@ -34,9 +34,9 @@ enum Sex: Int, Codable {
     var sexTitle: String {
         switch self {
         case .boy:
-            return "Boy"
+            return "男"
         case .girl:
-            return "Girl"
+            return "女"
         default:
             return ""
         }
@@ -69,8 +69,9 @@ class AdoptionViewController: UIViewController {
         }
     }
     var adoptionFirebaseModel = AdoptionModel()
-    let selectedBackgroundView = UIView()
     var userData: UserModel?
+    var publishButton = UIButton()
+    let selectedBackgroundView = UIView()
     
     enum Adoption: String {
         case age = "age"
@@ -116,9 +117,40 @@ class AdoptionViewController: UIViewController {
         tableView.reloadData()
         selectedBackgroundView.backgroundColor = UIColor.clear
         navigationController?.navigationBar.backgroundColor = .clear
+        setButtonLayout()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let publishAdoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "PublishAdoptionViewController") as? PublishAdoptionViewController else { return }
+        self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
+    }
+    
+    func setButtonLayout() {
+        view.addSubview(publishButton)
+        publishButton.backgroundColor = UIColor(named: "HoneyYellow")
+//        publishButton.layer.masksToBounds = true
+        publishButton.layer.cornerRadius = 30
+        publishButton.tintColor = .white
+        publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        publishButton.layer.shadowOpacity = 0.75
+        publishButton.layer.shadowOffset = .zero
+        publishButton.layer.shadowRadius = 8
+        publishButton.layer.shadowPath = UIBezierPath(roundedRect: publishButton.bounds,
+                                                      cornerRadius: publishButton.layer.cornerRadius).cgPath
+        publishButton.layer.shadowColor = UIColor.darkGray.cgColor
+        publishButton.addTarget(self, action: #selector(didTapped), for: .touchUpInside)
+        publishButton.anchor(bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             padding: .init(top: 0, left: 0, bottom: 95, right: 20),
+                             width: 60, height: 60)
+    }
+    
+    @objc func didTapped() {
         if Auth.auth().currentUser == nil {
             showLoginVC()
             return

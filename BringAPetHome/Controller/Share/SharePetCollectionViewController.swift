@@ -12,15 +12,17 @@ class SharePetCollectionViewController: UICollectionViewController {
     
     var shareManager = ShareManager()
     var shareList = [ShareModel]()
+    var publishButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setButtonLayout()
         configureCellSize()
         shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
             self.collectionView.reloadData()
         })
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
             self.collectionView.reloadData()
@@ -28,6 +30,36 @@ class SharePetCollectionViewController: UICollectionViewController {
     }
     
     @IBAction func goSharingPost(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let postSharingVC = mainStoryboard.instantiateViewController(withIdentifier: "PostSharingViewController") as? PostSharingViewController else { return }
+        self.navigationController?.pushViewController(postSharingVC, animated: true)
+    }
+    
+    func setButtonLayout() {
+        view.addSubview(publishButton)
+        publishButton.backgroundColor = UIColor(named: "HoneyYellow")
+//        publishButton.layer.masksToBounds = true
+        publishButton.layer.cornerRadius = 30
+        publishButton.tintColor = .white
+        publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        publishButton.layer.shadowOpacity = 0.75
+        publishButton.layer.shadowOffset = .zero
+        publishButton.layer.shadowRadius = 8
+        publishButton.layer.shadowPath = UIBezierPath(roundedRect: publishButton.bounds,
+                                                      cornerRadius: publishButton.layer.cornerRadius).cgPath
+        publishButton.layer.shadowColor = UIColor.darkGray.cgColor
+        publishButton.addTarget(self, action: #selector(didTapped), for: .touchUpInside)
+        publishButton.anchor(bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             padding: .init(top: 0, left: 0, bottom: 95, right: 20),
+                             width: 60, height: 60)
+    }
+
+    @objc func didTapped() {
         if Auth.auth().currentUser == nil {
             showLoginVC()
             return

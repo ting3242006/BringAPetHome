@@ -151,23 +151,23 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.areaPkidLabel.text = ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0)
-        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: pet?.sex ?? "")
-        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
-        cell.ageLabel.text = ShelterManager.shared.ageCh(age: pet?.age ?? "")
-        cell.animalIdLabel.text = " \(pet?.animalId ?? 0)"
-        cell.animalVarietyLabel.text = "\(pet?.animalVariety ?? "")"
-        cell.bodytypeLabel.text = ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? "")
-        cell.cDateLabel.text = "\(String(describing: pet?.cDate ?? ""))"
-        cell.colourLabel.text = " \(String(describing: pet?.colour ?? ""))"
-        cell.ageLabel.text = ShelterManager.shared.ageCh(age: pet?.age ?? "")
-        cell.kindLabel.text = "\(String(describing: pet?.kind ?? ""))"
-        cell.remarkLabel.text = " \(String(describing: pet?.remark ?? ""))"
-        cell.opendateLabel.text = " \(String(describing: pet?.opendate ?? ""))"
-        cell.shelterNameLabel.text = "\(String(describing: pet?.shelterName ?? ""))"
-        cell.shelterTel.text = "\(String(describing: pet?.shelterTel ?? ""))"
-        cell.shelterAddressLabel.text = "\(String(describing: pet?.shelterAddress ?? ""))"
-        cell.animalSterilizationLabel.text = ShelterManager.shared.sterilization(sterilization: pet?.animalSterilization ?? "")
+        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
+        cell.sexLabel.text = "性別：\( ShelterManager.shared.sexCh(sex: pet?.sex ?? ""))"
+//        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
+        cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
+        cell.animalIdLabel.text = "流水編號：\(pet?.animalId ?? 0)"
+        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
+        cell.bodytypeLabel.text = "品種：\( ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))"
+        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
+        cell.colourLabel.text = " 毛色：\(String(describing: pet?.colour ?? ""))"
+        cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
+        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
+        cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"
+        cell.opendateLabel.text = "開放認養時間： \(String(describing: pet?.opendate ?? ""))"
+        cell.shelterNameLabel.text = "收容所名稱：\(String(describing: pet?.shelterName ?? ""))"
+        cell.shelterTel.text = "電話：\(String(describing: pet?.shelterTel ?? ""))"
+        cell.shelterAddressLabel.text = "收容所地址：\(String(describing: pet?.shelterAddress ?? ""))"
+        cell.animalSterilizationLabel.text = "是否絕育：\( ShelterManager.shared.sterilization(sterilization: pet?.animalSterilization ?? ""))"
         cell.selectedBackgroundView = selectedBackgroundView
         return cell
     }
