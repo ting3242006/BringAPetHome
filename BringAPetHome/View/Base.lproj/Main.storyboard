@@ -369,6 +369,7 @@
                         <outlet property="imageView" destination="Zqm-Ry-dJd" id="1ae-Q9-slg"/>
                         <outlet property="inputContentTextField" destination="TKq-jS-LUk" id="GWB-gX-OQa"/>
                         <outlet property="locationTextField" destination="pnj-Va-XXP" id="Fhk-DY-zXU"/>
+                        <outlet property="postBarButton" destination="DPn-v7-kAg" id="omg-Xe-xEj"/>
                         <outlet property="sexButton" destination="pNh-QR-pW1" id="4ZN-eB-ZfX"/>
                     </connections>
                 </viewController>
@@ -1843,6 +1844,7 @@
                     <connections>
                         <outlet property="coverImageView" destination="AEy-Fo-yUL" id="Llr-kk-j1q"/>
                         <outlet property="editButton" destination="9pd-oj-Cev" id="qPR-Km-OSe"/>
+                        <outlet property="logoutBarButton" destination="aZg-af-UuX" id="Ehh-nN-gSD"/>
                         <outlet property="tableView" destination="fCy-Rf-xp2" id="MQ4-zF-9o4"/>
                         <outlet property="userImageView" destination="bnO-Ce-xON" id="daT-rK-FBm"/>
                         <outlet property="userNameLabel" destination="yYM-7V-k1P" id="hYk-lc-ea6"/>
@@ -2063,27 +2065,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="I2k-hG-91B"/>
                     <connections>
+                        <outlet property="animatedIconImage" destination="lbM-Iy-v3G" id="oJQ-qQ-96g"/>
                         <outlet property="bgView" destination="ZCs-yh-3bO" id="lYr-i4-dVv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oNq-eN-ECu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="900.00000000000011" y="1449.7767857142856"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="JzO-Mg-6We">
-            <objects>
-                <viewController id="w2P-c9-IDD" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ADv-rR-zQm">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="GYy-eM-6IE"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wMS-q4-lFn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1458" y="-1425"/>
         </scene>
     </scenes>
     <resources>

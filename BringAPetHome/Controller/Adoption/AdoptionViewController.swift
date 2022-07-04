@@ -235,6 +235,8 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
             cell.setupPetable(petable: petable)
         }
         
+//        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
+//        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "")
         UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
             switch result {
             case let .success(user):

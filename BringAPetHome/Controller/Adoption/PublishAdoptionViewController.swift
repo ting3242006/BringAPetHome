@@ -57,6 +57,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     @IBOutlet weak var sexButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var inputContentTextField: UITextView!
+    @IBOutlet weak var postBarButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -221,6 +222,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                                                              commentId: commentId as? String ?? "",
                                                              postId: postId ?? "",
                                                              userId: userUid)
+                            postBarButton.isEnabled = false
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
                             self.navigationController?.pushViewController(adoptionViewController, animated: true)

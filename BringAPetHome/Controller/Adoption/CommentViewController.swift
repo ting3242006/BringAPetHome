@@ -83,6 +83,7 @@ class CommentViewController: UIViewController {
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
+//            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
             Comments.userUid.rawValue: userData?.id
             
 //            Comments.postId.rawValue: postId
@@ -148,6 +149,7 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
+//        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
         UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
             switch result {
             case let .success(user):

@@ -10,10 +10,11 @@ import FirebaseAuth // 用來與 Firebase Auth 進行串接用的
 import AuthenticationServices // Sign in with Apple 的主體框架
 import CryptoKit // 用來產生隨機字串 (Nonce) 的
 
-
 class SignInWithAppleVC: UIViewController {
     
     @IBOutlet var bgView: UIView!
+    @IBOutlet weak var animatedIconImage: UIImageView!
+    
     var appleUserID: String?
     
     override func viewDidLoad() {
@@ -38,7 +39,6 @@ class SignInWithAppleVC: UIViewController {
                 print(error?.localizedDescription)
                 return
             }
-            
         })
         //        if let user = Auth.auth().currentUser {
         //           print(user.uid, user.email, user.displayName, user.photoURL)
@@ -55,6 +55,9 @@ class SignInWithAppleVC: UIViewController {
                 return
             }
         }
+        let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
+        animatedIconImage.image = animatedImage
+        animatedIconImage.layer.cornerRadius = 20
     }
     
     @IBAction func closeButton(_ sender: Any) {

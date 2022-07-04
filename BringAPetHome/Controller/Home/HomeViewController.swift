@@ -154,9 +154,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         var name = ""
         switch cell.sexLabel.text {
         case "男":
-            name = "boy"
+            name = "BOY-1"
         case "女":
-            name = "girl"
+            name = "GIRL-1"
         default:
             name = "paws"
         }

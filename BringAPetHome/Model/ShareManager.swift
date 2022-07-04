@@ -66,9 +66,10 @@ class ShareManager {
                 let shareImage = shareObject["image"] as? String ?? ""
                 let sharePostId = shareObject["postId"] as? String ?? ""
                 let shareContent = shareObject["shareContent"] as? String ?? ""
+                let shareUserUid = shareObject["userUid"] as? String ?? ""
                 
                 let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
-                                       postId: sharePostId, createdTime: shareTime)
+                                       postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
                 self.shareList.append(share)
             }
             completion(self.shareList)
@@ -173,9 +174,10 @@ class ShareManager {
                 let shareImage = shareObject["image"] as? String ?? ""
                 let sharePostId = shareObject["postId"] as? String ?? ""
                 let shareContent = shareObject["shareContent"] as? String ?? ""
+                let shareUserUid = shareObject["userUid"] as? String ?? ""
                 
                 let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
-                                       postId: sharePostId, createdTime: shareTime)
+                                       postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
                 self.shareList.append(share)
             }
             completion(self.shareList)

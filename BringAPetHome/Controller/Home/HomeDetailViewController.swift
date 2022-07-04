@@ -163,7 +163,7 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
         cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
         cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"
-        cell.opendateLabel.text = "開放認養時間： \(String(describing: pet?.opendate ?? ""))"
+        cell.opendateLabel.text = "開放認養時間：\(String(describing: pet?.opendate ?? ""))"
         cell.shelterNameLabel.text = "收容所名稱：\(String(describing: pet?.shelterName ?? ""))"
         cell.shelterTel.text = "電話：\(String(describing: pet?.shelterTel ?? ""))"
         cell.shelterAddressLabel.text = "收容所地址：\(String(describing: pet?.shelterAddress ?? ""))"

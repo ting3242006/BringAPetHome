@@ -137,7 +137,7 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
         cell.selectedBackgroundView = selectedBackgroundView
         cell.userImageView.layer.cornerRadius = 15
         
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        UserFirebaseManager.shared.fetchUser(userId: shareList[indexPath.row].userUid) { result in
             switch result {
             case let .success(user):
                 self.userData = user

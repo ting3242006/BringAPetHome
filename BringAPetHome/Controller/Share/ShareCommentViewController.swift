@@ -16,10 +16,9 @@ class ShareCommentViewController: UIViewController {
     
     var commentList = [ShareComment]()
     var postId: String? = ""
-    var cooo: String? = ""
     var userData: UserModel?
     
-    //var shareModel: ShareModel?
+    // var shareModel: ShareModel?
     // segue or prepare 傳值
    
     override func viewDidLoad() {
@@ -34,6 +33,7 @@ class ShareCommentViewController: UIViewController {
         }
         
         bgView.layer.cornerRadius = 25
+        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tableView.dataSource = self
         tableView.delegate = self
 //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
@@ -68,8 +68,6 @@ class ShareCommentViewController: UIViewController {
             switch result {
             case .success(let shareComments):
                 self?.commentList = shareComments
-                print("111111\(shareComments)")
-                print("222222\(self?.postId)")
                 self?.tableView.reloadData()
             case .failure:
                 print("Can't fetch data")
