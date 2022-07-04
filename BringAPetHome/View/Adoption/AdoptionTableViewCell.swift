@@ -82,9 +82,18 @@ class AdoptionTableViewCell: UITableViewCell {
     @IBOutlet weak var adoptionContent: UILabel!
     @IBOutlet weak var createdTimeLabel: UILabel!
     @IBOutlet weak var ageLabel: UILabel!
+    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var sexIconImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        userImageView.layer.cornerRadius = 15
+        userImageView.clipsToBounds = true
+        adoptionAnimalImage.layer.cornerRadius = 15
+        adoptionAnimalImage.clipsToBounds = true
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -99,7 +108,7 @@ class AdoptionTableViewCell: UITableViewCell {
         adoptionContent.text = content
         ageLabel.text = age.title
         adoptionSexLabel.text = sex.sexTitle
-        petableLabel.text = petable.petableTitle
+//        petableLabel.text = petable.petableTitle
     }
     
     func setupPetable(petable: Int) -> String {
@@ -108,8 +117,8 @@ class AdoptionTableViewCell: UITableViewCell {
         case 1: return "已領養"
         default: return ""
         }
-        let petable = showPetable
-        petableLabel.text = petable
+//        let petable = showPetable
+//        petableLabel.text = petable
     }
     
     func setupAge(age: Int) -> String {

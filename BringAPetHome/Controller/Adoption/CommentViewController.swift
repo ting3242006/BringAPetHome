@@ -10,6 +10,7 @@ import Firebase
 
 class CommentViewController: UIViewController {
     var adoptionId: String?
+    var userData: UserModel?
     
     enum Comments: String {
         case commentText = "commentText"
@@ -17,6 +18,7 @@ class CommentViewController: UIViewController {
         case adoptionId = "adoptionId"
         case time = "time"
         case creator = "creator"
+        case userUid = "userUid"
     }
     
     var creator: [String: Any] = [
@@ -24,7 +26,7 @@ class CommentViewController: UIViewController {
         "name": ""
     ]
     
-    let db = Firestore.firestore()
+//    let db = Firestore.firestore()
     var dataBase = Firestore.firestore()
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -46,6 +48,10 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func sendComment(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
         if commentTextField.text == "" {
             let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "確認", style: .default))
@@ -60,6 +66,13 @@ class CommentViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        //self.navigationController?.present(loginVC, animated: true)
+        present(loginVC, animated: true)
+    }
+    
     func addCommend(text: String) {
         let comment = Firestore.firestore().collection("Comments")
         let document = comment.document()
@@ -69,7 +82,9 @@ class CommentViewController: UIViewController {
             Comments.commentText.rawValue: text,
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
-            Comments.adoptionId.rawValue: adoptionId ?? ""
+            Comments.adoptionId.rawValue: adoptionId ?? "",
+            Comments.userUid.rawValue: userData?.id
+            
 //            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
@@ -82,7 +97,7 @@ class CommentViewController: UIViewController {
     }
     
     func fetchCommetData() {
-        db.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
+        dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").order(by: "time", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
 //        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
@@ -90,8 +105,9 @@ class CommentViewController: UIViewController {
             } else {
                 for document in querySnapshot!.documents {
                     self?.dbModels.insert(document.data(), at: 0)
-                    print("============\(document.data())")
+                    print("3333\(self?.dbModels.count)")
                 }
+                print("4444\(self?.dbModels.count)")
             }
         }
     }
@@ -132,6 +148,17 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                let url = self.userData?.imageURLString
+                cell.commentUserImage.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.commentUserId.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
+        }
         return cell
     }
 }

@@ -63,10 +63,23 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
+        setupButton()
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
-        dataSource = ["Boy", "Girl"]
+        dataSource = ["男", "女"]
         selectedButton = sexButton
         selectedButton.tag = 0
         addTransparentView(frames: sexButton.frame)
@@ -106,6 +119,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             // 開啟相機
             present(imagePicker, animated: true)
         }
+    }
+    
+    @objc private func didTapClose() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func imagePickerController(_ picker: UIImagePickerController,
@@ -166,14 +183,15 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     
     // MARK: - add data to Firebase
     @IBAction func publishButton(_ sender: Any) {
-        
+        print("publishButton")
         guard let selectedSex = selectedSex,
               let selectedAge = selectedAge,
-              let commentId = comment["commentId"],
-//              let postId = postId,
-              let selectedPetable = selectedPetable else { return }
+              let commentId = comment["commentId"]
+            else { return }
+        guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.5) else { return }
         
-        guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.8) else { return }
+
+        
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
         fileReference.putData(imageData, metadata: nil) { result in
@@ -188,6 +206,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             alert.addAction(UIAlertAction(title: "確認", style: .default))
                             self.present(alert, animated: true)
                         } else {
+                            let userUid = Auth.auth().currentUser?.uid ?? ""
                             let age = selectedAge
                             let sex = selectedSex
                             let petable = selectedPetable
@@ -196,9 +215,12 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
                             self.adoptionManager.addAdoption(age: age.rawValue, content: content,
-                                                             imageFileUrl: "\(url)", location: location,
-                                                             sex: sex.rawValue, petable: petable.rawValue,
-                                                             commentId: commentId as? String ?? "", postId: postId as? String ?? "")
+                                                             imageFileUrl: "\(url)",
+                                                             location: location,
+                                                             sex: sex.rawValue,
+                                                             commentId: commentId as? String ?? "",
+                                                             postId: postId ?? "",
+                                                             userId: userUid)
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
                             self.navigationController?.pushViewController(adoptionViewController, animated: true)
@@ -216,6 +238,27 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                 break
             }
         }
+    }
+    
+    func setupButton() {
+        inputContentTextField.layer.borderWidth = 0.5
+        inputContentTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        inputContentTextField.layer.cornerRadius = 5
+        sexButton.backgroundColor = UIColor(named: "CulturedWhite")
+//        sexButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        sexButton.layer.borderWidth = 0.5
+        sexButton.layer.cornerRadius = 5
+//        sexButton.tintColor = .white
+//        ageButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        ageButton.layer.borderWidth = 0.5
+        ageButton.backgroundColor = UIColor(named: "CulturedWhite")
+        ageButton.layer.cornerRadius = 5
+//        ageButton.tintColor = .white
+//        petableButton.layer.borderColor = UIColor.systemGray5.cgColor
+//        petableButton.layer.borderWidth = 0.5
+//        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
+//        petableButton.layer.cornerRadius = 5
+//        petableButton.tintColor = .white
     }
 }
 

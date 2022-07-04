@@ -23,32 +23,43 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setLayout()
         addSharIngImageButton.layer.cornerRadius = 15
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
     }
     
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+    }
+        
     @IBAction func sentSharingPost(_ sender: Any) {
-        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.8) else { return }
+        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.5) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
         fileReference.putData(imageData, metadata: nil) { result in
             switch result {
             case .success:
-                fileReference.downloadURL { [self]
-                    result in
+                fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
-                        shareManager.addSharing(shareContent: shareTextView.text, image: "\(url)")
+                        let userUid = Auth.auth().currentUser?.uid ?? ""
+                        shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
                     case .failure:
                         break
                     }
+                    navigationController?.popToRootViewController(animated: true)
                 }
             case .failure:
                 break
             }
         }
-        navigationController?.popToRootViewController(animated: true)
     }
     
     @IBAction func addImageButton(_ sender: Any) {
@@ -67,6 +78,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         present(alertController, animated: true, completion: nil)
     }
     
+    @objc private func didTapClose() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     //  指定 data source / delegate 選取相簿照片或照相
     func selectPhoto(sourceType: UIImagePickerController.SourceType) {
         let controller = UIImagePickerController()
@@ -82,5 +97,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             self.shareImageView.image = image
         }
         dismiss(animated: true, completion: nil)
+    }
+    
+    func setLayout() {
+        shareTextView.layer.borderColor = UIColor.systemGray3.cgColor
+        shareTextView.layer.borderWidth = 0.5
     }
 }

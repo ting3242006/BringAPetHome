@@ -20,16 +20,17 @@ struct ShareModel: Comparable, Codable {
     var postId: String
 //    var user: User
     var createdTime: Int
-//    var comment: ShareComment
+//    var comments: ShareComment
 //    var userName: String
 }
 
 struct ShareComment: Codable {
     var commentId: String
-    var userId: String
-    var userName: String
-    var time: Int
+//    var userId: String
+//    var userName: String
+    var time: Date
     var text: String
+    var userUid: String
 }
 
 struct User: Codable {

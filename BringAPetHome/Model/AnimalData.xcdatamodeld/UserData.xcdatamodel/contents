@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Animal" representedClassName="Animal" syncable="YES" codeGenerationType="class">
+        <attribute name="age" optional="YES" attributeType="String"/>
+        <attribute name="albumFile" optional="YES" attributeType="String"/>
+        <attribute name="albumUpdate" optional="YES" attributeType="String"/>
+        <attribute name="animalId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="animalSterilization" optional="YES" attributeType="String"/>
+        <attribute name="animalVariety" optional="YES" attributeType="String"/>
+        <attribute name="areaPkid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="bodytype" optional="YES" attributeType="String"/>
+        <attribute name="cDate" optional="YES" attributeType="String"/>
+        <attribute name="colour" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="kind" optional="YES" attributeType="String"/>
         <attribute name="like" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="opendate" optional="YES" attributeType="String"/>
         <attribute name="openDate" optional="YES" attributeType="String"/>
         <attribute name="picName" optional="YES" attributeType="String"/>
         <attribute name="place" optional="YES" attributeType="String"/>
+        <attribute name="remark" optional="YES" attributeType="String"/>
         <attribute name="sex" optional="YES" attributeType="String"/>
+        <attribute name="shelterAddress" optional="YES" attributeType="String"/>
+        <attribute name="shelterName" optional="YES" attributeType="String"/>
+        <attribute name="shelterTel" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
         <attribute name="steriization" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Animal" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="Animal" positionX="-63" positionY="-18" width="128" height="404"/>
     </elements>
 </model>

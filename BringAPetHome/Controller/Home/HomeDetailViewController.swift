@@ -31,13 +31,11 @@ class HomeDetailViewController: UIViewController {
 //        let photo = pet[indexPathTapped!.item]
     }
     var saveAnimal: Animal?
-    
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         selectedBackgroundView.backgroundColor = UIColor.clear
-        //self.tabBarController?.tabBar.isHidden = true
-        tableView.backgroundColor = .orange
+        self.tabBarController?.tabBar.isHidden = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.anchor(top: view.topAnchor,
@@ -64,11 +62,39 @@ class HomeDetailViewController: UIViewController {
             print("error")
         }
         
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
+//        tableView.automaticallyAdjustsScrollIndicatorInsets =
+        let barAppearance = UINavigationBarAppearance()
+        barAppearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
+        
+        tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    @IBAction func backButton(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func clickMapButton(_ sender: Any) {
         guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
-        mapVC.cllocation = self.cllocation
+        mapVC.address = pet?.shelterAddress 
+//        mapVC.cllocation = self.cllocation
 //        mapVC.titlename = (pet?.shelterName != nil)
             self.navigationController?.pushViewController(mapVC, animated: true)
     }
@@ -101,6 +127,10 @@ class HomeDetailViewController: UIViewController {
         let activity = UIActivityViewController(activityItems: [pet?.albumFile, pet?.sex, pet?.kind, pet?.shelterAddress], applicationActivities: nil)
         present(activity, animated: true)
     }
+    
+    @objc private func didTapClose() {
+        self.navigationController?.popViewController(animated: true)
+    }
 }
 
 extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
@@ -121,24 +151,23 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.placeLabel.text = "動物實際所在地： \(String(describing: pet?.place ?? ""))"
-        cell.sexLabel.text = "性別： \(String(describing: pet?.sex ?? ""))"
-        cell.statusLabel.text = "動物狀態: \(String(describing: pet?.status ?? ""))"
-        cell.ageLabel.text = "年紀: \(String(describing: pet?.age ?? ""))"
-        cell.animalIdLabel.text = "流水編號: \(pet?.animalId ?? 0)"
-        cell.animalVarietyLabel.text = "品種: \(pet?.animalVariety ?? "")"
-        cell.areaPkidLabel.text = "所屬縣市代碼: \(pet?.areaPkid ?? 0)"
-        cell.bodytypeLabel.text = "體型: \(String(describing: pet?.bodytype ?? ""))"
-        cell.cDateLabel.text = "資料更新時間: \(String(describing: pet?.cDate ?? ""))"
-        cell.colourLabel.text = "毛色: \(String(describing: pet?.colour ?? ""))"
-        cell.ageLabel.text = "年紀: \(String(describing: pet?.age ?? ""))"
-        cell.kindLabel.text = "動物類型: \(String(describing: pet?.kind ?? ""))"
-        cell.remarkLabel.text = "資料備註: \(String(describing: pet?.remark ?? ""))"
-        cell.opendateLabel.text = "開放認養時間: \(String(describing: pet?.opendate ?? ""))"
-        cell.shelterNameLabel.text = "動物所屬收容所名稱: \(String(describing: pet?.shelterName ?? ""))"
-        cell.shelterTel.text = "連絡電話: \(String(describing: pet?.shelterTel ?? ""))"
-        cell.shelterAddressLabel.text = "地址: \(String(describing: pet?.shelterAddress ?? ""))"
-        cell.animalSterilizationLabel.text = "是否絕育: \(pet?.animalSterilization ?? "")"
+        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
+        cell.sexLabel.text = "性別：\( ShelterManager.shared.sexCh(sex: pet?.sex ?? ""))"
+//        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
+        cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
+        cell.animalIdLabel.text = "流水編號：\(pet?.animalId ?? 0)"
+        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
+        cell.bodytypeLabel.text = "品種：\( ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))"
+        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
+        cell.colourLabel.text = "毛色：\(String(describing: pet?.colour ?? ""))"
+        cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
+        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
+        cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"
+        cell.opendateLabel.text = "開放認養時間： \(String(describing: pet?.opendate ?? ""))"
+        cell.shelterNameLabel.text = "收容所名稱：\(String(describing: pet?.shelterName ?? ""))"
+        cell.shelterTel.text = "電話：\(String(describing: pet?.shelterTel ?? ""))"
+        cell.shelterAddressLabel.text = "收容所地址：\(String(describing: pet?.shelterAddress ?? ""))"
+        cell.animalSterilizationLabel.text = "是否絕育：\( ShelterManager.shared.sterilization(sterilization: pet?.animalSterilization ?? ""))"
         cell.selectedBackgroundView = selectedBackgroundView
         return cell
     }
@@ -159,13 +188,41 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             let sterilization = pet?.animalSterilization ?? ""
             let openDate = pet?.opendate ?? ""
             let place = pet?.place ?? ""
+            let kind = pet?.kind ?? ""
+            let animalVariety = pet?.animalVariety ?? ""
+            let bodytype = pet?.bodytype ?? ""
+            let shelterTel = pet?.shelterTel
+            let areaPkid = pet?.areaPkid ?? 0
+            let colour = pet?.colour ?? ""
+            let albumFile = pet?.albumFile ?? ""
+            let remark = pet?.remark ?? ""
+            let cDate = pet?.cDate ?? ""
+            let shelterAddress = pet?.shelterAddress ?? ""
+            let shelterName = pet?.shelterName
+            let age = pet?.age
+            let opendate = pet?.opendate
+            
             saveAnimal?.id = Int64(id)
             saveAnimal?.sex = sex
             saveAnimal?.steriization = sterilization
             saveAnimal?.openDate = openDate
             saveAnimal?.place = place
+            saveAnimal?.bodytype = bodytype
+            saveAnimal?.animalVariety = animalVariety
+            saveAnimal?.shelterTel = shelterTel
+            saveAnimal?.areaPkid = Int64(areaPkid)
+            saveAnimal?.kind = kind
+            saveAnimal?.colour = colour
+            saveAnimal?.albumFile = albumFile
+            saveAnimal?.remark = remark
+            saveAnimal?.cDate = cDate
+            saveAnimal?.shelterAddress = shelterAddress
+            saveAnimal?.shelterName = shelterName
+            saveAnimal?.age = age
+            saveAnimal?.opendate = opendate
+            
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
-            let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.9)
+            let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let imageUrl = documentsDirectory.appendingPathComponent("\(id)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)

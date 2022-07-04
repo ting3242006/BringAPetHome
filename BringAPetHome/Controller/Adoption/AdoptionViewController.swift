@@ -34,9 +34,9 @@ enum Sex: Int, Codable {
     var sexTitle: String {
         switch self {
         case .boy:
-            return "Boy"
+            return "男"
         case .girl:
-            return "Girl"
+            return "女"
         default:
             return ""
         }
@@ -61,7 +61,7 @@ enum Petable: Int, Codable {
 
 class AdoptionViewController: UIViewController {
     
-    let db = Firestore.firestore()
+    let database = Firestore.firestore()
     var databaseRef: DatabaseReference!
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -69,6 +69,8 @@ class AdoptionViewController: UIViewController {
         }
     }
     var adoptionFirebaseModel = AdoptionModel()
+    var userData: UserModel?
+    var publishButton = UIButton()
     let selectedBackgroundView = UIView()
     
     enum Adoption: String {
@@ -114,16 +116,52 @@ class AdoptionViewController: UIViewController {
         fetchData()
         tableView.reloadData()
         selectedBackgroundView.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.backgroundColor = .clear
+        setButtonLayout()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let publishAdoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "PublishAdoptionViewController") as? PublishAdoptionViewController else { return }
+        self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
+    }
+    
+    func setButtonLayout() {
+        view.addSubview(publishButton)
+        publishButton.backgroundColor = UIColor(named: "HoneyYellow")
+//        publishButton.layer.masksToBounds = true
+        publishButton.layer.cornerRadius = 30
+        publishButton.tintColor = .white
+        publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        publishButton.layer.shadowOpacity = 0.75
+        publishButton.layer.shadowOffset = .zero
+        publishButton.layer.shadowRadius = 8
+        publishButton.layer.shadowPath = UIBezierPath(roundedRect: publishButton.bounds,
+                                                      cornerRadius: publishButton.layer.cornerRadius).cgPath
+        publishButton.layer.shadowColor = UIColor.darkGray.cgColor
+        publishButton.addTarget(self, action: #selector(didTapped), for: .touchUpInside)
+        publishButton.anchor(bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             padding: .init(top: 0, left: 0, bottom: 95, right: 20),
+                             width: 60, height: 60)
+    }
+    
+    @objc func didTapped() {
+        if Auth.auth().currentUser == nil {
+            showLoginVC()
+            return
+        }
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let publishAdoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "PublishAdoptionViewController") as? PublishAdoptionViewController else { return }
         self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
     }
     
     func fetchData() {
-        db.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+        database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
                 print("Error fetching documents: \(error)")
@@ -136,16 +174,23 @@ class AdoptionViewController: UIViewController {
         }
     }
     
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        //self.navigationController?.present(loginVC, animated: true)
+        present(loginVC, animated: true)
+    }
+    
     @IBSegueAction func showComments(_ coder: NSCoder, sender: Any?) -> CommentViewController? {
         let controller = CommentViewController(coder: coder)
         let button = sender as? UIButton
         if let point = button?.convert(CGPoint.zero, to: tableView),
            let indexPath = tableView.indexPathForRow(at: point) {
             let firebaseData = dbModels[indexPath.row]
-            controller?.adoptionId = firebaseData[Adoption.userId.rawValue] as? String ?? ""
+            controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
         }
         return controller
-    } 
+    }
 }
 
 extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
@@ -173,12 +218,33 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
         formatter.dateFormat = "yyyy.MM.dd HH:mm"
         
         cell.layout(location: "\(firebaseData[Adoption.location.rawValue] ?? "")",
-                    date: formatter.string(from: date as Date),
+                    date: "刊登日期：\(formatter.string(from: date as Date))",
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
-
+//        var name = ""
+//        switch cell.adoptionSexLabel.text {
+//        case "男":
+//            name = "BOY-1"
+//        case "女":
+//            name = "GIRL-1"
+//        default:
+//            name = "paws"
+//        }
+        
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
             cell.setupPetable(petable: petable)
+        }
+        
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                let url = self.userData?.imageURLString
+                cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.usernameLabel.text = self.userData?.name
+            case .failure(_):
+                print("Error")
+            }
         }
         return cell
     }

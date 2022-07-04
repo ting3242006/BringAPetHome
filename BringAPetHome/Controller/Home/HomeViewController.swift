@@ -30,14 +30,8 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
-            let resizeImage = resizeImage(image: image, width: 30)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
-                                                                style: .plain,
-                                                                target: self,
-                                                                action: #selector(didTap))
-        }
+//        self.tabBarController?.tabBar.barTintColor = .white
+        setupNavigationItem()
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -45,7 +39,7 @@ class HomeViewController: UIViewController {
         collectionView.allowsSelection = true
         
         // style
-        collectionView.backgroundColor = .lightGray
+        collectionView.backgroundColor = UIColor(red: 244/255, green: 247/255, blue: 245/255, alpha: 1)
         collectionView.showsVerticalScrollIndicator = false
         
         // layout
@@ -56,6 +50,7 @@ class HomeViewController: UIViewController {
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
+        
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +69,17 @@ class HomeViewController: UIViewController {
             return
         }
         collectionView.reloadData()
+    }
+    
+    func setupNavigationItem() {
+        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
+            let resizeImage = resizeImage(image: image, width: 30)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTap))
+        }
+        
     }
     
     func fetchData() {
@@ -123,7 +129,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         } else {
             //            print("~~~\(newAnimalList.count)")
-            return newAnimalList.count            
+            return newAnimalList.count
         }
     }
     
@@ -132,16 +138,34 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() } // 要拆開寫
-//        DispatchQueue.main.async {
-            let item = self.animalDatas[indexPath.item]
-            let url = item.albumFile
-            cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
-            cell.shelterImageView.contentMode = .scaleAspectFill
-            cell.shelterImageView.layer.cornerRadius = 10
-            cell.shelterImageView.clipsToBounds = true
-            cell.sexLabel.text = String(item.sex)
-            cell.placeLabel.text = item.place
-//        }
+        //        DispatchQueue.main.async {
+        let item = self.animalDatas[indexPath.item]
+        let url = item.albumFile
+        cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
+        cell.shelterImageView.contentMode = .scaleAspectFill
+        cell.shelterImageView.layer.cornerRadius = 10
+        cell.shelterImageView.clipsToBounds = true
+//        cell.sexLabel.text = String(item.sex)
+        cell.colorLabel.text = item.colour
+        cell.sexLabel.textColor = .clear
+        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
+        cell.placeLabel.textColor = UIColor(named: "RichBlack")
+        cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
+        var name = ""
+        switch cell.sexLabel.text {
+        case "男":
+            name = "boy"
+        case "女":
+            name = "girl"
+        default:
+            name = "paws"
+        }
+        cell.sexImageView.image = UIImage(named: name)
+        cell.layer.shadowColor = UIColor.lightGray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
+        cell.layer.shadowRadius = 3
+        cell.layer.shadowOpacity = 0.3
+        //        }
         return cell
     }
     

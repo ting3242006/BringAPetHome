@@ -596,6 +596,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - Alamofire (5.6.1)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
     - BoringSSL-GRPC/Interface (= 0.0.24)
@@ -653,6 +654,8 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+  - FirebaseFirestoreSwift (9.2.0):
+    - FirebaseFirestore (~> 9.0)
   - FirebaseStorage (9.0.0):
     - FirebaseAppCheckInterop (~> 9.0)
     - FirebaseAuthInterop (~> 9.0)
@@ -751,10 +754,12 @@ PODS:
   - SwiftLint (0.47.1)
 
 DEPENDENCIES:
+  - Alamofire
   - Firebase/Auth
   - Firebase/Database
   - Firebase/Firestore
   - Firebase/Storage
+  - FirebaseFirestoreSwift
   - IQKeyboardManagerSwift
   - Kingfisher
   - SwiftLint
@@ -762,6 +767,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
+    - Alamofire
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAppCheckInterop
@@ -773,6 +779,7 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseDatabase
     - FirebaseFirestore
+    - FirebaseFirestoreSwift
     - FirebaseStorage
     - FirebaseStorageInternal
     - GoogleDataTransport
@@ -790,6 +797,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
+  Alamofire: 87bd8c952f9a4454320fce00d9cc3de57bcadaf5
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   Firebase: a876fadc5ea653a377693376fd4f885c62704512
   FirebaseAppCheckInterop: 0da214236777e71d8535c5f3b9cb5174f636a9eb
@@ -801,6 +809,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 5b8f4f2e2970a4cb9bd1cf7ada16c8ba69a29530
   FirebaseDatabase: c7bb29fefd9196f719164452ebe287bc8f5976dd
   FirebaseFirestore: 3ff0784d61f9a0faa3d67c5a8b1e4fb0b828c6b1
+  FirebaseFirestoreSwift: d7e3e7b587a7b8118b97ddb038852750026ee861
   FirebaseStorage: 7b70fce0c7a751017b2f749d161e4f4855f431d9
   FirebaseStorageInternal: 153685c8d9f67ee3007fed0414351c43487983c2
   GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
@@ -816,6 +825,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: fc84eb41a54225af4c648bd44bb01f9d13d34d6f
+PODFILE CHECKSUM: 5f288caf0d00a7b27427c6ae8bc7ca696a76688b
 
 COCOAPODS: 1.11.3
