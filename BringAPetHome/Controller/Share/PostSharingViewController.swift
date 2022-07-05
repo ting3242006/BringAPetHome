@@ -9,6 +9,9 @@ import UIKit
 import Firebase
 import FirebaseStorage
 import simd
+import CoreML
+import Vision
+import Alamofire
 
 class PostSharingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -20,6 +23,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var addSharIngImageButton: UIButton!
     @IBOutlet weak var shareTextView: UITextView!
     @IBOutlet weak var shareImageView: UIImageView!
+    @IBOutlet weak var postBarButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +37,13 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             style: .plain,
             target: self,
             action: #selector(didTapClose))
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
     }
-        
+    
     @IBAction func sentSharingPost(_ sender: Any) {
         guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.5) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
@@ -93,14 +98,85 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         // 取得相片
-        if let image = info[.originalImage] as? UIImage {
-            self.shareImageView.image = image
+        if let userPickedImage = info[.originalImage] as? UIImage {
+            shareImageView.image = userPickedImage
+            
+            guard let ciimage = CIImage(image: userPickedImage) else {
+                fatalError("Could not convert to CIImage")
+            }
+            detect(image: ciimage)
         }
         dismiss(animated: true, completion: nil)
     }
+    
+    // swiftlint:disable all
+    func detect(image: CIImage) {
+        guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("Loading CoreML Model failed")
+        }
+        let request = VNCoreMLRequest(model: model) { (request, error) in
+            guard let results = request.results as? [VNClassificationObservation] else {
+                fatalError("Model failed to process image.")
+            }
+            
+            //            let filteredResult = results.contains(where: { observation in
+            //                observation.identifier == "cat" || observation.identifier == "dog"
+            //            })
+            //
+            //            print(filteredResult)
+            //            enum Animal {
+            //                case dog(String)
+            //                case cat(String)
+            //            }
+            //            let animals: [Animal] = [.cat("cat"), .dog("dog")]
+            let animals = ["cat", "Border collie", "bird"]
+            //            let animalData = "This is animalData"
+            //            let result = !animals.filter({ animalData.contains($0)}).isEmpty
+            if let firstResult = results.first {
+                print("firstResult", firstResult.identifier)
+                //                if firstResult.identifier.contains(where: animalData.contains) {
+                if firstResult.identifier.contains("cat") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else if firstResult.identifier.contains("Border collie") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else if firstResult.identifier.contains("golden retriever") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else if firstResult.identifier.contains("dog") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else if firstResult.identifier.contains("Rhodesian ridgeback") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else if firstResult.identifier.contains("basenji") {
+                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                } else {
+                    CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
+//                    self.postBarButton.isEnabled = false
+                }
+            }
+        }
+        //guard let image = image else { return }
+        let handler = VNImageRequestHandler(ciImage: image)
+        do {
+            try handler.perform([request])
+        }
+        catch {
+            print(error)
+        }
+    }
+    // swiftlint:ensable all
     
     func setLayout() {
         shareTextView.layer.borderColor = UIColor.systemGray3.cgColor
         shareTextView.layer.borderWidth = 0.5
     }
+    
+    //    let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
+    //           let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
+    //               self.deleteAccount()
+    //           }
+    //           let noAction = UIAlertAction(title: "Cancel", style: .cancel)
+    //
+    //           alert.addAction(noAction)
+    //           alert.addAction(yesAction)
+    //
+    //           present(alert, animated: true, completion: nil)
 }

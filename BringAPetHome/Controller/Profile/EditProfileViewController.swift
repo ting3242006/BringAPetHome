@@ -16,6 +16,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var uploadImageButton: UIButton!
     @IBOutlet weak var deleteAccountButton: UIButton!
+    @IBOutlet weak var privacyPolicyButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                alert.addAction(yesAction)
 
                present(alert, animated: true, completion: nil)
+    }
+    @IBAction func goPrivacyWeb(_ sender: Any) {
+        let privacyVC = UINavigationController(rootViewController: PrivacyPolicyViewController())
+        privacyVC.modalPresentationStyle = .fullScreen
+        present(privacyVC, animated: true)
     }
     
     func deleteAccount() {
@@ -122,5 +128,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         sendInfoButton.layer.cornerRadius = 10
         deleteAccountButton.layer.cornerRadius = 10
         uploadImageButton.layer.cornerRadius = 20
+        privacyPolicyButton.layer.cornerRadius = 10
     }
 }

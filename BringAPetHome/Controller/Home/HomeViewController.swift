@@ -143,12 +143,13 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let url = item.albumFile
         cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
         cell.shelterImageView.contentMode = .scaleAspectFill
-        cell.shelterImageView.layer.cornerRadius = 10
+        cell.shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        cell.layer.cornerRadius = 10
         cell.shelterImageView.clipsToBounds = true
 //        cell.sexLabel.text = String(item.sex)
-        cell.colorLabel.text = item.colour
-        cell.sexLabel.textColor = .clear
+//        cell.colorLabel.text = item.colour
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
+        cell.sexLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
         var name = ""

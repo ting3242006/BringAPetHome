@@ -72,6 +72,7 @@ class AdoptionViewController: UIViewController {
     var userData: UserModel?
     var publishButton = UIButton()
     let selectedBackgroundView = UIView()
+    public var userIsBlocked: Bool = false
     
     enum Adoption: String {
         case age = "age"
@@ -118,6 +119,10 @@ class AdoptionViewController: UIViewController {
         selectedBackgroundView.backgroundColor = UIColor.clear
         navigationController?.navigationBar.backgroundColor = .clear
         setButtonLayout()
+    }
+    
+    @IBAction func blockUserButton(_ sender: UIButton) {
+        presentOptions()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
@@ -190,6 +195,18 @@ class AdoptionViewController: UIViewController {
             controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
         }
         return controller
+    }
+    
+    func presentOptions() {
+      let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "封鎖此用戶", style: .default, handler: { _ in
+            self.blockUserAction()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "取消", style: .cancel, handler: nil))
+    }
+    
+    func blockUserAction() {
+        //CODE TO ADD USER ID TO BLOCKED USER IN FIREBASE
     }
 }
 
