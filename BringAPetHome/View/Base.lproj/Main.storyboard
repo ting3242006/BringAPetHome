@@ -198,7 +198,7 @@
                                                         <backgroundConfiguration key="background" image="block user"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <action selector="blockUserButton:" destination="axW-rw-aSW" eventType="touchUpInside" id="aXj-wu-cZt"/>
+                                                        <action selector="blockUserButton:" destination="3ie-kf-zYG" eventType="touchUpInside" id="8Qr-ZE-Jth"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1338,9 +1338,24 @@
                                                     <color key="textColor" red="0.32898199550000001" green="0.33333334329999997" blue="0.18199111339999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieg-nn-cUc">
+                                                    <rect key="frame" x="374" y="20" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="0e8-Ii-i30"/>
+                                                        <constraint firstAttribute="width" constant="20" id="E6r-Hf-y5B"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain">
+                                                        <backgroundConfiguration key="background" image="block user"/>
+                                                    </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="blockUser:" destination="658-Vj-NUy" eventType="touchUpInside" id="NEk-j6-rJl"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="0BY-pw-jos" secondAttribute="trailing" constant="20" id="8IR-qL-U7Z"/>
+                                                <constraint firstItem="ieg-nn-cUc" firstAttribute="top" secondItem="CHZ-V3-KfO" secondAttribute="top" constant="20" id="KrL-Hj-TRN"/>
                                                 <constraint firstItem="gOu-LT-fSg" firstAttribute="leading" secondItem="CHZ-V3-KfO" secondAttribute="leading" id="Lke-fu-Joz"/>
                                                 <constraint firstItem="Q6L-En-nC1" firstAttribute="top" secondItem="CHZ-V3-KfO" secondAttribute="top" constant="15" id="Niu-VV-vF5"/>
                                                 <constraint firstItem="Q6L-En-nC1" firstAttribute="leading" secondItem="CHZ-V3-KfO" secondAttribute="leading" constant="20" id="RV9-0a-KTh"/>
@@ -1350,6 +1365,7 @@
                                                 <constraint firstItem="PTm-sO-ZBX" firstAttribute="top" secondItem="CHZ-V3-KfO" secondAttribute="top" constant="22" id="ZJZ-Sb-bbf"/>
                                                 <constraint firstAttribute="trailing" secondItem="gOu-LT-fSg" secondAttribute="trailing" id="ZbT-8x-Ru0"/>
                                                 <constraint firstItem="fWP-Lk-VgU" firstAttribute="top" secondItem="0BY-pw-jos" secondAttribute="bottom" constant="10" id="axs-aF-sZn"/>
+                                                <constraint firstAttribute="trailing" secondItem="ieg-nn-cUc" secondAttribute="trailing" constant="20" id="ePL-r1-cnj"/>
                                                 <constraint firstItem="PTm-sO-ZBX" firstAttribute="leading" secondItem="Q6L-En-nC1" secondAttribute="trailing" constant="10" id="eeO-xs-RL2"/>
                                                 <constraint firstItem="0BY-pw-jos" firstAttribute="top" secondItem="gOu-LT-fSg" secondAttribute="bottom" constant="20" id="hZM-JY-DOv"/>
                                                 <constraint firstAttribute="bottom" secondItem="fWP-Lk-VgU" secondAttribute="bottom" constant="20" id="yCg-lH-UmO"/>

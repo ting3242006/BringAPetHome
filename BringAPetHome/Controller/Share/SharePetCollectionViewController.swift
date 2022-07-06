@@ -18,11 +18,18 @@ class SharePetCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         setButtonLayout()
         configureCellSize()
-        shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
+        //        guard let userData = userData else {
+        //            return
+        //        }
+
+        shareManager.fetchSharing(completion: { shareList in
+            self.shareList = shareList ?? []
             self.collectionView.reloadData()
         })
     }
-    
+    //    guard let userData = userData else {
+    //        return
+    //    }
     override func viewDidAppear(_ animated: Bool) {
         shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
             self.collectionView.reloadData()
@@ -42,7 +49,7 @@ class SharePetCollectionViewController: UICollectionViewController {
     func setButtonLayout() {
         view.addSubview(publishButton)
         publishButton.backgroundColor = UIColor(named: "HoneyYellow")
-//        publishButton.layer.masksToBounds = true
+        //        publishButton.layer.masksToBounds = true
         publishButton.layer.cornerRadius = 30
         publishButton.tintColor = .white
         publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -58,7 +65,7 @@ class SharePetCollectionViewController: UICollectionViewController {
                              padding: .init(top: 0, left: 0, bottom: 95, right: 20),
                              width: 60, height: 60)
     }
-
+    
     @objc func didTapped() {
         if Auth.auth().currentUser == nil {
             showLoginVC()

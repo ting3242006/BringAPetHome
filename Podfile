@@ -16,6 +16,7 @@ pod 'Kingfisher'
 pod 'IQKeyboardManagerSwift'
 pod 'Alamofire'
 pod 'FirebaseFirestoreSwift'
+pod 'lottie-ios'
 
 
 post_install do |installer|

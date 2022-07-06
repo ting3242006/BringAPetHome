@@ -24,11 +24,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func deleteAccount(_ sender: Any) {
-        let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
-               let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
+        let alert  = UIAlertController(title: "刪除帳號", message: "確定要刪除嗎?", preferredStyle: .alert)
+               let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
                    self.deleteAccount()
                }
-               let noAction = UIAlertAction(title: "Cancel", style: .cancel)
+               let noAction = UIAlertAction(title: "取消", style: .cancel)
 
                alert.addAction(noAction)
                alert.addAction(yesAction)
