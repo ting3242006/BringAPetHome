@@ -30,6 +30,12 @@
 		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
 		251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80028586FC7004BDEC9 /* Main.storyboard */; };
 		251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */; };
+		251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */; };
+		251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251FF2B02876BB64005945A1 /* EULAViewController.swift */; };
+		251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */; };
+		251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */; };
+		251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */; };
+		251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */; };
 		2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2529E4F82871E4BB00373C90 /* Time+Extension.swift */; };
 		252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */; };
 		252D807E285995290076236B /* ShelterDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807D285995290076236B /* ShelterDataModel.swift */; };
@@ -84,6 +90,12 @@
 		251CF80128586FC7004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		251CF80628586FC8004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		251CF80828586FC8004BDEC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "92612-cats-cats-cats.json"; sourceTree = "<group>"; };
+		251FF2B02876BB64005945A1 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
+		251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_x0zdphwq.json; sourceTree = "<group>"; };
+		251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_nq4j1vj5.json; sourceTree = "<group>"; };
+		251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-ekaterina-bolovtsova-7131682.mp4"; sourceTree = "<group>"; };
+		251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-cottonbro-6853336.mp4"; sourceTree = "<group>"; };
 		2529E4F82871E4BB00373C90 /* Time+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time+Extension.swift"; sourceTree = "<group>"; };
 		252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		252D807D285995290076236B /* ShelterDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterDataModel.swift; sourceTree = "<group>"; };
@@ -192,6 +204,9 @@
 				251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */,
 				251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */,
 				256793AD2871684B00703002 /* Assets.xcassets */,
+				251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */,
+				251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */,
+				251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */,
 				2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */,
 				257CA5F128589B2C0009BE17 /* Extension */,
 				25C4818D2858E47D000C6D7F /* Model */,
@@ -256,6 +271,8 @@
 				253773BC285AE58700B28A3D /* Home */,
 				251CF80028586FC7004BDEC9 /* Main.storyboard */,
 				251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */,
+				251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */,
+				251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -295,6 +312,7 @@
 				25E573332869B20E009348A0 /* ProfileViewController.swift */,
 				25349ABC286C484A00C5F76B /* EditProfileViewController.swift */,
 				25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */,
+				251FF2B02876BB64005945A1 /* EULAViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -380,6 +398,11 @@
 				257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */,
 				256793AE2871684E00703002 /* Assets.xcassets in Resources */,
 				251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */,
+				251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */,
+				251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */,
+				251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */,
+				251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */,
+				251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */,
 				250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */,
 				25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */,
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,

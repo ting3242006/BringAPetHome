@@ -35,11 +35,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
 
                present(alert, animated: true, completion: nil)
     }
-    @IBAction func goPrivacyWeb(_ sender: Any) {
-        let privacyVC = UINavigationController(rootViewController: PrivacyPolicyViewController())
-        privacyVC.modalPresentationStyle = .fullScreen
-        present(privacyVC, animated: true)
-    }
     
     func deleteAccount() {
         UserFirebaseManager.shared.deleteAccount()
@@ -128,6 +123,5 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         sendInfoButton.layer.cornerRadius = 10
         deleteAccountButton.layer.cornerRadius = 10
         uploadImageButton.layer.cornerRadius = 20
-        privacyPolicyButton.layer.cornerRadius = 10
     }
 }

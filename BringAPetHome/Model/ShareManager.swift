@@ -129,7 +129,7 @@ class ShareManager {
         }
     }
     
-    func fetchSharingComment(postId: String ,completion: @escaping(Result<[ShareComment]>) -> Void) {
+    func fetchSharingComment(postId: String, completion: @escaping(Result<[ShareComment]>) -> Void) {
         print("postId", postId)
         dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId).getDocuments { (querySnapshot, error) in
             if let error = error {

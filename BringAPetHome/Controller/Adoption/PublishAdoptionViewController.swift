@@ -8,6 +8,9 @@
 import UIKit
 import Firebase
 import FirebaseStorage
+import Lottie
+import CoreML
+import Vision
 
 class CellClass: UITableViewCell {
 }
@@ -57,6 +60,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     @IBOutlet weak var sexButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var inputContentTextField: UITextView!
+    @IBOutlet weak var camaraButton: UIButton!
     @IBOutlet weak var postBarButton: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -77,6 +81,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+    }
+    
+    override func viewDidLayoutSubviews() {
+        camaraButton.layer.cornerRadius = 20
     }
     
     @IBAction func selectSexButton(_ sender: Any) {
@@ -103,50 +111,89 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     @IBAction func inputLocationText(_ sender: Any) {
     }
     
-    @IBAction func openAlbum(_ sender: Any) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .savedPhotosAlbum
-        imagePicker.delegate = self
-        present(imagePicker, animated: true)
-    }
-    
     @IBAction func openCameraButton(_ sender: Any) {
-        // 檢查是否具有照相功能
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let imagePicker = UIImagePickerController()
-            // 設置相片來源為相機
-            imagePicker.sourceType = .camera
-            imagePicker.delegate = self
-            // 開啟相機
-            present(imagePicker, animated: true)
+        postBarButton.isEnabled = true
+        let alertController = UIAlertController(title: "Choose photo from", message: nil, preferredStyle: .actionSheet)
+        let sources: [(name: String, type: UIImagePickerController.SourceType)] = [
+            ("Album", .photoLibrary),
+            ("Camera", .camera)
+        ]
+        for source in sources {
+            let action = UIAlertAction(title: source.name, style: .default) { _ in
+                self.selectPhoto(sourceType: source.type)
+            }
+            alertController.addAction(action)
         }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
     }
     
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
     }
     
+    //  指定 data source / delegate 選取相簿照片或照相
+    func selectPhoto(sourceType: UIImagePickerController.SourceType) {
+        let controller = UIImagePickerController()
+        controller.sourceType = sourceType
+        controller.delegate = self
+        present(controller, animated: true, completion: nil)
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         // 取得相片
-        if let image = info[.originalImage] as? UIImage {
-            self.imageView.image = image
+        if let userPickedImage = info[.originalImage] as? UIImage {
+            imageView.image = userPickedImage
+            
+            guard let ciimage = CIImage(image: userPickedImage) else {
+                fatalError("Could not convert to CIImage")
+            }
+            detect(image: ciimage)
         }
         dismiss(animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController,
-                               didFinishPickingImage image: UIImage,
-                               editingInfo: [String: AnyObject]?) {
-        print("didFinishPickingImage")
-        //    self.imageView.image = image // 儲存拍攝（編輯）後的圖片到我們的imageView展示
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // 將圖片儲存到相簿
-        picker.dismiss(animated: true, completion: nil) // 退出相機介面
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("imagePickerControllerDidCancel")
-        picker.dismiss(animated: true, completion: nil) // 退出相機介面
+    // swiftlint:disable all
+    func detect(image: CIImage) {
+        guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
+            fatalError("Loading CoreML Model failed")
+        }
+        let request = VNCoreMLRequest(model: model) { (request, error) in
+            guard let results = request.results as? [VNClassificationObservation] else {
+                fatalError("Model failed to process image.")
+            }
+
+            let animals = ["cat", "Border collie", "bird"]
+
+            if let firstResult = results.first {
+                print("firstResult", firstResult.identifier)
+                if firstResult.identifier.contains("cat") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Border collie") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("golden retriever") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("dog") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Rhodesian ridgeback") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("basenji") {
+                    self.correctAnimation()
+                } else {
+                    CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
+                    self.postBarButton.isEnabled = false
+                }
+                
+            }
+        }
+        let handler = VNImageRequestHandler(ciImage: image)
+        do {
+            try handler.perform([request])
+        }
+        catch {
+            print(error)
+        }
     }
     
     // MARK: - DropDown Menu
@@ -185,6 +232,8 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     // MARK: - add data to Firebase
     @IBAction func publishButton(_ sender: Any) {
         print("publishButton")
+        postBarButton.isEnabled = false
+        setupLottie()
         guard let selectedSex = selectedSex,
               let selectedAge = selectedAge,
               let commentId = comment["commentId"]
@@ -261,6 +310,28 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
 //        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
 //        petableButton.layer.cornerRadius = 5
 //        petableButton.tintColor = .white
+    }
+    
+    func setupLottie() {
+        let animationView = AnimationView(name: "lf20_x0zdphwq")
+        animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
+    func correctAnimation() {
+        let animationView = AnimationView(name: "lf20_nq4j1vj5")
+        animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play(completion: { (finished) in
+            animationView.isHidden = true
+        })
     }
 }
 

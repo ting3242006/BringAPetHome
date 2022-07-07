@@ -12,6 +12,7 @@ import simd
 import CoreML
 import Vision
 import Alamofire
+import Lottie
 
 class PostSharingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -44,7 +45,14 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
     }
     
+    override func viewDidLayoutSubviews() {
+        addSharIngImageButton.layer.cornerRadius = 20
+        addSharIngImageButton.clipsToBounds = true
+    }
+    
     @IBAction func sentSharingPost(_ sender: Any) {
+        postBarButton.isEnabled = false
+        setupLottie()
         guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.5) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
@@ -68,6 +76,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func addImageButton(_ sender: Any) {
+        postBarButton.isEnabled = true
         let alertController = UIAlertController(title: "Choose photo from", message: nil, preferredStyle: .actionSheet)
         let sources: [(name: String, type: UIImagePickerController.SourceType)] = [
             ("Album", .photoLibrary),
@@ -118,7 +127,6 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model failed to process image.")
             }
-            
             //            let filteredResult = results.contains(where: { observation in
             //                observation.identifier == "cat" || observation.identifier == "dog"
             //            })
@@ -136,21 +144,23 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                 print("firstResult", firstResult.identifier)
                 //                if firstResult.identifier.contains(where: animalData.contains) {
                 if firstResult.identifier.contains("cat") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+//                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else if firstResult.identifier.contains("Border collie") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else if firstResult.identifier.contains("golden retriever") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else if firstResult.identifier.contains("dog") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else if firstResult.identifier.contains("Rhodesian ridgeback") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else if firstResult.identifier.contains("basenji") {
-                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
-//                    self.postBarButton.isEnabled = false
+                    self.postBarButton.isEnabled = false
                 }
+                
             }
         }
         //guard let image = image else { return }
@@ -167,8 +177,31 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     func setLayout() {
         shareTextView.layer.borderColor = UIColor.systemGray3.cgColor
         shareTextView.layer.borderWidth = 0.5
+        addSharIngImageButton.layer.cornerRadius = 20
+        addSharIngImageButton.clipsToBounds = true
     }
     
+    func setupLottie() {
+        let animationView = AnimationView(name: "lf20_x0zdphwq")
+        animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play()
+    }
+    
+    func correctAnimation() {
+        let animationView = AnimationView(name: "lf20_nq4j1vj5")
+        animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play(completion: { (finished) in
+            animationView.isHidden = true
+        })
+    }
     //    let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
     //           let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
     //               self.deleteAccount()

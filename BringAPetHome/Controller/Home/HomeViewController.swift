@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import Lottie
 
 // 頁面狀態
 enum PageStatus {
@@ -30,7 +31,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.tabBarController?.tabBar.barTintColor = .white
         setupNavigationItem()
         // setup
         collectionView.delegate = self
@@ -50,7 +50,7 @@ class HomeViewController: UIViewController {
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
-        
+//        layoutLottie()
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -92,10 +92,25 @@ class HomeViewController: UIViewController {
                 })
                 //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
                 //                })
+                DispatchQueue.main.async {
+                    self?.setupLottie()
+                }
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    func setupLottie() {
+        let animationView = AnimationView(name: "92612-cats-cats-cats")
+        animationView.frame = CGRect(x: 0, y: 0, width: UIScreen.width, height: 350)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play(fromFrame: 173, toFrame: 255, loopMode: .playOnce, completion: { (finished) in
+            animationView.isHidden = true
+        })
     }
     
     func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
@@ -213,7 +228,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 //                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 //        return 0
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView,
 //                        layout collectionViewLayout: UICollectionViewLayout,
 //                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
