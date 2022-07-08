@@ -92,9 +92,9 @@ class HomeViewController: UIViewController {
                 })
                 //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
                 //                })
-                DispatchQueue.main.async {
-                    self?.setupLottie()
-                }
+//                DispatchQueue.main.async {
+//                    self?.setupLottie()
+//                }
             case .failure(let error):
                 print(error)
             }

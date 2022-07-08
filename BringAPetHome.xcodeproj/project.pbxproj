@@ -346,6 +346,7 @@
 				251CF7F528586FC7004BDEC9 /* Resources */,
 				0D5C4694D7DBD01C2426F7CD /* [CP] Embed Pods Frameworks */,
 				257CA5EE285899460009BE17 /* ShellScript */,
+				253C20B7287855FF0026168A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -425,6 +426,25 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		253C20B7287855FF0026168A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		257CA5EE285899460009BE17 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -665,6 +685,7 @@
 				CODE_SIGN_ENTITLEMENTS = BringAPetHome/BringAPetHome.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;

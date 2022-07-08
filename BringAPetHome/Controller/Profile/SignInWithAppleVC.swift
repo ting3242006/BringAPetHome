@@ -100,7 +100,7 @@ class SignInWithAppleVC: UIViewController {
         videoPlayer = AVPlayerLooper(player: player, templateItem: item)
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = view.bounds
-        playerLayer.videoGravity = .resizeAspectFill
+        playerLayer.videoGravity = .resize
         playerLayer.frame = bgView.layer.bounds
         bgView.layer.insertSublayer(playerLayer, at: 0)
         

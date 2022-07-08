@@ -73,6 +73,7 @@ class ProfileViewController: UIViewController {
             userNameLabel.text = "暱稱"
             logoutBarButton.isEnabled = false
         } else {
+            logoutBarButton.isEnabled = true
             return
         }
     }
@@ -96,8 +97,8 @@ class ProfileViewController: UIViewController {
                 //                self.navigationController?.popToRootViewController(animated: true)
                 //                self.tableView.reloadData()
                 let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-                self.navigationController?.pushViewController(homeVC, animated: true)
+                guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
+                self.navigationController?.pushViewController(profileVC, animated: true)
                 print("sign out")
             } catch let signOutError as NSError {
                 print("Error signing out: (signOutError)")

@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="20" width="374" height="856"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Best Furry Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXG-ka-Rfu">
-                                <rect key="frame" x="69" y="556" width="276.5" height="26"/>
+                                <rect key="frame" x="69" y="576" width="276.5" height="26"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -29,7 +29,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rXG-ka-Rfu" secondAttribute="bottom" constant="280" id="1Tj-ua-p8g"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rXG-ka-Rfu" secondAttribute="bottom" constant="260" id="1Tj-ua-p8g"/>
                             <constraint firstAttribute="bottom" secondItem="uvs-Kq-kET" secondAttribute="bottom" constant="20" id="3wc-W9-iUg"/>
                             <constraint firstItem="rXG-ka-Rfu" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="4Ym-UG-nZW"/>
                             <constraint firstItem="uvs-Kq-kET" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="20" id="fHS-oQ-Hb5"/>

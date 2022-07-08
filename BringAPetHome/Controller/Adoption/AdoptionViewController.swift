@@ -247,15 +247,16 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
                     date: "刊登日期：\(formatter.string(from: date as Date))",
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
-        //        var name = ""
-        //        switch cell.adoptionSexLabel.text {
-        //        case "男":
-        //            name = "BOY-1"
-        //        case "女":
-        //            name = "GIRL-1"
-        //        default:
-        //            name = "paws"
-        //        }
+                var name = ""
+                switch cell.adoptionSexLabel.text {
+                case "男":
+                    name = "BOY-1"
+                case "女":
+                    name = "GIRL-1"
+                default:
+                    name = "paws"
+                }
+        cell.sexIconImage.image = UIImage(named: name)
         
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
             cell.setupPetable(petable: petable)
