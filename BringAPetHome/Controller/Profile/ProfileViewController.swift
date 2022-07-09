@@ -94,12 +94,14 @@ class ProfileViewController: UIViewController {
         let okAction = UIAlertAction(title: "確定", style: .default) { _ in
             do {
                 try Auth.auth().signOut()
+                
+                self.view.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarController")
                 //                self.navigationController?.popToRootViewController(animated: true)
                 //                self.tableView.reloadData()
-                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
-                self.navigationController?.pushViewController(profileVC, animated: true)
-                print("sign out")
+//                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//                guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
+//                self.navigationController?.pushViewController(profileVC, animated: true)
+//                print("sign out")
             } catch let signOutError as NSError {
                 print("Error signing out: (signOutError)")
             }
@@ -131,7 +133,7 @@ class ProfileViewController: UIViewController {
                 switch result {
                 case let .success(user):
                     self.userData = user
-                    let urls = self.userData?.imageURLString
+                    let urls = self.userData?.image
                     self.userImageView.kf.setImage(with: URL(string: urls ?? ""), placeholder: UIImage(named: "dketch-4"))
                     self.userNameLabel.text = self.userData?.name
                 case .failure(_):

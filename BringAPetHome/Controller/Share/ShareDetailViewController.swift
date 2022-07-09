@@ -192,7 +192,7 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
             switch result {
             case let .success(user):
 //                self.userData = user
-                let url = user.imageURLString
+                let url = user.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.userNameLabel.text = user.name
             case .failure(_):

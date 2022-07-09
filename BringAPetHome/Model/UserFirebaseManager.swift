@@ -59,10 +59,10 @@ class UserFirebaseManager {
                 let userId = userData["id"] as? String ?? ""
                 let userImage = userData["image"] as? String ?? ""
                 let blockedUser = userData["blockedUser"] as? [String] ?? [""]
-                let user = UserModel(id: userId, name: userName, email: userEmail, imageURLString: userImage, blockedUser: blockedUser)
+                let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockedUser)
                 self.userData = user
             }
-            completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", imageURLString: "", blockedUser: [""])))
+            completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", image: "", blockedUser: [""])))
         }
     }
     
@@ -117,7 +117,7 @@ class UserFirebaseManager {
                         let userImage = userData["image"] as? String ?? ""
                         let blockList = userData["blockedUser"] as? [String] ?? [""]
                         
-                        let user = UserModel(id: userId, name: userName, email: userEmail, imageURLString: userImage, blockedUser: blockList)
+                        let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockList)
                         self.friendData = user
                         let blockUser = user.blockedUser
                         self.isUserBlocked = blockUser.contains { (blockId) -> Bool in

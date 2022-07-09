@@ -101,7 +101,7 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.userNameLabel.text = self.userData?.name
             case .failure(_):

@@ -764,12 +764,15 @@ PODS:
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
   - lottie-ios (3.3.0)
+  - LZViewPager (1.2.5):
+    - SnapKit (~> 5.0.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.1.0)
+  - SnapKit (5.0.1)
   - SwiftLint (0.47.1)
 
 DEPENDENCIES:
@@ -784,6 +787,7 @@ DEPENDENCIES:
   - IQKeyboardManagerSwift
   - Kingfisher
   - lottie-ios
+  - LZViewPager (~> 1.2.5)
   - SwiftLint
 
 SPEC REPOS:
@@ -817,8 +821,10 @@ SPEC REPOS:
     - leveldb-library
     - Libuv-gRPC
     - lottie-ios
+    - LZViewPager
     - nanopb
     - PromisesObjC
+    - SnapKit
     - SwiftLint
 
 SPEC CHECKSUMS:
@@ -851,10 +857,12 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
+  LZViewPager: 89ddd98246d54b52bde14c8d91702f946d6f8893
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: c28927270b37ff393edbcd437a17f3a748373366
+PODFILE CHECKSUM: d7ae4fa045b75aabd944caf685f51574119434b4
 
 COCOAPODS: 1.11.3

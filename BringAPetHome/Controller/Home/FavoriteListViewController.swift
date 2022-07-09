@@ -99,7 +99,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         let animal = self.animalList[indexPath.row]
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
-        let animalData = AnimalData(animalId: Int(animal.animalId),
+        let animalData = AnimalData(animalId: Int(animal.id),
                                     place: animal.place ?? "", kind: animal.kind ?? "",
                                     sex: animal.sex ?? "",
                                     bodytype: animal.bodytype ?? "",
@@ -118,6 +118,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
                                     title: animal.title ?? "",
                                     cDate: animal.cDate ?? "",
                                     albumUpdate: "")
+//    like: animal.like
         
         detailVC.pet = animalData
         print(detailVC.pet)

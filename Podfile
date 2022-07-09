@@ -19,6 +19,7 @@ pod 'FirebaseFirestoreSwift'
 pod 'lottie-ios'
 pod 'Fabric'
 pod 'Firebase/Crashlytics'
+pod 'LZViewPager', '~> 1.2.5'
 
 
 post_install do |installer|

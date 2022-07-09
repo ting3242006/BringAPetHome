@@ -158,7 +158,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
-                    self.postBarButton.isEnabled = false
+//                    self.postBarButton.isEnabled = false
                 }
                 
             }

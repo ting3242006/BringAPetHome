@@ -12,6 +12,6 @@ struct UserModel: Codable {
     var id: String
     var name: String
     var email: String
-    var imageURLString: String
+    var image: String
     var blockedUser: [String]
 }

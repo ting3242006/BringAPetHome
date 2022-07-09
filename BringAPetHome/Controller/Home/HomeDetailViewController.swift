@@ -50,16 +50,15 @@ class HomeDetailViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
-        let predicate = NSPredicate(format: "id == %d AND openDate == %@ AND sex == %@ AND steriization == %@ AND place == %@",
-                                    pet?.animalId ?? 0, pet?.opendate ?? "",
-                                    pet?.sex ?? "", pet?.animalSterilization ?? "",
-                                    pet?.place ?? "")
+        let predicate = NSPredicate(format: "id == %d",
+                                    pet?.animalId ?? 0)
         let request: NSFetchRequest<Animal> = Animal.fetchRequest()
         request.predicate = predicate
         do {
             saveAnimal = try context.fetch(request).first
+            print("saveAnimal", pet?.animalId, saveAnimal)
         } catch {
-            print("error")
+            print("error", error )
         }
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -151,17 +150,17 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
+//        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
         cell.sexLabel.text = "性別：\( ShelterManager.shared.sexCh(sex: pet?.sex ?? ""))"
 //        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
         cell.animalIdLabel.text = "流水編號：\(pet?.animalId ?? 0)"
-        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
-        cell.bodytypeLabel.text = "品種：\( ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))"
-        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
+//        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
+        cell.bodytypeLabel.text = "品種：\(ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))\(pet?.animalVariety ?? "")"
+//        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
         cell.colourLabel.text = "毛色：\(String(describing: pet?.colour ?? ""))"
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
-        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
+//        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
         cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"
         cell.opendateLabel.text = "開放認養時間：\(String(describing: pet?.opendate ?? ""))"
         cell.shelterNameLabel.text = "收容所名稱：\(String(describing: pet?.shelterName ?? ""))"
@@ -201,6 +200,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             let shelterName = pet?.shelterName
             let age = pet?.age
             let opendate = pet?.opendate
+            let like = saveAnimal?.like ?? false
             
             saveAnimal?.id = Int64(id)
             saveAnimal?.sex = sex
@@ -220,6 +220,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             saveAnimal?.shelterName = shelterName
             saveAnimal?.age = age
             saveAnimal?.opendate = opendate
+            saveAnimal?.like = like
             
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
             let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)

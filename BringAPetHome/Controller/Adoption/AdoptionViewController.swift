@@ -163,18 +163,52 @@ class AdoptionViewController: UIViewController {
     }
     
     func fetchData() {
-        database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
-            self?.dbModels = []
-            if let error = error {
-                print("Error fetching documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-//                    self?.userData.
-                    self?.dbModels.insert(document.data(), at: 0)
-                    print("============\(document.data())")
+        if let uid = Auth.auth().currentUser?.uid {
+            database.collection("User").document(uid).getDocument { snapshot, error in
+                guard let snapshot = snapshot,
+                      snapshot.exists,
+                      let userModel = try? snapshot.data(as: UserModel.self) else {
+                    return
+                }
+                print("userModel.blockedUser", userModel.blockedUser)
+                self.database.collection("Adoption").whereField("userId", notIn: userModel.blockedUser).order(by: "userId")
+                    .order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                    self?.dbModels = []
+                    if let error = error {
+                        print("Error fetching documents: \(error)")
+                    } else {
+                        print("querySnapshot!.documents", querySnapshot!.documents.count)
+                        for document in querySnapshot!.documents {
+                            //                    self?.userData.
+                            self?.dbModels.insert(document.data(), at: 0)
+                            print("============\(document.data())")
+                        }
+                    }
+                }
+                
+                
+            }
+            
+        } else {
+            
+            self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                self?.dbModels = []
+                if let error = error {
+                    print("Error fetching documents: \(error)")
+                } else {
+                    print("querySnapshot!.documents", querySnapshot!.documents.count)
+                    for document in querySnapshot!.documents {
+                        //                    self?.userData.
+                        self?.dbModels.insert(document.data(), at: 0)
+                        print("============\(document.data())")
+                    }
                 }
             }
+            
+            
+            
         }
+        
     }
     
     func showLoginVC() {
@@ -247,15 +281,15 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
                     date: "刊登日期：\(formatter.string(from: date as Date))",
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
-                var name = ""
-                switch cell.adoptionSexLabel.text {
-                case "男":
-                    name = "BOY-1"
-                case "女":
-                    name = "GIRL-1"
-                default:
-                    name = "paws"
-                }
+        var name = ""
+        switch cell.adoptionSexLabel.text {
+        case "男":
+            name = "BOY-1"
+        case "女":
+            name = "GIRL-1"
+        default:
+            name = "paws"
+        }
         cell.sexIconImage.image = UIImage(named: name)
         
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
@@ -268,10 +302,10 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.usernameLabel.text = self.userData?.name
-            case .failure(_):
+            case .failure:
                 print("Error")
             }
         }

@@ -77,6 +77,7 @@ class SignInWithAppleVC: UIViewController {
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
+        fatalError()
         let privacyVC = UINavigationController(rootViewController: PrivacyPolicyViewController())
         privacyVC.modalPresentationStyle = .fullScreen
         present(privacyVC, animated: true)

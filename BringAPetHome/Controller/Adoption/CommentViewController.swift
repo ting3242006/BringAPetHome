@@ -154,7 +154,7 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.commentUserImage.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.commentUserId.text = self.userData?.name
             case .failure(_):
