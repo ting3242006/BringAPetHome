@@ -10,6 +10,7 @@ import FirebaseAuth // 用來與 Firebase Auth 進行串接用的
 import AuthenticationServices // Sign in with Apple 的主體框架
 import CryptoKit // 用來產生隨機字串 (Nonce) 的
 import AVFoundation
+import Firebase
 
 class SignInWithAppleVC: UIViewController {
     
@@ -77,7 +78,6 @@ class SignInWithAppleVC: UIViewController {
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
-        fatalError()
         let privacyVC = UINavigationController(rootViewController: PrivacyPolicyViewController())
         privacyVC.modalPresentationStyle = .fullScreen
         present(privacyVC, animated: true)
@@ -229,14 +229,10 @@ extension SignInWithAppleVC {
                 return
             }
             CustomFunc.customAlert(title: "登入成功！", message: "", vc: self, actionHandler: self.getFirebaseUserInfo)
-            let tabController =  self.view.window?.rootViewController as? UITabBarController
-            self.dismiss(animated: false) {
-                tabController?.selectedIndex = 0
-            }
-            
-            //            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            //            guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-            //            self.navigationController?.pushViewController(homeVC, animated: true)
+            //            let tabController =  self.view.window?.rootViewController as? UITabBarController
+            //            self.dismiss(animated: false) {
+            //                tabController?.selectedIndex = 0
+            //            }
         }
     }
     
@@ -247,13 +243,47 @@ extension SignInWithAppleVC {
             CustomFunc.customAlert(title: "無法取得使用者資料！", message: "", vc: self, actionHandler: nil)
             return
         }
-        //        let name = user.displayName
-        let uid = user.uid
-        let email = user.email
-        //        let image = user.
-        //        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
-        //        UserFirebaseManager.shared.addUser(name: "", uid: uid, email: email ?? "", image: "")
-        UserFirebaseManager.shared.checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "")
+        //        let uid = user.uid
+        //        let email = user.email
+        //
+        //        UserFirebaseManager.shared.checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        //    }
+        //        let tabController =  self.view.window?.rootViewController as? UITabBarController
+        //        self.dismiss(animated: false) {
+        //            tabController?.selectedIndex = 0
+        //        }
+        self.dismiss(animated: true)
+        presentingViewController?.viewWillAppear(true)
+    }
+    
+    
+    func checkUserEmail(userId: String) {
+        print("checkUserEmail")
+        let dataBase = Firestore.firestore()
+        dataBase.collection("User").whereField("id", isEqualTo: userId).getDocuments { (querySnapshot, _) in
+            print(querySnapshot, querySnapshot?.documents.count)
+            
+            if let querySnapshot = querySnapshot {
+                if let document = querySnapshot.documents.first {
+                    for data in querySnapshot.documents {
+                        let userData = data.data(with: ServerTimestampBehavior.none)
+                        let userName = userData["name"] as? String ?? ""
+                        let userEmail = userData["email"] as? String ?? ""
+                        let userId = userData["id"] as? String ?? ""
+                        let userImage = userData["image"] as? String ?? ""
+                        let blockList = userData["blockedUser"] as? [String] ?? [""]
+                        
+                        let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockList)
+                    }
+                    print("Account is exist")
+                } else {
+                    UserFirebaseManager.shared.addUser(name: "name",
+                                                       uid: Auth.auth().currentUser?.uid ?? "",
+                                                       email: Auth.auth().currentUser?.email ?? "",
+                                                       image: "image", blockedUser: ["blockedUser"])
+                }
+            }
         }
     }
 }

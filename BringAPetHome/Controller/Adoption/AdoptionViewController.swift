@@ -185,12 +185,8 @@ class AdoptionViewController: UIViewController {
                         }
                     }
                 }
-                
-                
             }
-            
-        } else {
-            
+        } else {            
             self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
                 self?.dbModels = []
                 if let error = error {
@@ -204,11 +200,7 @@ class AdoptionViewController: UIViewController {
                     }
                 }
             }
-            
-            
-            
         }
-        
     }
     
     func showLoginVC() {

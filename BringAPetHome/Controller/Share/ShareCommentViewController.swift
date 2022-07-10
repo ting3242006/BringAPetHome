@@ -60,7 +60,10 @@ class ShareCommentViewController: UIViewController {
         }
         let userUid = Auth.auth().currentUser?.uid ?? ""
         ShareManager.shared.addComments(uid: userUid, postId: postId ?? "", comments: commentTextField.text ?? "")
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
+        fetchSharingComment()
+        commentTextField.text = ""
+        tableView.reloadData()
     }
     
     func fetchSharingComment() {

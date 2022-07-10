@@ -17,9 +17,9 @@ pod 'IQKeyboardManagerSwift'
 pod 'Alamofire'
 pod 'FirebaseFirestoreSwift'
 pod 'lottie-ios'
-pod 'Fabric'
 pod 'Firebase/Crashlytics'
 pod 'LZViewPager', '~> 1.2.5'
+pod 'MJRefresh'
 
 
 post_install do |installer|

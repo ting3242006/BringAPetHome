@@ -156,6 +156,18 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("basenji") {
                     self.correctAnimation()
+                } else if firstResult.identifier.contains("hamster") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Staffordshire bullterrier") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("kelpie") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Hungarian pointer") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("beagle") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("American Staffordshire terrier") {
+                    self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
 //                    self.postBarButton.isEnabled = false

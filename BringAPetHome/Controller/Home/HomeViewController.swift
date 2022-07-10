@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import Lottie
+import MJRefresh
 
 // 頁面狀態
 enum PageStatus {
@@ -23,6 +24,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    let header = MJRefreshHeader()
     var newAnimalList: [AnimalData] = []
     var skip: Int = 100
     var pageStatus: PageStatus = .notLoadingMore
@@ -50,7 +52,22 @@ class HomeViewController: UIViewController {
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
+        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+        header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
+        self.collectionView.mj_header = header
 //        layoutLottie()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+    }
+    
+    @objc func headerRefresh() {
+        // 更新資料
+        fetchData()
+        self.collectionView.reloadData()
+        // 结束刷新
+        self.collectionView.mj_header?.endRefreshing()
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -205,7 +222,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self.fetchData()
                 self.newAnimalList.append(contentsOf: self.animalDatas)
                 self.pageStatus = .notLoadingMore
-                //                self.collectionView.reloadData()
+                self.collectionView.reloadData()
                 //                }
             }
         }

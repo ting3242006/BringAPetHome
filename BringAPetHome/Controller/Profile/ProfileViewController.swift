@@ -176,4 +176,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let shareDetailVC = mainStoryboard.instantiateViewController(withIdentifier: "ShareDetailViewController") as? ShareDetailViewController else {
+            return
+        }
+        let share = shareList[indexPath.row]
+        shareDetailVC.shareItem = share
+        self.navigationController?.pushViewController(shareDetailVC, animated: true)
+    }
 }

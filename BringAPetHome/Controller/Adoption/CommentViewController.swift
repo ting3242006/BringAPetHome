@@ -58,7 +58,10 @@ class CommentViewController: UIViewController {
             self.present(alert, animated: true)
         } else {
             addCommend(text: commentTextField.text ?? "")
-            dismiss(animated: true, completion: nil)
+//            dismiss(animated: true, completion: nil)
+            fetchCommetData()
+            commentTextField.text = ""
+            tableView.reloadData()
         }
     }
     

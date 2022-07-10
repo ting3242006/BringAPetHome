@@ -603,7 +603,6 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - Fabric (1.10.2)
   - Firebase/Auth (9.0.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 9.0.0)
@@ -766,6 +765,7 @@ PODS:
   - lottie-ios (3.3.0)
   - LZViewPager (1.2.5):
     - SnapKit (~> 5.0.0)
+  - MJRefresh (3.7.5)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -777,7 +777,6 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - Fabric
   - Firebase/Auth
   - Firebase/Crashlytics
   - Firebase/Database
@@ -788,6 +787,7 @@ DEPENDENCIES:
   - Kingfisher
   - lottie-ios
   - LZViewPager (~> 1.2.5)
+  - MJRefresh
   - SwiftLint
 
 SPEC REPOS:
@@ -795,7 +795,6 @@ SPEC REPOS:
     - abseil
     - Alamofire
     - BoringSSL-GRPC
-    - Fabric
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -822,6 +821,7 @@ SPEC REPOS:
     - Libuv-gRPC
     - lottie-ios
     - LZViewPager
+    - MJRefresh
     - nanopb
     - PromisesObjC
     - SnapKit
@@ -831,7 +831,6 @@ SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   Alamofire: 87bd8c952f9a4454320fce00d9cc3de57bcadaf5
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  Fabric: ea977e3cd9c20425516d3dafd3bf8c941c51223f
   Firebase: a876fadc5ea653a377693376fd4f885c62704512
   FirebaseAppCheckInterop: 0da214236777e71d8535c5f3b9cb5174f636a9eb
   FirebaseAuth: eae56c13e1161da89be202b1fae3ca60b4b8d689
@@ -858,11 +857,12 @@ SPEC CHECKSUMS:
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   LZViewPager: 89ddd98246d54b52bde14c8d91702f946d6f8893
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: d7ae4fa045b75aabd944caf685f51574119434b4
+PODFILE CHECKSUM: 2069710f71c4b4ad9964c464ea4638ed7e7c209b
 
 COCOAPODS: 1.11.3

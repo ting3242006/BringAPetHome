@@ -105,7 +105,9 @@ class UserFirebaseManager {
     }
     
     func checkUserEmail(userId: String, completion: @escaping (Result<UserModel>) -> Void) {
+        print("checkUserEmail")
         dataBase.collection("User").whereField("id", isEqualTo: userId).getDocuments { querySnapshot, _ in
+            print(querySnapshot, querySnapshot?.documents.count)
             if let querySnapshot = querySnapshot {
                 if let document = querySnapshot.documents.first {
                     

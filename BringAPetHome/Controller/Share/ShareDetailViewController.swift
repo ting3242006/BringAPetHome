@@ -182,7 +182,7 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
         cell.shareDetailTableViewCellDelegate = self
         let urls = shareList[indexPath.row].shareImageUrl
         cell.shareImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
-        //        cell.timeLabel.text = shareList[indexPath.row].createdTime
+//        cell.postTimeLabel.text = "\(shareList[indexPath.row].createdTime)"
         cell.contentLabel.text = shareList[indexPath.row].shareContent
         //        cell.userImageView.image = UIImage(named: "dketch-1")
         cell.selectedBackgroundView = selectedBackgroundView
