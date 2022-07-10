@@ -4,7 +4,6 @@
         <attribute name="age" optional="YES" attributeType="String"/>
         <attribute name="albumFile" optional="YES" attributeType="String"/>
         <attribute name="albumUpdate" optional="YES" attributeType="String"/>
-        <attribute name="animalId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="animalSterilization" optional="YES" attributeType="String"/>
         <attribute name="animalVariety" optional="YES" attributeType="String"/>
         <attribute name="areaPkid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -28,6 +27,6 @@
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Animal" positionX="-63" positionY="-18" width="128" height="404"/>
+        <element name="Animal" positionX="-63" positionY="-18" width="128" height="389"/>
     </elements>
 </model>

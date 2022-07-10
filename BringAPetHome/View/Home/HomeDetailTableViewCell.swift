@@ -40,7 +40,7 @@ class HomeDetailTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        heartButton = makeTabButton(imageName: "heartFill", unselectedImageName: "heart")
+        heartButton = makeTabButton(imageName: "Group 55-1", unselectedImageName: "Group 56-1")
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         addSubview(heartButton)
         heartButton.anchor(

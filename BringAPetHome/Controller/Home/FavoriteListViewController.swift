@@ -70,7 +70,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
         let animal = animalList[indexPath.row]
-        cell.sex.text = "ID:\(animal.id)"
+        cell.idLabel.text = "ID:\(animal.id)"
 //        cell.sex.text = "性別:\(animal.sex ?? "")"
         cell.opendate.text = "\(animal.openDate ?? "")"
         cell.sterilization.text = ShelterManager.shared.sterilization(sterilization: animal.steriization ?? "")
@@ -78,6 +78,17 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let imageUrl = documentsDirectory.appendingPathComponent("\(animal.id)").appendingPathExtension("jpg")
         cell.animalImageView.image = UIImage(contentsOfFile: imageUrl.path)
+        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: animal.sex ?? "")
+        var name = ""
+        switch cell.sexLabel.text {
+        case "男":
+            name = "BOY-1"
+        case "女":
+            name = "GIRL-1"
+        default:
+            name = "paws"
+        }
+        cell.sexImageView.image = UIImage(named: name)
         
         return cell
     }
@@ -88,7 +99,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         let animal = self.animalList[indexPath.row]
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
-        let animalData = AnimalData(animalId: Int(animal.animalId),
+        let animalData = AnimalData(animalId: Int(animal.id),
                                     place: animal.place ?? "", kind: animal.kind ?? "",
                                     sex: animal.sex ?? "",
                                     bodytype: animal.bodytype ?? "",
@@ -107,6 +118,7 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
                                     title: animal.title ?? "",
                                     cDate: animal.cDate ?? "",
                                     albumUpdate: "")
+//    like: animal.like
         
         detailVC.pet = animalData
         print(detailVC.pet)

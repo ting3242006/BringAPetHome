@@ -43,7 +43,7 @@ class ShareManager {
             "createdTime": timeInterval,
             "shareContent": shareContent,
             "userUid": Auth.auth().currentUser?.uid
-//            "userUid": uid
+            //            "userUid": uid
         ]
         document.setData(data) { error in
             if let error = error {
@@ -54,26 +54,82 @@ class ShareManager {
         }
     }
     
+    // swiftlint:disable all
     func fetchSharing(completion: @escaping ([ShareModel]?) -> Void) {
-        dataBase.collection("Share").order(by: "createdTime", descending: true).getDocuments { (querySnapshot, _) in
-            guard let querySnapshot = querySnapshot else {
-                return
+        if let uid = Auth.auth().currentUser?.uid {
+            dataBase.collection("User").document(uid).getDocument { snapshot, error in
+                guard let snapshot = snapshot,
+                      snapshot.exists,
+                      let userModel = try? snapshot.data(as: UserModel.self) else {
+                    return
+                }
+                self.dataBase.collection("Share").whereField("userUid", notIn: userModel.blockedUser).order(by: "userUid").order(by: "createdTime", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
+
+                    guard let querySnapshot = querySnapshot else {
+                        return
+                    }
+                    self?.shareList.removeAll()
+                    for document in querySnapshot.documents {
+                        let shareObject = document.data(with: ServerTimestampBehavior.none)
+                        let shareTime = shareObject["createdTime"] as? Int ?? 0
+                        let shareImage = shareObject["image"] as? String ?? ""
+                        let sharePostId = shareObject["postId"] as? String ?? ""
+                        let shareContent = shareObject["shareContent"] as? String ?? ""
+                        let shareUserUid = shareObject["userUid"] as? String ?? ""
+                        
+                        let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
+                                               postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
+                        self?.shareList.append(share)
+                    }
+                    completion(self?.shareList)
+                }
             }
-            self.shareList.removeAll()
-            for document in querySnapshot.documents {
-                let shareObject = document.data(with: ServerTimestampBehavior.none)
-                let shareTime = shareObject["createdTime"] as? Int ?? 0
-                let shareImage = shareObject["image"] as? String ?? ""
-                let sharePostId = shareObject["postId"] as? String ?? ""
-                let shareContent = shareObject["shareContent"] as? String ?? ""
-                
-                let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
-                                       postId: sharePostId, createdTime: shareTime)
-                self.shareList.append(share)
+            
+        } else {
+            dataBase.collection("Share").order(by: "createdTime", descending: true).getDocuments { (querySnapshot, _) in
+                guard let querySnapshot = querySnapshot else {
+                    return
+                }
+                self.shareList.removeAll()
+                for document in querySnapshot.documents {
+                    let shareObject = document.data(with: ServerTimestampBehavior.none)
+                    let shareTime = shareObject["createdTime"] as? Int ?? 0
+                    let shareImage = shareObject["image"] as? String ?? ""
+                    let sharePostId = shareObject["postId"] as? String ?? ""
+                    let shareContent = shareObject["shareContent"] as? String ?? ""
+                    let shareUserUid = shareObject["userUid"] as? String ?? ""
+                    
+                    let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
+                                           postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
+                    // 判斷文章是不是UserBlock ID else return
+                    //                var hasMaster = self.shareList.contains { (share) -> Bool in
+                    //                    isUserBlocked == true
+                    //                }
+                    //                if hasMaster = self.shareList.contains { (share) -> Bool in
+                    //                    isUserBlocked == true
+                    //                    return
+                    //                } else {
+                    
+                    //                if !blockedUser.contains(shareUserUid) {
+                    self.shareList.append(share)
+                }
+                //            }
+                completion(self.shareList)
             }
-            completion(self.shareList)
         }
     }
+    // swiftlint:ensable all
+    
+    //    func checkIsBlock() {
+    //        for list in shareList {
+    //            if
+    //        }
+    //    }
+    
+    //    if hasMaster = self.shareList.contains { (share) -> Bool in
+    //        isUserBlocked == true
+    //        return
+    //    }
     
     func addComments(uid: String, postId: String, comments: String) {
         let comment = dataBase.collection("ShareComment")
@@ -88,9 +144,9 @@ class ShareManager {
             "user": [
                 "id": "ting3242006",
                 "name": Auth.auth().currentUser?.displayName],
-//            "comments": [
-//                "commentId": document.documentID,
-//                "text": "\(comments)"],
+            //            "comments": [
+            //                "commentId": document.documentID,
+            //                "text": "\(comments)"],
             "commentId": document.documentID,
             "text": "\(comments)",
             "time": timeInterval,
@@ -106,7 +162,7 @@ class ShareManager {
         }
     }
     
-    func fetchSharingComment(postId: String ,completion: @escaping(Result<[ShareComment]>) -> Void) {
+    func fetchSharingComment(postId: String, completion: @escaping(Result<[ShareComment]>) -> Void) {
         print("postId", postId)
         dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId).getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -125,44 +181,43 @@ class ShareManager {
                         return  nil
                     }
                 }
-                
                 completion(.success(shareComments))
             }
         }
     }
     
-//    func fetchSharingComment(completion: @escaping ([ShareComment]?) -> Void) {
-//        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
-//            guard let querySnapshot = querySnapshot else {
-//                return
-//            }
-////            self?.dbModels = []
-//            self?.commentList.removeAll()
-//            for document in querySnapshot.documents {
-//                let sharingComment = document.data(with: ServerTimestampBehavior.none)
-//                let commentTime = sharingComment["time"] as? Int ?? 0
-//                let commentPostId = sharingComment["postId"] as? String ?? ""
-//                let commentContent = sharingComment["text"] as? String ?? ""
-//                let userId = sharingComment["userUid"] as? Int ?? 0
-//                let comment = ShareComment(commentId: commentPostId, time: commentTime, text: commentContent, userId: userUid)
-//                self?.commentList.append(comment)
-//            }
-//            completion(self?.commentList)
-//            print("======\(self?.commentList)")
-////            if let error = error {
-////                print("Error fetching documents: \(error)")
-////            } else {
-////                for document in querySnapshot!.documents {
-////                    self?.dbModels.insert(document.data(), at: 0)
-////                    print("============\(document.data())")
-////                }
-////            }
-//        }
-//    }
+    //    func fetchSharingComment(completion: @escaping ([ShareComment]?) -> Void) {
+    //        dataBase.collection("ShareComment").whereField("postId", isEqualTo: postId ?? "").getDocuments() { [weak self] (querySnapshot, error) in
+    //            guard let querySnapshot = querySnapshot else {
+    //                return
+    //            }
+    ////            self?.dbModels = []
+    //            self?.commentList.removeAll()
+    //            for document in querySnapshot.documents {
+    //                let sharingComment = document.data(with: ServerTimestampBehavior.none)
+    //                let commentTime = sharingComment["time"] as? Int ?? 0
+    //                let commentPostId = sharingComment["postId"] as? String ?? ""
+    //                let commentContent = sharingComment["text"] as? String ?? ""
+    //                let userId = sharingComment["userUid"] as? Int ?? 0
+    //                let comment = ShareComment(commentId: commentPostId, time: commentTime, text: commentContent, userId: userUid)
+    //                self?.commentList.append(comment)
+    //            }
+    //            completion(self?.commentList)
+    //            print("======\(self?.commentList)")
+    ////            if let error = error {
+    ////                print("Error fetching documents: \(error)")
+    ////            } else {
+    ////                for document in querySnapshot!.documents {
+    ////                    self?.dbModels.insert(document.data(), at: 0)
+    ////                    print("============\(document.data())")
+    ////                }
+    ////            }
+    //        }
+    //    }
     
     func fetchUserSharing(uid: String, completion: @escaping ([ShareModel]?) -> Void) {
         dataBase.collection("Share").whereField("userUid", isEqualTo: uid).order(by: "createdTime", descending: true).getDocuments { (querySnapshot, _) in
-//        dataBase.collection("Share").whereField("userUid", isEqualTo: uid).getDocuments { (querySnapshot, _) in
+            //        dataBase.collection("Share").whereField("userUid", isEqualTo: uid).getDocuments { (querySnapshot, _) in
             guard let querySnapshot = querySnapshot else {
                 return
             }
@@ -173,9 +228,10 @@ class ShareManager {
                 let shareImage = shareObject["image"] as? String ?? ""
                 let sharePostId = shareObject["postId"] as? String ?? ""
                 let shareContent = shareObject["shareContent"] as? String ?? ""
+                let shareUserUid = shareObject["userUid"] as? String ?? ""
                 
                 let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
-                                       postId: sharePostId, createdTime: shareTime)
+                                       postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
                 self.shareList.append(share)
             }
             completion(self.shareList)

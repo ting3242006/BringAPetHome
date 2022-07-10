@@ -4,7 +4,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,24 +16,24 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch" translatesAutoresizingMaskIntoConstraints="NO" id="uvs-Kq-kET">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="30" y="30" width="354" height="836"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Best Furry Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXG-ka-Rfu">
-                                <rect key="frame" x="69" y="536" width="276.5" height="26"/>
+                                <rect key="frame" x="69" y="576" width="276.5" height="26"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94263595339999995" green="0.93230175969999995" blue="0.88774961230000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rXG-ka-Rfu" secondAttribute="bottom" constant="300" id="1Tj-ua-p8g"/>
-                            <constraint firstAttribute="bottom" secondItem="uvs-Kq-kET" secondAttribute="bottom" id="3wc-W9-iUg"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rXG-ka-Rfu" secondAttribute="bottom" constant="260" id="1Tj-ua-p8g"/>
+                            <constraint firstAttribute="bottom" secondItem="uvs-Kq-kET" secondAttribute="bottom" constant="30" id="3wc-W9-iUg"/>
                             <constraint firstItem="rXG-ka-Rfu" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="4Ym-UG-nZW"/>
-                            <constraint firstItem="uvs-Kq-kET" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="fHS-oQ-Hb5"/>
-                            <constraint firstItem="uvs-Kq-kET" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="jDu-KC-xkX"/>
-                            <constraint firstItem="uvs-Kq-kET" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="uW9-jy-Yzt"/>
+                            <constraint firstItem="uvs-Kq-kET" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="30" id="fHS-oQ-Hb5"/>
+                            <constraint firstItem="uvs-Kq-kET" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="jDu-KC-xkX"/>
+                            <constraint firstItem="uvs-Kq-kET" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-30" id="uW9-jy-Yzt"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -45,8 +44,5 @@
     </scenes>
     <resources>
         <image name="Launch" width="800" height="800"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

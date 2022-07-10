@@ -27,6 +27,7 @@ enum Age: Int, Codable {
         }
     }
 }
+
 enum Sex: Int, Codable {
     case boy = 0
     case girl = 1
@@ -58,6 +59,7 @@ enum Petable: Int, Codable {
         }
     }
 }
+public var isUserBlocked: Bool = false
 
 class AdoptionViewController: UIViewController {
     
@@ -133,7 +135,7 @@ class AdoptionViewController: UIViewController {
     func setButtonLayout() {
         view.addSubview(publishButton)
         publishButton.backgroundColor = UIColor(named: "HoneyYellow")
-//        publishButton.layer.masksToBounds = true
+        //        publishButton.layer.masksToBounds = true
         publishButton.layer.cornerRadius = 30
         publishButton.tintColor = .white
         publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -161,14 +163,41 @@ class AdoptionViewController: UIViewController {
     }
     
     func fetchData() {
-        database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
-            self?.dbModels = []
-            if let error = error {
-                print("Error fetching documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-                    self?.dbModels.insert(document.data(), at: 0)
-                    print("============\(document.data())")
+        if let uid = Auth.auth().currentUser?.uid {
+            database.collection("User").document(uid).getDocument { snapshot, error in
+                guard let snapshot = snapshot,
+                      snapshot.exists,
+                      let userModel = try? snapshot.data(as: UserModel.self) else {
+                    return
+                }
+                print("userModel.blockedUser", userModel.blockedUser)
+                self.database.collection("Adoption").whereField("userId", notIn: userModel.blockedUser).order(by: "userId")
+                    .order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                    self?.dbModels = []
+                    if let error = error {
+                        print("Error fetching documents: \(error)")
+                    } else {
+                        print("querySnapshot!.documents", querySnapshot!.documents.count)
+                        for document in querySnapshot!.documents {
+                            //                    self?.userData.
+                            self?.dbModels.insert(document.data(), at: 0)
+                            print("============\(document.data())")
+                        }
+                    }
+                }
+            }
+        } else {            
+            self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                self?.dbModels = []
+                if let error = error {
+                    print("Error fetching documents: \(error)")
+                } else {
+                    print("querySnapshot!.documents", querySnapshot!.documents.count)
+                    for document in querySnapshot!.documents {
+                        //                    self?.userData.
+                        self?.dbModels.insert(document.data(), at: 0)
+                        print("============\(document.data())")
+                    }
                 }
             }
         }
@@ -188,8 +217,30 @@ class AdoptionViewController: UIViewController {
            let indexPath = tableView.indexPathForRow(at: point) {
             let firebaseData = dbModels[indexPath.row]
             controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
+            //            controller.userData?.blockedUser = firebaseData[User[blockedUser].rawValue] as [String] ?? ""
         }
         return controller
+    }
+    
+    func confirmBlocked(userId: String) {
+        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎?", preferredStyle: .alert)
+        let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
+            self.database.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])
+        }
+        let noAction = UIAlertAction(title: "取消", style: .cancel)
+        
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func checkBlockedUser() {
+        if isUserBlocked == true {
+            return
+        } else {
+            
+        }
     }
 }
 
@@ -203,6 +254,7 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? AdoptionTableViewCell
         else { return UITableViewCell()
         }
+        cell.adoptionTableViewCellDelegate = self
         cell.selectedBackgroundView = selectedBackgroundView
         let firebaseData = dbModels[indexPath.row]
         let comment: [String: Any] = firebaseData[Adoption.comment.rawValue] as? [String: Any] ?? [:]
@@ -221,28 +273,31 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
                     date: "刊登日期：\(formatter.string(from: date as Date))",
                     content: "\(firebaseData[Adoption.content.rawValue] ?? "")",
                     imageFileUrl: "\(firebaseData[Adoption.imageFileUrl.rawValue] ?? "")", age: age ?? .threeMonthOld, sex: sex ?? .boy, petable: petable ?? .adopt)
-//        var name = ""
-//        switch cell.adoptionSexLabel.text {
-//        case "男":
-//            name = "BOY-1"
-//        case "女":
-//            name = "GIRL-1"
-//        default:
-//            name = "paws"
-//        }
+        var name = ""
+        switch cell.adoptionSexLabel.text {
+        case "男":
+            name = "BOY-1"
+        case "女":
+            name = "GIRL-1"
+        default:
+            name = "paws"
+        }
+        cell.sexIconImage.image = UIImage(named: name)
         
         if let petable = firebaseData[Adoption.petable.rawValue] as? Int {
             cell.setupPetable(petable: petable)
         }
         
+        //        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
+        //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "")
         UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.usernameLabel.text = self.userData?.name
-            case .failure(_):
+            case .failure:
                 print("Error")
             }
         }
@@ -255,5 +310,14 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+}
+
+extension AdoptionViewController: AdoptionTableViewCellDelegate {
+    func tappedBlock(_ cell: UITableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        self.confirmBlocked(userId: Auth.auth().currentUser?.uid ?? "")
     }
 }

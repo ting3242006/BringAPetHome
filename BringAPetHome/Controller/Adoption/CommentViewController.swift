@@ -58,7 +58,10 @@ class CommentViewController: UIViewController {
             self.present(alert, animated: true)
         } else {
             addCommend(text: commentTextField.text ?? "")
-            dismiss(animated: true, completion: nil)
+//            dismiss(animated: true, completion: nil)
+            fetchCommetData()
+            commentTextField.text = ""
+            tableView.reloadData()
         }
     }
     
@@ -83,6 +86,7 @@ class CommentViewController: UIViewController {
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
+//            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
             Comments.userUid.rawValue: userData?.id
             
 //            Comments.postId.rawValue: postId
@@ -148,11 +152,12 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
+//        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
         UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.commentUserImage.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.commentUserId.text = self.userData?.name
             case .failure(_):
