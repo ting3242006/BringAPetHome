@@ -7,6 +7,8 @@
 
 import UIKit
 import Kingfisher
+import Lottie
+import MJRefresh
 
 // 頁面狀態
 enum PageStatus {
@@ -22,6 +24,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    let header = MJRefreshHeader()
     var newAnimalList: [AnimalData] = []
     var skip: Int = 100
     var pageStatus: PageStatus = .notLoadingMore
@@ -30,7 +33,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.tabBarController?.tabBar.barTintColor = .white
         setupNavigationItem()
         // setup
         collectionView.delegate = self
@@ -50,7 +52,22 @@ class HomeViewController: UIViewController {
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
-        
+        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+        header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
+        self.collectionView.mj_header = header
+//        layoutLottie()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+    }
+    
+    @objc func headerRefresh() {
+        // 更新資料
+        fetchData()
+        self.collectionView.reloadData()
+        // 结束刷新
+        self.collectionView.mj_header?.endRefreshing()
     }
     
     //    override func viewWillAppear(_ animated: Bool) {
@@ -92,10 +109,25 @@ class HomeViewController: UIViewController {
                 })
                 //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
                 //                })
+//                DispatchQueue.main.async {
+//                    self?.setupLottie()
+//                }
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    func setupLottie() {
+        let animationView = AnimationView(name: "92612-cats-cats-cats")
+        animationView.frame = CGRect(x: 0, y: 0, width: UIScreen.width, height: 350)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        
+        view.addSubview(animationView)
+        animationView.play(fromFrame: 173, toFrame: 255, loopMode: .playOnce, completion: { (finished) in
+            animationView.isHidden = true
+        })
     }
     
     func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
@@ -143,20 +175,21 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let url = item.albumFile
         cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
         cell.shelterImageView.contentMode = .scaleAspectFill
-        cell.shelterImageView.layer.cornerRadius = 10
+        cell.shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        cell.layer.cornerRadius = 10
         cell.shelterImageView.clipsToBounds = true
 //        cell.sexLabel.text = String(item.sex)
-        cell.colorLabel.text = item.colour
-        cell.sexLabel.textColor = .clear
+//        cell.colorLabel.text = item.colour
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
+        cell.sexLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
         var name = ""
         switch cell.sexLabel.text {
         case "男":
-            name = "boy"
+            name = "BOY-1"
         case "女":
-            name = "girl"
+            name = "GIRL-1"
         default:
             name = "paws"
         }
@@ -189,7 +222,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self.fetchData()
                 self.newAnimalList.append(contentsOf: self.animalDatas)
                 self.pageStatus = .notLoadingMore
-                //                self.collectionView.reloadData()
+                self.collectionView.reloadData()
                 //                }
             }
         }
@@ -207,17 +240,17 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+//        return 0
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return 5
+//    }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,

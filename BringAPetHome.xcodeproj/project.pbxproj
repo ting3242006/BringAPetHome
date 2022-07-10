@@ -30,6 +30,12 @@
 		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
 		251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80028586FC7004BDEC9 /* Main.storyboard */; };
 		251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */; };
+		251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */; };
+		251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251FF2B02876BB64005945A1 /* EULAViewController.swift */; };
+		251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */; };
+		251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */; };
+		251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */; };
+		251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */; };
 		2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2529E4F82871E4BB00373C90 /* Time+Extension.swift */; };
 		252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */; };
 		252D807E285995290076236B /* ShelterDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807D285995290076236B /* ShelterDataModel.swift */; };
@@ -37,10 +43,12 @@
 		252D80822859CC7C0076236B /* ShelterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80812859CC7C0076236B /* ShelterManager.swift */; };
 		252D80842859E67C0076236B /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80832859E67C0076236B /* HTTP.swift */; };
 		252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D8085285A170A0076236B /* HomeDetailViewController.swift */; };
+		25317A4C28741AF1003093C7 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */; };
 		25349ABD286C484A00C5F76B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25349ABC286C484A00C5F76B /* EditProfileViewController.swift */; };
 		253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */; };
 		254861B62865AE7B00A4C177 /* ShareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */; };
 		256793AE2871684E00703002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 256793AD2871684B00703002 /* Assets.xcassets */; };
+		2577885C28733BF700B888A1 /* Inceptionv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */; };
 		257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 257CA5EC285895620009BE17 /* GoogleService-Info.plist */; };
 		257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5EF28589A780009BE17 /* UIView+Extension.swift */; };
 		257CA5F328589B550009BE17 /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257CA5F228589B550009BE17 /* UIScreen+Extension.swift */; };
@@ -82,6 +90,12 @@
 		251CF80128586FC7004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		251CF80628586FC8004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		251CF80828586FC8004BDEC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "92612-cats-cats-cats.json"; sourceTree = "<group>"; };
+		251FF2B02876BB64005945A1 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
+		251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_x0zdphwq.json; sourceTree = "<group>"; };
+		251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_nq4j1vj5.json; sourceTree = "<group>"; };
+		251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-ekaterina-bolovtsova-7131682.mp4"; sourceTree = "<group>"; };
+		251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-cottonbro-6853336.mp4"; sourceTree = "<group>"; };
 		2529E4F82871E4BB00373C90 /* Time+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time+Extension.swift"; sourceTree = "<group>"; };
 		252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		252D807D285995290076236B /* ShelterDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterDataModel.swift; sourceTree = "<group>"; };
@@ -89,10 +103,12 @@
 		252D80812859CC7C0076236B /* ShelterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterManager.swift; sourceTree = "<group>"; };
 		252D80832859E67C0076236B /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		252D8085285A170A0076236B /* HomeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewController.swift; sourceTree = "<group>"; };
+		25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		25349ABC286C484A00C5F76B /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailTableViewCell.swift; sourceTree = "<group>"; };
 		254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCollectionViewCell.swift; sourceTree = "<group>"; };
 		256793AD2871684B00703002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
 		257CA5EC285895620009BE17 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		257CA5EF28589A780009BE17 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		257CA5F228589B550009BE17 /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
@@ -188,6 +204,10 @@
 				251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */,
 				251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */,
 				256793AD2871684B00703002 /* Assets.xcassets */,
+				251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */,
+				251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */,
+				251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */,
+				2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */,
 				257CA5F128589B2C0009BE17 /* Extension */,
 				25C4818D2858E47D000C6D7F /* Model */,
 				25C4818C2858E464000C6D7F /* Controller */,
@@ -251,6 +271,8 @@
 				253773BC285AE58700B28A3D /* Home */,
 				251CF80028586FC7004BDEC9 /* Main.storyboard */,
 				251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */,
+				251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */,
+				251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -289,6 +311,8 @@
 				25E573382869B6A8009348A0 /* SignInWithAppleVC.swift */,
 				25E573332869B20E009348A0 /* ProfileViewController.swift */,
 				25349ABC286C484A00C5F76B /* EditProfileViewController.swift */,
+				25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */,
+				251FF2B02876BB64005945A1 /* EULAViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -322,6 +346,7 @@
 				251CF7F528586FC7004BDEC9 /* Resources */,
 				0D5C4694D7DBD01C2426F7CD /* [CP] Embed Pods Frameworks */,
 				257CA5EE285899460009BE17 /* ShellScript */,
+				253C20B7287855FF0026168A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -374,6 +399,11 @@
 				257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */,
 				256793AE2871684E00703002 /* Assets.xcassets in Resources */,
 				251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */,
+				251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */,
+				251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */,
+				251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */,
+				251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */,
+				251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +426,25 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		253C20B7287855FF0026168A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		257CA5EE285899460009BE17 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -443,6 +492,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */,
 				250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */,
 				25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */,
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,
@@ -466,6 +516,7 @@
 				252D80842859E67C0076236B /* HTTP.swift in Sources */,
 				257CA5F028589A780009BE17 /* UIView+Extension.swift in Sources */,
 				25178BA2286AA79C008126A9 /* UserFirebaseManager.swift in Sources */,
+				25317A4C28741AF1003093C7 /* PrivacyPolicyViewController.swift in Sources */,
 				251C9982285DC74E00E46457 /* FavoriteListViewController.swift in Sources */,
 				2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */,
 				251C9984285DCA2D00E46457 /* FavoriteListTableViewCell.swift in Sources */,
@@ -482,6 +533,7 @@
 				253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */,
 				25E573392869B6A8009348A0 /* SignInWithAppleVC.swift in Sources */,
 				25178BA0286AA6DB008126A9 /* UserModel.swift in Sources */,
+				2577885C28733BF700B888A1 /* Inceptionv3.mlmodel in Sources */,
 				2511F4752867413B00E59FB0 /* ShareModel.swift in Sources */,
 				251AF647285CB0EF007B912D /* MapViewController.swift in Sources */,
 				251A7EAF285F122800FA7E1D /* AdoptionTableViewCell.swift in Sources */,
@@ -632,7 +684,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BringAPetHome/BringAPetHome.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -644,13 +697,15 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -667,7 +722,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BringAPetHome/BringAPetHome.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
@@ -678,13 +733,15 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

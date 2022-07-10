@@ -8,6 +8,10 @@
 import UIKit
 import Kingfisher
 
+protocol AdoptionTableViewCellDelegate: AnyObject {
+    func tappedBlock(_ cell: UITableViewCell)
+}
+
 class AdoptionTableViewCell: UITableViewCell {
     
 //    struct DownloadData: Codable {
@@ -54,6 +58,7 @@ class AdoptionTableViewCell: UITableViewCell {
 //        }
 //    }
     
+    weak var adoptionTableViewCellDelegate: AdoptionTableViewCellDelegate?
     var showSex: String?
     var showAge: String?
     var showPetable: String?
@@ -98,6 +103,10 @@ class AdoptionTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @IBAction func blockUserButton(_ sender: UIButton) {
+        adoptionTableViewCellDelegate?.tappedBlock(self)
     }
     
     func layout(location: String, date: String, content: String, imageFileUrl: String, age: Age, sex: Sex, petable: Petable) {

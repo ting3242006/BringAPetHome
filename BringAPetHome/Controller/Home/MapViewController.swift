@@ -21,6 +21,8 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tabBarController?.tabBar.isHidden = true
         self.navigationItem.title = "收容所位置"
         //myLocationManager.requestWhenInUseAuthorization()
 //        myMapView.showsUserLocation = true

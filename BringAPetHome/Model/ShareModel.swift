@@ -22,6 +22,7 @@ struct ShareModel: Comparable, Codable {
     var createdTime: Int
 //    var comments: ShareComment
 //    var userName: String
+    var userUid: String
 }
 
 struct ShareComment: Codable {

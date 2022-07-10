@@ -42,31 +42,33 @@ class HomeCollectionViewCell: UICollectionViewCell {
                                    leading: contentView.leadingAnchor,
                                    bottom: contentView.bottomAnchor,
                                    trailing: contentView.leadingAnchor,
-                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 170, height: 245)
+                                   padding: .init(top: 5, left: 5, bottom: 5, right: 5), width: 170, height: 200)
         shelterImageView.anchor(top: backgroundImageView.topAnchor,
                                 leading: backgroundImageView.leadingAnchor,
                                 trailing: backgroundImageView.trailingAnchor,
-                                padding: .init(top: 10, left: 10, bottom: 0, right: 10),
+                                padding: .init(top: 0, left: 0, bottom: 0, right: 0),
                                 height: 150)
         sexLabel.anchor(top: shelterImageView.bottomAnchor,
-                        leading: shelterImageView.leadingAnchor,
-                        trailing: shelterImageView.trailingAnchor,
-                        padding: .init(top: 12, left: 0, bottom: 0, right: 0),
+                        leading: sexImageView.trailingAnchor,
+                        padding: .init(top: 12, left: 10, bottom: 0, right: 0),
                         height: 22)
-        colorLabel.anchor(top: shelterImageView.bottomAnchor,
-                        leading: shelterImageView.leadingAnchor,
-                        trailing: shelterImageView.trailingAnchor,
-                        padding: .init(top: 12, left: 2, bottom: 0, right: 0),
-                        height: 22)
-        placeLabel.anchor(top: sexLabel.bottomAnchor,
-                          leading: backgroundImageView.leadingAnchor,
+        //        colorLabel.anchor(top: shelterImageView.bottomAnchor,
+        //                        leading: shelterImageView.leadingAnchor,
+        //                        trailing: shelterImageView.trailingAnchor,
+        //                        padding: .init(top: 12, left: 2, bottom: 0, right: 0),
+        //                        height: 22)
+        placeLabel.anchor(top: shelterImageView.bottomAnchor,
                           trailing: backgroundImageView.trailingAnchor,
-                          padding: .init(top: 8, left: 12, bottom: 0, right: 2),
+                          padding: .init(top: 12, left: 10, bottom: 0, right: 15),
                           height: 22)
-        sexImageView.anchor(bottom: backgroundImageView.bottomAnchor,
-                            trailing: backgroundImageView.trailingAnchor,
-                            padding: .init(top: 0, left: 0, bottom: 28, right: 8),
-                            width: 18, height: 20)
+        sexImageView.anchor(top: shelterImageView.bottomAnchor,
+                            leading: shelterImageView.leadingAnchor,
+                            padding: .init(top: 12, left: 10, bottom: 0, right: 0),
+                            width: 22, height: 22)
+        //        sexImageView.anchor(bottom: backgroundImageView.bottomAnchor,
+        //                            trailing: backgroundImageView.trailingAnchor,
+        //                            padding: .init(top: 0, left: 0, bottom: 28, right: 8),
+        //                            width: 18, height: 20)
         sexImageView.contentMode = .scaleAspectFit
     }
     required init?(coder: NSCoder) {

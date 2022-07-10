@@ -148,9 +148,9 @@ class ShelterManager {
         case "ADULT":
             return "成年"
         case "F":
-            return "年齡不詳"
+            return "不詳"
         default:
-            return "年齡不詳"
+            return "不詳"
         }
     }
     

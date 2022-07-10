@@ -17,6 +17,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var logoutBarButton: UIBarButtonItem!
     
     var gradient = CAGradientLayer()
     let selectedBackgroundView = UIView()
@@ -36,7 +37,7 @@ class ProfileViewController: UIViewController {
         } else {
             return
         }
-        getUserProfile()
+        //        getUserProfile()
         let userUid = Auth.auth().currentUser?.uid ?? ""
         shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
@@ -52,24 +53,27 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getUserProfile()
-        //        UserFirebaseManager.shared.fetchUser(userId: userUid) { result in
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
-            switch result {
-            case let .success(user):
-                self.userData = user
-                //                self.userIdLabel.text = self.userData?.email
-                //                self.userIdLabel.textColor = .lightGray
-            case .failure(_):
-                print("Error")
-            }
-        }
+        //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        //            switch result {
+        //            case let .success(user):
+        //                self.userData = user
+        //                //                self.userIdLabel.text = self.userData?.email
+        //                //                self.userIdLabel.textColor = .lightGray
+        //            case .failure(_):
+        //                print("Error")
+        //            }
+        //        }
         shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
         //        showLoginVC()
         if Auth.auth().currentUser == nil {
             showLoginVC()
+            userImageView.image = UIImage(named: "dketch-4")
+            userNameLabel.text = "暱稱"
+            logoutBarButton.isEnabled = false
         } else {
+            logoutBarButton.isEnabled = true
             return
         }
     }
@@ -90,12 +94,14 @@ class ProfileViewController: UIViewController {
         let okAction = UIAlertAction(title: "確定", style: .default) { _ in
             do {
                 try Auth.auth().signOut()
+                
+                self.view.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarController")
                 //                self.navigationController?.popToRootViewController(animated: true)
                 //                self.tableView.reloadData()
-                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-                self.navigationController?.pushViewController(homeVC, animated: true)
-                print("sign out")
+//                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//                guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
+//                self.navigationController?.pushViewController(profileVC, animated: true)
+//                print("sign out")
             } catch let signOutError as NSError {
                 print("Error signing out: (signOutError)")
             }
@@ -122,16 +128,22 @@ class ProfileViewController: UIViewController {
     }
     
     func getUserProfile() {
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
-            switch result {
-            case let .success(user):
-                self.userData = user
-                let urls = self.userData?.imageURLString
-                self.userImageView.kf.setImage(with: URL(string: urls ?? ""), placeholder: UIImage(named: "dketch-4"))
-                self.userNameLabel.text = self.userData?.name
-            case .failure(_):
-                print("Error")
+        if Auth.auth().currentUser != nil {
+            UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+                switch result {
+                case let .success(user):
+                    self.userData = user
+                    let urls = self.userData?.image
+                    self.userImageView.kf.setImage(with: URL(string: urls ?? ""), placeholder: UIImage(named: "dketch-4"))
+                    self.userNameLabel.text = self.userData?.name
+                case .failure(_):
+                    print("Error")
+                }
             }
+        } else {
+            userImageView.image = UIImage(named: "dketch-4")
+            userNameLabel.text = "暱稱"
+            
         }
     }
 }
@@ -163,5 +175,15 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectedBackgroundView = selectedBackgroundView
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let shareDetailVC = mainStoryboard.instantiateViewController(withIdentifier: "ShareDetailViewController") as? ShareDetailViewController else {
+            return
+        }
+        let share = shareList[indexPath.row]
+        shareDetailVC.shareItem = share
+        self.navigationController?.pushViewController(shareDetailVC, animated: true)
     }
 }

@@ -16,10 +16,9 @@ class ShareCommentViewController: UIViewController {
     
     var commentList = [ShareComment]()
     var postId: String? = ""
-    var cooo: String? = ""
     var userData: UserModel?
     
-    //var shareModel: ShareModel?
+    // var shareModel: ShareModel?
     // segue or prepare 傳值
    
     override func viewDidLoad() {
@@ -34,6 +33,7 @@ class ShareCommentViewController: UIViewController {
         }
         
         bgView.layer.cornerRadius = 25
+        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tableView.dataSource = self
         tableView.delegate = self
 //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
@@ -60,7 +60,10 @@ class ShareCommentViewController: UIViewController {
         }
         let userUid = Auth.auth().currentUser?.uid ?? ""
         ShareManager.shared.addComments(uid: userUid, postId: postId ?? "", comments: commentTextField.text ?? "")
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
+        fetchSharingComment()
+        commentTextField.text = ""
+        tableView.reloadData()
     }
     
     func fetchSharingComment() {
@@ -68,8 +71,6 @@ class ShareCommentViewController: UIViewController {
             switch result {
             case .success(let shareComments):
                 self?.commentList = shareComments
-                print("111111\(shareComments)")
-                print("222222\(self?.postId)")
                 self?.tableView.reloadData()
             case .failure:
                 print("Can't fetch data")
@@ -103,7 +104,7 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.imageURLString
+                let url = self.userData?.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.userNameLabel.text = self.userData?.name
             case .failure(_):

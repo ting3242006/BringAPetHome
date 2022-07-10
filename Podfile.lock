@@ -608,6 +608,9 @@ PODS:
     - FirebaseAuth (~> 9.0.0)
   - Firebase/CoreOnly (9.0.0):
     - FirebaseCore (= 9.0.0)
+  - Firebase/Crashlytics (9.0.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 9.0.0)
   - Firebase/Database (9.0.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 9.0.0)
@@ -638,6 +641,13 @@ PODS:
     - FirebaseCore (~> 9.0)
   - FirebaseCoreInternal (9.0.0):
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - FirebaseCrashlytics (9.0.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleDataTransport (~> 9.1)
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (~> 2.30908.0)
+    - PromisesObjC (~> 2.1)
   - FirebaseDatabase (9.0.0):
     - FirebaseCore (~> 9.0)
     - leveldb-library (~> 1.22)
@@ -656,6 +666,11 @@ PODS:
     - nanopb (~> 2.30908.0)
   - FirebaseFirestoreSwift (9.2.0):
     - FirebaseFirestore (~> 9.0)
+  - FirebaseInstallations (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (~> 2.1)
   - FirebaseStorage (9.0.0):
     - FirebaseAppCheckInterop (~> 9.0)
     - FirebaseAuthInterop (~> 9.0)
@@ -683,6 +698,8 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
@@ -745,23 +762,32 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
+  - lottie-ios (3.3.0)
+  - LZViewPager (1.2.5):
+    - SnapKit (~> 5.0.0)
+  - MJRefresh (3.7.5)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.1.0)
+  - SnapKit (5.0.1)
   - SwiftLint (0.47.1)
 
 DEPENDENCIES:
   - Alamofire
   - Firebase/Auth
+  - Firebase/Crashlytics
   - Firebase/Database
   - Firebase/Firestore
   - Firebase/Storage
   - FirebaseFirestoreSwift
   - IQKeyboardManagerSwift
   - Kingfisher
+  - lottie-ios
+  - LZViewPager (~> 1.2.5)
+  - MJRefresh
   - SwiftLint
 
 SPEC REPOS:
@@ -777,9 +803,11 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseCrashlytics
     - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseFirestoreSwift
+    - FirebaseInstallations
     - FirebaseStorage
     - FirebaseStorageInternal
     - GoogleDataTransport
@@ -791,8 +819,12 @@ SPEC REPOS:
     - Kingfisher
     - leveldb-library
     - Libuv-gRPC
+    - lottie-ios
+    - LZViewPager
+    - MJRefresh
     - nanopb
     - PromisesObjC
+    - SnapKit
     - SwiftLint
 
 SPEC CHECKSUMS:
@@ -807,9 +839,11 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnostics: 54410e5d156bf406a764c2722d9f77d682723b4c
   FirebaseCoreExtension: 9ce1dc5fedca6dad29fe8e2be7ee7786498dc675
   FirebaseCoreInternal: 5b8f4f2e2970a4cb9bd1cf7ada16c8ba69a29530
+  FirebaseCrashlytics: 08561398868790fc9694b85efb4c080940926fcc
   FirebaseDatabase: c7bb29fefd9196f719164452ebe287bc8f5976dd
   FirebaseFirestore: 3ff0784d61f9a0faa3d67c5a8b1e4fb0b828c6b1
   FirebaseFirestoreSwift: d7e3e7b587a7b8118b97ddb038852750026ee861
+  FirebaseInstallations: 21186f0ca7849f90f4a3219fa31a5eca2e30f113
   FirebaseStorage: 7b70fce0c7a751017b2f749d161e4f4855f431d9
   FirebaseStorageInternal: 153685c8d9f67ee3007fed0414351c43487983c2
   GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
@@ -821,10 +855,14 @@ SPEC CHECKSUMS:
   Kingfisher: 184d4d1a8c36666e663caf8e08abe87898595c53
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
+  lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
+  LZViewPager: 89ddd98246d54b52bde14c8d91702f946d6f8893
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: 5f288caf0d00a7b27427c6ae8bc7ca696a76688b
+PODFILE CHECKSUM: 2069710f71c4b4ad9964c464ea4638ed7e7c209b
 
 COCOAPODS: 1.11.3
