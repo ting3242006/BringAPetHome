@@ -51,7 +51,7 @@ class HomeFilterViewController: UIViewController {
         tableView.dataSource = self
 
         view.backgroundColor = .white
-        self.navigationItem.title = "Search Filters"
+        self.navigationItem.title = "篩選"
         self.tabBarController?.tabBar.isHidden = true
         layoutButton()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(

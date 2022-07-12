@@ -56,6 +56,7 @@ class HomeViewController: UIViewController {
         header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
         self.collectionView.mj_header = header
 //        layoutLottie()
+        updateNavBarColor()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,7 +97,6 @@ class HomeViewController: UIViewController {
                                                                 target: self,
                                                                 action: #selector(didTap))
         }
-        
     }
     
     func fetchData() {
@@ -117,6 +117,20 @@ class HomeViewController: UIViewController {
             }
         }
     }
+    
+    func updateNavBarColor() {
+            if #available(iOS 15.0, *) {
+                let barAppearance = UINavigationBarAppearance()
+                barAppearance.configureWithOpaqueBackground()
+                barAppearance.backgroundColor = UIColor(named: "CulturedWhite")
+                        navigationController?.navigationBar.standardAppearance = barAppearance
+                navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+                navigationController?.navigationBar.compactAppearance = barAppearance
+                navigationController?.navigationBar.compactScrollEdgeAppearance = barAppearance
+            } else {
+                navigationController?.navigationBar.barTintColor = UIColor(named: "CulturedWhite")
+            }
+        }
     
     func setupLottie() {
         let animationView = AnimationView(name: "92612-cats-cats-cats")

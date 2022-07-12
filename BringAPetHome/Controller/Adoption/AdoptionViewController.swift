@@ -74,6 +74,7 @@ class AdoptionViewController: UIViewController {
     var userData: UserModel?
     var publishButton = UIButton()
     let selectedBackgroundView = UIView()
+    var newlist: [AdoptionModel] = []
     
     enum Adoption: String {
         case age = "age"
@@ -115,11 +116,12 @@ class AdoptionViewController: UIViewController {
         databaseRef = Database.database().reference().child("Adoption")
         tableView.dataSource = self
         tableView.delegate = self
-        fetchData()
+        
         tableView.reloadData()
         selectedBackgroundView.backgroundColor = UIColor.clear
         navigationController?.navigationBar.backgroundColor = .clear
         setButtonLayout()
+        fetchData()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
@@ -131,6 +133,25 @@ class AdoptionViewController: UIViewController {
         guard let publishAdoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "PublishAdoptionViewController") as? PublishAdoptionViewController else { return }
         self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
     }
+    
+//    func sortTime() {
+//        fetchData(completion: {
+//            adoptionFirebaseModel in
+//            print("=======\(adoptionFirebaseModel)")
+//            self.adoptionFirebaseModel = adoptionFirebaseModel ?? []
+//            self.adoptionFirebaseModel.sort {
+//                $0.createdTime > $1.createdTime
+//            }
+//            self.tableView.reloadData()
+////            for post in self.adoptionFirebaseModel {
+////                self.newlist.append(post)
+////                self.newlist.sort {
+////                    $0.createdTime > $1.createdTime
+////                }
+////                self.tableView.reloadData()
+////            }
+//        })
+//    }
     
     func setButtonLayout() {
         view.addSubview(publishButton)
@@ -173,20 +194,20 @@ class AdoptionViewController: UIViewController {
                 print("userModel.blockedUser", userModel.blockedUser)
                 self.database.collection("Adoption").whereField("userId", notIn: userModel.blockedUser).order(by: "userId")
                     .order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
-                    self?.dbModels = []
-                    if let error = error {
-                        print("Error fetching documents: \(error)")
-                    } else {
-                        print("querySnapshot!.documents", querySnapshot!.documents.count)
-                        for document in querySnapshot!.documents {
-                            //                    self?.userData.
-                            self?.dbModels.insert(document.data(), at: 0)
-                            print("============\(document.data())")
+                        self?.dbModels = []
+                        if let error = error {
+                            print("Error fetching documents: \(error)")
+                        } else {
+                            print("querySnapshot!.documents", querySnapshot!.documents.count)
+                            for document in querySnapshot!.documents {
+                                //                    self?.userData.
+                                self?.dbModels.insert(document.data(), at: 0)
+                                print("============\(document.data())")
+                            }
                         }
                     }
-                }
             }
-        } else {            
+        } else {
             self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
                 self?.dbModels = []
                 if let error = error {
@@ -290,7 +311,8 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
         
         //        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
         //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "")
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")") { result in
             switch result {
             case let .success(user):
                 self.userData = user

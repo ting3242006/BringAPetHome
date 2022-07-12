@@ -53,7 +53,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     @IBAction func sentSharingPost(_ sender: Any) {
         postBarButton.isEnabled = false
         setupLottie()
-        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.5) else { return }
+        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.3) else { return }
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
         
         fileReference.putData(imageData, metadata: nil) { result in
