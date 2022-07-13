@@ -137,7 +137,7 @@
                                                         <backgroundConfiguration key="background" image="commentIcon" imageContentMode="scaleAspectFit"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <segue destination="hOR-No-So3" kind="presentation" destinationCreationSelector="showComments:sender:" modalPresentationStyle="overFullScreen" id="oN5-qc-oFe"/>
+                                                        <segue destination="hOR-No-So3" kind="presentation" destinationCreationSelector="showComments:sender:" id="oN5-qc-oFe"/>
                                                     </connections>
                                                 </button>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SdP-v6-qAb">
@@ -1236,7 +1236,7 @@
                                                     </buttonConfiguration>
                                                     <connections>
                                                         <action selector="showComment:" destination="7u3-qQ-6Ib" eventType="touchUpInside" id="9Ui-sE-iMQ"/>
-                                                        <segue destination="qs5-66-QFD" kind="presentation" identifier="sentComment" destinationCreationSelector="sentCommentData:sender:" modalPresentationStyle="overFullScreen" id="7Wz-zC-6MJ"/>
+                                                        <segue destination="qs5-66-QFD" kind="presentation" identifier="sentComment" destinationCreationSelector="sentCommentData:sender:" id="7Wz-zC-6MJ"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTm-sO-ZBX">
@@ -1312,7 +1312,7 @@
         <!--Share Comment View Controller-->
         <scene sceneID="5yy-zo-0Zz">
             <objects>
-                <viewController id="qs5-66-QFD" customClass="ShareCommentViewController" customModule="BringAPetHome" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="overCurrentContext" id="qs5-66-QFD" customClass="ShareCommentViewController" customModule="BringAPetHome" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7s4-Sc-Vo2">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1426,7 +1426,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9SR-cQ-r49"/>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="0.45110720198675497" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="jWV-yE-cf8" secondAttribute="bottom" id="9b4-nY-xsd"/>
                             <constraint firstItem="jWV-yE-cf8" firstAttribute="trailing" secondItem="9SR-cQ-r49" secondAttribute="trailing" id="C9u-sd-Sr2"/>
@@ -1645,7 +1645,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hT5-h3-Bx4"/>
-                        <color key="backgroundColor" white="0.33333333333333331" alpha="0.40586196192052981" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="rr0-z0-uTe" firstAttribute="leading" secondItem="hT5-h3-Bx4" secondAttribute="leading" id="FSl-d2-iM0"/>
                             <constraint firstAttribute="bottom" secondItem="rr0-z0-uTe" secondAttribute="bottom" id="QFq-93-he5"/>
@@ -2070,7 +2070,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0kp-nM-tSs"/>
-                        <color key="backgroundColor" red="0.73839964108033618" green="0.73839964108033618" blue="0.73839964108033618" alpha="0.39618687913907286" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.25900248344370863" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ZCs-yh-3bO" firstAttribute="leading" secondItem="0kp-nM-tSs" secondAttribute="leading" id="qoF-of-4aP"/>
                             <constraint firstItem="ZCs-yh-3bO" firstAttribute="trailing" secondItem="0kp-nM-tSs" secondAttribute="trailing" id="qza-6Y-2Bp"/>

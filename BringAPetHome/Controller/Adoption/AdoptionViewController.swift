@@ -232,6 +232,7 @@ class AdoptionViewController: UIViewController {
             let firebaseData = dbModels[indexPath.row]
             controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
             //            controller.userData?.blockedUser = firebaseData[User[blockedUser].rawValue] as [String] ?? ""
+            tabBarController?.tabBar.isHidden = true
         }
         return controller
     }

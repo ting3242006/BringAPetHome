@@ -32,13 +32,14 @@ class ShareDetailViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-
+        
         setButtonLayout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchShareData()
+        tabBarController?.tabBar.isHidden = false
     }
     
     @IBAction func showComment(_ sender: Any) {
@@ -58,6 +59,7 @@ class ShareDetailViewController: UIViewController {
             controller?.postId = shareModel.postId
             //            let userData = userData[indexPath.row]
             //            controller.userData?.blockedUser = userData.blockedUser
+            tabBarController?.tabBar.isHidden = true
         }
         return controller
     }

@@ -33,7 +33,8 @@ class CommentViewController: UIViewController {
             tableView.reloadData()
         }
     }
-//    var postId: String
+    var blackView = UIView(frame: UIScreen.main.bounds)
+    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var bgView: UIView!
@@ -46,11 +47,20 @@ class CommentViewController: UIViewController {
         bgView.layer.cornerRadius = 25
         bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         fetchCommetData()
+        blackViewDynamic()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchCommetData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismiss(animated: true)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0
+        }
     }
     
     @IBAction func sendComment(_ sender: Any) {
@@ -72,7 +82,14 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func closePopVC(_ sender: Any) {
-        dismiss(animated: true)
+//        dismiss(animated: true)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0
+        }
+        let presentingVC = self.presentingViewController
+        self.dismiss(animated: false) {
+            presentingVC?.tabBarController?.tabBar.isHidden = false
+        }
     }
     
     func showLoginVC() {
@@ -141,6 +158,22 @@ class CommentViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func blackViewDynamic() {
+        blackView.backgroundColor = .black
+        blackView.alpha = 0
+        blackView.isUserInteractionEnabled = true
+        blackView.addGestureRecognizer(tapGestureRecognizer)
+        presentingViewController?.view.addSubview(blackView)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0.5
+        }
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController))
+    }
+    
+    @objc func dismissController() {
+        self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 }
 

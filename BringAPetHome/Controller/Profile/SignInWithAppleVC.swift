@@ -74,7 +74,7 @@ class SignInWithAppleVC: UIViewController {
         bgView.layer.cornerRadius = 25
         let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
         animatedIconImage.image = animatedImage
-        animatedIconImage.layer.cornerRadius = 20
+        animatedIconImage.layer.cornerRadius = 30
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
