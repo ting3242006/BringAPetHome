@@ -73,25 +73,11 @@ class HomeFilterViewController: UIViewController {
         override func viewWillDisappear(_ animated: Bool) {
             self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
         }
-    
-//    @objc func btnTouchDown() {// 点击改变背景色
-//        dogButton.backgroundColor = UIColor.white
-//    }
-//
-//    @objc func btnTouchUpInside() {// 恢复背景色
-//        dogButton.backgroundColor = UIColor.white
-//    }
+
     
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
         self.dogButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
-//        self.dogButton.tintColor = UIColor(named: "DarkGreen")
-//        dogButton.setTitleColor(UIColor.white, for: .normal)
-//        dogButton.setTitleColor(UIColor.white, for: .highlighted)
-//        // 在 touchDown 事件 action 里改变背景色
-//        dogButton.addTarget(self, action: #selector(btnTouchDown), for: .touchDown)
-//        // 在 touchUpInside 事件 action 里面恢复背景色
-//        dogButton.addTarget(self, action: #selector(btnTouchUpInside), for: .touchUpInside)
         self.catButton.layer.borderColor = UIColor.lightGray.cgColor
         self.catButton.tintColor = .lightGray
     }
@@ -99,7 +85,6 @@ class HomeFilterViewController: UIViewController {
     @IBAction func selectCat(_ sender: Any) {
         filter.kind = "貓"
         self.catButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
-//        self.catButton.tintColor = UIColor(named: "DarkGreen")
         self.dogButton.layer.borderColor = UIColor.lightGray.cgColor
         self.dogButton.tintColor = .lightGray
     }

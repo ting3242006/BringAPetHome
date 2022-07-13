@@ -101,6 +101,7 @@ class HomeViewController: UIViewController {
     }
     
     func fetchData() {
+        self.setupLottie()
         ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
             switch result {
             case .success(let animalDatas):
@@ -134,13 +135,13 @@ class HomeViewController: UIViewController {
         }
     
     func setupLottie() {
-        let animationView = AnimationView(name: "92612-cats-cats-cats")
-        animationView.frame = CGRect(x: 0, y: 0, width: UIScreen.width, height: 350)
+        let animationView = AnimationView(name: "lf30_editor_wgvv5jrs")
+        animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
         
         view.addSubview(animationView)
-        animationView.play(fromFrame: 173, toFrame: 255, loopMode: .playOnce, completion: { (finished) in
+        animationView.play(fromFrame: 0, toFrame: 288, loopMode: .playOnce, completion: { (finished) in
             animationView.isHidden = true
         })
     }
@@ -276,9 +277,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
-        
-        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self] result  in
+        self.setupLottie()
+        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self]
+            result  in
+            
             switch result {
+
             case .success(let animalDatas):
                 self?.animalDatas = animalDatas
                 // 把沒照片的排到後面

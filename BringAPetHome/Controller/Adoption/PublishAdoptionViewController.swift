@@ -316,7 +316,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     }
     
     func setupLottie() {
-        let animationView = AnimationView(name: "lf20_x0zdphwq")
+        let animationView = AnimationView(name: "lf30_editor_5phd8cww")
         animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
@@ -326,7 +326,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     }
     
     func correctAnimation() {
-        let animationView = AnimationView(name: "lf20_nq4j1vj5")
+        let animationView = AnimationView(name: "lf30_editor_yqqlpukj")
         animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill

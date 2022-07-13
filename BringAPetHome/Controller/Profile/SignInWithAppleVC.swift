@@ -62,9 +62,6 @@ class SignInWithAppleVC: UIViewController {
                 return
             }
         }
-        let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
-        animatedIconImage.image = animatedImage
-        animatedIconImage.layer.cornerRadius = 20
         
         playVideo()
     }
@@ -75,6 +72,9 @@ class SignInWithAppleVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         bgView.layer.cornerRadius = 25
+        let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
+        animatedIconImage.image = animatedImage
+        animatedIconImage.layer.cornerRadius = 20
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
