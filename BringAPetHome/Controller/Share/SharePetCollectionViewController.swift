@@ -18,7 +18,6 @@ class SharePetCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         setButtonLayout()
         configureCellSize()
-//        getData()
     }
 
     override func viewWillAppear(_ animated: Bool) {

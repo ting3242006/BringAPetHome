@@ -44,6 +44,12 @@ class CommentViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         bgView.layer.cornerRadius = 25
+        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        fetchCommetData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fetchCommetData()
     }
     
@@ -86,8 +92,8 @@ class CommentViewController: UIViewController {
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
-//            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
-            Comments.userUid.rawValue: userData?.id
+            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
+//            Comments.userUid.rawValue: userData?.id
             
 //            Comments.postId.rawValue: postId
         ]
@@ -108,7 +114,17 @@ class CommentViewController: UIViewController {
                 print("Error fetching documents: \(error)")
             } else {
                 for document in querySnapshot!.documents {
-                    self?.dbModels.insert(document.data(), at: 0)
+                    let commentDic = document.data()
+//                    commentDic["profileUrlString"] = "profileUrlString"
+//                    commentDic[Comments.userUid.rawValue]
+//                    { result in
+//                        switch result {
+//                        case let .success(user):
+//                            self.userData = user
+                    self?.dbModels.insert(commentDic, at: 0)
+//                        case .failure(_):
+//                            print("Error")
+//                        }
                 }
             }
         }
@@ -151,7 +167,8 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            date: formatter.string(from: date as Date))
         
 //        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
-        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
+        { result in
             switch result {
             case let .success(user):
                 self.userData = user

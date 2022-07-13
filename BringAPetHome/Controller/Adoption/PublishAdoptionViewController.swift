@@ -286,7 +286,8 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                             postBarButton.isEnabled = false
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
-                            self.navigationController?.pushViewController(adoptionViewController, animated: true)
+                            
+                            self.navigationController?.popToRootViewController(animated: true)
 //                            dismiss(animated: true, completion: nil)
                         }
                     case .failure(_):
@@ -308,20 +309,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         inputContentTextField.layer.borderColor = UIColor.systemGray5.cgColor
         inputContentTextField.layer.cornerRadius = 5
         sexButton.backgroundColor = UIColor(named: "CulturedWhite")
-//        sexButton.layer.borderColor = UIColor.systemGray5.cgColor
-//        sexButton.layer.borderWidth = 0.5
         sexButton.layer.cornerRadius = 5
-//        sexButton.tintColor = .white
-//        ageButton.layer.borderColor = UIColor.systemGray5.cgColor
-//        ageButton.layer.borderWidth = 0.5
         ageButton.backgroundColor = UIColor(named: "CulturedWhite")
         ageButton.layer.cornerRadius = 5
-//        ageButton.tintColor = .white
-//        petableButton.layer.borderColor = UIColor.systemGray5.cgColor
-//        petableButton.layer.borderWidth = 0.5
-//        petableButton.backgroundColor = UIColor(named: "CulturedWhite")
-//        petableButton.layer.cornerRadius = 5
-//        petableButton.tintColor = .white
+
     }
     
     func setupLottie() {

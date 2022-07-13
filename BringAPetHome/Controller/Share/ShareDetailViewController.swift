@@ -32,45 +32,13 @@ class ShareDetailViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-//        guard let userData = userData else {
-//            return
-//        }
-//
-//        UserFirebaseManager.shared.fetchUser(userId: user ?? "") { result in
-//            switch result {
-//            case let .success(user):
-////                self.userData = user
-//                let url = user.imageURLString
-//                userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
-//                userNameLabel.text = user.name
-//
-//                self.shareManager.fetchSharing(blockedUser: userData.blockedUser ,completion: { shareList in
-//                    self.shareList = shareList ?? []
-//                    self.tableView.reloadData()
-//                    let index = self.shareList.firstIndex {
-//                        $0.postId == self.shareItem?.postId
-//                    }
-//                    if let index = index {
-//                        self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
-//                    }
-//                })
-//            case .failure(_):
-//                print("Error")
-//            }
-//        }
 
-        shareManager.fetchSharing(completion: { shareList in
-            self.shareList = shareList ?? []
-            self.tableView.reloadData()
-            let index = self.shareList.firstIndex {
-                $0.postId == self.shareItem?.postId
-            }
-            if let index = index {
-                self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
-            }
-        })
-        //        refresh()
         setButtonLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchShareData()
     }
     
     @IBAction func showComment(_ sender: Any) {
@@ -150,10 +118,28 @@ class ShareDetailViewController: UIViewController {
         })
     }
     
+    func fetchShareData() {
+        shareManager.fetchSharing(completion: { shareList in
+            self.shareList = shareList ?? []
+            self.shareList.sort {
+                $0.createdTime.seconds > $1.createdTime.seconds
+            }
+            self.tableView.reloadData()
+            let index = self.shareList.firstIndex {
+                $0.postId == self.shareItem?.postId
+            }
+            if let index = index {
+                self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
+            }
+        })
+    }
+    
     func confirmBlocked(userId: String) {
-        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎?", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])
+            self.fetchShareData()
+            self.tableView.reloadData()
         }
         let noAction = UIAlertAction(title: "取消", style: .cancel)
         
@@ -161,6 +147,7 @@ class ShareDetailViewController: UIViewController {
         alert.addAction(yesAction)
         
         present(alert, animated: true, completion: nil)
+        tableView.reloadData()
     }
 }
 // DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -207,6 +194,7 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
 extension ShareDetailViewController: ShareDetailTableViewCellDelegate {
     func tappedBlock(_ cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
+        print("confirmBlocked", shareList[indexPath.row].userUid)
         self.confirmBlocked(userId: shareList[indexPath.row].userUid)
     }
 }

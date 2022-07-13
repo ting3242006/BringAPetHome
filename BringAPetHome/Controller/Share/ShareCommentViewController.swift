@@ -20,7 +20,7 @@ class ShareCommentViewController: UIViewController {
     
     // var shareModel: ShareModel?
     // segue or prepare 傳值
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,17 +36,17 @@ class ShareCommentViewController: UIViewController {
         bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tableView.dataSource = self
         tableView.delegate = self
-//        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
-//            self.tableView.reloadData()
-//        })
+        //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
+        //            self.tableView.reloadData()
+        //        })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         fetchSharingComment()
-//        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
-//
-//            self.tableView.reloadData()
-//        })
+        //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
+        //
+        //            self.tableView.reloadData()
+        //        })
     }
     
     @IBAction func closeView(_ sender: Any) {
@@ -58,12 +58,17 @@ class ShareCommentViewController: UIViewController {
             showLoginVC()
             return
         }
-        let userUid = Auth.auth().currentUser?.uid ?? ""
-        ShareManager.shared.addComments(uid: userUid, postId: postId ?? "", comments: commentTextField.text ?? "")
-//        dismiss(animated: true, completion: nil)
-        fetchSharingComment()
-        commentTextField.text = ""
-        tableView.reloadData()
+        if commentTextField.text == "" {
+            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "確認", style: .default))
+            self.present(alert, animated: true)
+        } else {
+            let userUid = Auth.auth().currentUser?.uid ?? ""
+            ShareManager.shared.addComments(uid: userUid, postId: postId ?? "", comments: commentTextField.text ?? "")
+            fetchSharingComment()
+            commentTextField.text = ""
+            tableView.reloadData()
+        }
     }
     
     func fetchSharingComment() {
@@ -95,9 +100,9 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShareCommentTableViewCell",
                                                        for: indexPath) as? ShareCommentTableViewCell else { return UITableViewCell() }
-//        cell.userImageView.image = UIImage(named: "dketch-4")
+        //        cell.userImageView.image = UIImage(named: "dketch-4")
         cell.contentLabel.text = commentList[indexPath.row].text
-//        cell.userNameLabel.text = commentList[indexPath.row].userUid
+        //        cell.userNameLabel.text = commentList[indexPath.row].userUid
         cell.commentTimeLabel.text = commentList[indexPath.row].time.displayTimeInSocialMediaStyle()
         
         UserFirebaseManager.shared.fetchUser(userId: commentList[indexPath.row].userUid) { result in

@@ -61,6 +61,7 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+        updateNavBarColor()
     }
     
     @objc func headerRefresh() {

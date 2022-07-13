@@ -59,6 +59,7 @@ enum Petable: Int, Codable {
         }
     }
 }
+
 public var isUserBlocked: Bool = false
 
 class AdoptionViewController: UIViewController {
@@ -74,7 +75,7 @@ class AdoptionViewController: UIViewController {
     var userData: UserModel?
     var publishButton = UIButton()
     let selectedBackgroundView = UIView()
-    var newlist: [AdoptionModel] = []
+    var adoptionList = [AdoptionModel]()
     
     enum Adoption: String {
         case age = "age"
@@ -124,6 +125,11 @@ class AdoptionViewController: UIViewController {
         fetchData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchData()
+    }
+    
     @IBAction func addAdoptionArticles(_ sender: Any) {
         if Auth.auth().currentUser == nil {
             showLoginVC()
@@ -133,25 +139,6 @@ class AdoptionViewController: UIViewController {
         guard let publishAdoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "PublishAdoptionViewController") as? PublishAdoptionViewController else { return }
         self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
     }
-    
-//    func sortTime() {
-//        fetchData(completion: {
-//            adoptionFirebaseModel in
-//            print("=======\(adoptionFirebaseModel)")
-//            self.adoptionFirebaseModel = adoptionFirebaseModel ?? []
-//            self.adoptionFirebaseModel.sort {
-//                $0.createdTime > $1.createdTime
-//            }
-//            self.tableView.reloadData()
-////            for post in self.adoptionFirebaseModel {
-////                self.newlist.append(post)
-////                self.newlist.sort {
-////                    $0.createdTime > $1.createdTime
-////                }
-////                self.tableView.reloadData()
-////            }
-//        })
-//    }
     
     func setButtonLayout() {
         view.addSubview(publishButton)
@@ -200,9 +187,15 @@ class AdoptionViewController: UIViewController {
                         } else {
                             print("querySnapshot!.documents", querySnapshot!.documents.count)
                             for document in querySnapshot!.documents {
-                                //                    self?.userData.
                                 self?.dbModels.insert(document.data(), at: 0)
                                 print("============\(document.data())")
+                                self?.dbModels.sort {
+                                    let time0Number = $0["createdTime"] as? Double ?? 0.0
+                                    let time0 = Date(timeIntervalSince1970: time0Number)
+                                    let time1Number = $1["createdTime"] as? Double ?? 0.0
+                                    let time1 = Date(timeIntervalSince1970: time1Number)
+                                    return time0 > time1
+                                }
                             }
                         }
                     }
@@ -244,9 +237,11 @@ class AdoptionViewController: UIViewController {
     }
     
     func confirmBlocked(userId: String) {
-        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎?", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.database.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])
+            self.fetchData()
+            self.tableView.reloadData()
         }
         let noAction = UIAlertAction(title: "取消", style: .cancel)
         
@@ -254,6 +249,7 @@ class AdoptionViewController: UIViewController {
         alert.addAction(yesAction)
         
         present(alert, animated: true, completion: nil)
+        
     }
     
     func checkBlockedUser() {
@@ -340,6 +336,7 @@ extension AdoptionViewController: AdoptionTableViewCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else {
             return
         }
-        self.confirmBlocked(userId: Auth.auth().currentUser?.uid ?? "")
+        let firebaseData = dbModels[indexPath.row]
+        self.confirmBlocked(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
     }
 }
