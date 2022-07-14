@@ -51,27 +51,34 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func sentSharingPost(_ sender: Any) {
-        postBarButton.isEnabled = false
-        setupLottie()
-        
-        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.3) else { return }
-        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        
-        fileReference.putData(imageData, metadata: nil) { result in
-            switch result {
-            case .success:
-                fileReference.downloadURL { [self] result in
-                    switch result {
-                    case .success(let url):
-                        let userUid = Auth.auth().currentUser?.uid ?? ""
-                        shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
-                    case .failure:
-                        break
+        if shareImageView.image == nil || shareTextView.text == "" {
+            let alert = UIAlertController(title: "錯誤", message: "請輸入內容",   preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "確認", style: .default))
+            self.present(alert, animated: true)
+        } else {            
+            guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.3) else { return }
+            let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+            
+            self.postBarButton.isEnabled = false
+            self.setupLottie()
+            
+            fileReference.putData(imageData, metadata: nil) { result in
+                switch result {
+                case .success:
+                    
+                    fileReference.downloadURL { [self] result in
+                        switch result {
+                        case .success(let url):
+                            let userUid = Auth.auth().currentUser?.uid ?? ""
+                            shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
+                        case .failure:
+                            break
+                        }
+                        navigationController?.popToRootViewController(animated: true)
                     }
-                    navigationController?.popToRootViewController(animated: true)
+                case .failure:
+                    break
                 }
-            case .failure:
-                break
             }
         }
     }
@@ -145,7 +152,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                 print("firstResult", firstResult.identifier)
                 //                if firstResult.identifier.contains(where: animalData.contains) {
                 if firstResult.identifier.contains("cat") {
-//                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
+                    //                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("Border collie") {
                     self.correctAnimation()
@@ -171,7 +178,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
-//                    self.postBarButton.isEnabled = false
+                    //                    self.postBarButton.isEnabled = false
                 }
                 
             }

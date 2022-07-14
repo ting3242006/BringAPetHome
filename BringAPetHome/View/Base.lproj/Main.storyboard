@@ -1236,7 +1236,7 @@
                                                     </buttonConfiguration>
                                                     <connections>
                                                         <action selector="showComment:" destination="7u3-qQ-6Ib" eventType="touchUpInside" id="9Ui-sE-iMQ"/>
-                                                        <segue destination="qs5-66-QFD" kind="presentation" identifier="sentComment" destinationCreationSelector="sentCommentData:sender:" id="7Wz-zC-6MJ"/>
+                                                        <segue destination="qs5-66-QFD" kind="presentation" identifier="sentComment" destinationCreationSelector="sentCommentData:sender:" modalPresentationStyle="overCurrentContext" id="7Wz-zC-6MJ"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PTm-sO-ZBX">
@@ -2070,7 +2070,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0kp-nM-tSs"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.25900248344370863" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ZCs-yh-3bO" firstAttribute="leading" secondItem="0kp-nM-tSs" secondAttribute="leading" id="qoF-of-4aP"/>
                             <constraint firstItem="ZCs-yh-3bO" firstAttribute="trailing" secondItem="0kp-nM-tSs" secondAttribute="trailing" id="qza-6Y-2Bp"/>

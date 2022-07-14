@@ -163,9 +163,9 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model failed to process image.")
             }
-
+            
             let animals = ["cat", "Border collie", "bird"]
-
+            
             if let firstResult = results.first {
                 print("firstResult", firstResult.identifier)
                 if firstResult.identifier.contains("cat") {
@@ -243,37 +243,41 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
     
     // MARK: - add data to Firebase
     @IBAction func publishButton(_ sender: Any) {
-        print("publishButton")
-        postBarButton.isEnabled = false
-        setupLottie()
-        guard let selectedSex = selectedSex,
-              let selectedAge = selectedAge,
-              let commentId = comment["commentId"]
+        if inputContentTextField.text == "" || locationTextField.text == "" || imageView.image == nil {
+            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "確認", style: .default))
+            self.present(alert, animated: true)
+        } else {
+            guard let selectedSex = selectedSex,
+                  let selectedAge = selectedAge,
+                  let commentId = comment["commentId"]
             else { return }
-        guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.5) else { return }
-        
-
-        
-        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        
-        fileReference.putData(imageData, metadata: nil) { result in
-            switch result {
-                
-            case .success(_):
-                fileReference.downloadURL { [self] result in
-                    switch result {
-                    case .success(let url):
-                        if inputContentTextField.text == "" || locationTextField.text == "" || imageView.image == nil {
-                            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "確認", style: .default))
-                            self.present(alert, animated: true)
-                        } else {
+            guard let imageData = self.imageView.image?.jpegData(compressionQuality: 0.5) else { return }
+            
+            let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+            
+            self.postBarButton.isEnabled = false
+            self.setupLottie()
+            
+            fileReference.putData(imageData, metadata: nil) { result in
+                switch result {
+                    
+                case .success(_):
+                    
+                    fileReference.downloadURL { [self] result in
+                        switch result {
+                        case .success(let url):
+                            //                        if inputContentTextField.text == "" || locationTextField.text == "" || imageView.image == nil {
+                            //                            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
+                            //                            alert.addAction(UIAlertAction(title: "確認", style: .default))
+                            //                            self.present(alert, animated: true)
+                            //                        } else {
                             let userUid = Auth.auth().currentUser?.uid ?? ""
                             let age = selectedAge
                             let sex = selectedSex
                             let petable = selectedPetable
                             let postId = postId
-//                            let commentId = commentId
+                            //                            let commentId = commentId
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
                             self.adoptionManager.addAdoption(age: age.rawValue, content: content,
@@ -283,23 +287,24 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                                                              commentId: commentId as? String ?? "",
                                                              postId: postId ?? "",
                                                              userId: userUid)
-                            postBarButton.isEnabled = false
+//                            postBarButton.isEnabled = false
+//                            setupLottie()
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
                             
                             self.navigationController?.popToRootViewController(animated: true)
-//                            dismiss(animated: true, completion: nil)
+                            //                        }
+                        case .failure(_):
+                            let age = Age(rawValue: 0)
+                            let sex = Sex(rawValue: 0)
+                            let petable = Petable(rawValue: 0)
+                            break
                         }
-                    case .failure(_):
-                        let age = Age(rawValue: 0)
-                        let sex = Sex(rawValue: 0)
-                        let petable = Petable(rawValue: 0)
-                        break
                     }
+                case .failure(_):
+                    print("失敗！")
+                    break
                 }
-            case .failure(_):
-                print("失敗！")
-                break
             }
         }
     }
@@ -312,7 +317,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         sexButton.layer.cornerRadius = 5
         ageButton.backgroundColor = UIColor(named: "CulturedWhite")
         ageButton.layer.cornerRadius = 5
-
+        
     }
     
     func setupLottie() {
