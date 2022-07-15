@@ -65,6 +65,9 @@ public var isUserBlocked: Bool = false
 class AdoptionViewController: UIViewController {
     
     let database = Firestore.firestore()
+    let selectedBackgroundView = UIView()
+    var publishButton = UIButton()
+    var refreshControl: UIRefreshControl!
     var databaseRef: DatabaseReference!
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -73,8 +76,6 @@ class AdoptionViewController: UIViewController {
     }
     var adoptionFirebaseModel = AdoptionModel()
     var userData: UserModel?
-    var publishButton = UIButton()
-    let selectedBackgroundView = UIView()
     var adoptionList = [AdoptionModel]()
     
     enum Adoption: String {
@@ -123,11 +124,13 @@ class AdoptionViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .clear
         setButtonLayout()
         fetchData()
+        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchData()
+//        refresh()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
@@ -170,7 +173,7 @@ class AdoptionViewController: UIViewController {
         self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
     }
     
-    func fetchData() {
+    @objc func fetchData() {
         if let uid = Auth.auth().currentUser?.uid {
             database.collection("User").document(uid).getDocument { snapshot, error in
                 guard let snapshot = snapshot,
@@ -197,6 +200,7 @@ class AdoptionViewController: UIViewController {
                                     return time0 > time1
                                 }
                             }
+                            self?.refreshControl!.endRefreshing()
                         }
                     }
             }
@@ -213,8 +217,15 @@ class AdoptionViewController: UIViewController {
                         print("============\(document.data())")
                     }
                 }
+                self?.refreshControl!.endRefreshing()
             }
         }
+    }
+    
+    func refresh() {
+        refreshControl = UIRefreshControl()
+        tableView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(fetchData), for: UIControl.Event.valueChanged)
     }
     
     func showLoginVC() {

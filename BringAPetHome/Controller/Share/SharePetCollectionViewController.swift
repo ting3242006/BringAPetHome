@@ -13,11 +13,13 @@ class SharePetCollectionViewController: UICollectionViewController {
     var shareManager = ShareManager()
     var shareList = [ShareModel]()
     var publishButton = UIButton()
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setButtonLayout()
         configureCellSize()
+        refresh()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -35,17 +37,24 @@ class SharePetCollectionViewController: UICollectionViewController {
         self.navigationController?.pushViewController(postSharingVC, animated: true)
     }
     
-    func getData() {
+    @objc func getData() {
         shareManager.fetchSharing(completion: { shareList in
 
             self.shareList = shareList ?? []
             self.shareList.sort {
                 $0.createdTime.seconds > $1.createdTime.seconds
             }
+            self.refreshControl.endRefreshing()
             UIView.performWithoutAnimation {
                 self.collectionView.reloadData()
             }
         })
+    }
+    
+    func refresh() {
+        refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(getData), for: UIControl.Event.valueChanged)
     }
     
     func setButtonLayout() {

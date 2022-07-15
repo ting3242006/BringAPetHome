@@ -13,6 +13,7 @@ class ShareDetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let selectedBackgroundView = UIView()
+    var refreshControl: UIRefreshControl!
     var shareManager = ShareManager()
     var dataBase = Firestore.firestore()
     var shareList = [ShareModel]()
@@ -34,6 +35,7 @@ class ShareDetailViewController: UIViewController {
         tableView.dataSource = self
         
         setButtonLayout()
+        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,31 +103,25 @@ class ShareDetailViewController: UIViewController {
     }
     
     func refresh() {
-        let refreshControl = UIRefreshControl()
-        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.yellow]
-        refreshControl.attributedTitle = NSAttributedString(string: "正在更新", attributes: attributes)
-        refreshControl.tintColor = UIColor.white
-        refreshControl.backgroundColor = UIColor.black
+        refreshControl = UIRefreshControl()
         tableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(fetchData), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(fetchShareData), for: UIControl.Event.valueChanged)
     }
     
-    @objc func fetchData() {
-//        guard let userData = userData else {
-//            return
-//        }
-        shareManager.fetchSharing(completion: { shareList in
-            self.shareList = shareList ?? []
-            self.tableView.reloadData()
-        })
-    }
+//    @objc func fetchData() {
+//        shareManager.fetchSharing(completion: { shareList in
+//            self.shareList = shareList ?? []
+//            self.tableView.reloadData()
+//        })
+//    }
     
-    func fetchShareData() {
+    @objc func fetchShareData() {
         shareManager.fetchSharing(completion: { shareList in
             self.shareList = shareList ?? []
             self.shareList.sort {
                 $0.createdTime.seconds > $1.createdTime.seconds
             }
+            self.refreshControl.endRefreshing()
             self.tableView.reloadData()
             let index = self.shareList.firstIndex {
                 $0.postId == self.shareItem?.postId
