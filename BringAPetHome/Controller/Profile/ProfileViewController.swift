@@ -28,7 +28,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         selectedBackgroundView.backgroundColor = UIColor.clear
-        setCoverImageGradient()
         tableView.dataSource = self
         tableView.delegate = self
         //        tableView.backgroundColor = .orange
@@ -69,10 +68,12 @@ class ProfileViewController: UIViewController {
         //        showLoginVC()
         if Auth.auth().currentUser == nil {
             showLoginVC()
-            userImageView.image = UIImage(named: "dketch-4")
+//            userImageView.image = UIImage(named: "dketch-4")
             userNameLabel.text = "暱稱"
+            logoutBarButton.tintColor = UIColor.clear
             logoutBarButton.isEnabled = false
         } else {
+            logoutBarButton.tintColor = nil
             logoutBarButton.isEnabled = true
             return
         }
@@ -120,13 +121,6 @@ class ProfileViewController: UIViewController {
         self.navigationController?.present(loginVC, animated: true)
     }
     
-    func setCoverImageGradient() {
-        gradient.frame = coverImageView.bounds
-        gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.2).cgColor]
-        gradient.locations = [1, 0.2, 0]
-        coverImageView.layer.addSublayer(gradient)
-    }
-    
     func getUserProfile() {
         if Auth.auth().currentUser != nil {
             UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
@@ -134,14 +128,14 @@ class ProfileViewController: UIViewController {
                 case let .success(user):
                     self.userData = user
                     let urls = self.userData?.image
-                    self.userImageView.kf.setImage(with: URL(string: urls ?? ""), placeholder: UIImage(named: "dketch-4"))
+                    self.userImageView.kf.setImage(with: URL(string: urls ?? ""))
                     self.userNameLabel.text = self.userData?.name
                 case .failure(_):
                     print("Error")
                 }
             }
         } else {
-            userImageView.image = UIImage(named: "dketch-4")
+//            userImageView.image = UIImage(named: "dketch-4")
             userNameLabel.text = "暱稱"
             
         }

@@ -63,6 +63,7 @@ class ShareManager {
                       let userModel = try? snapshot.data(as: UserModel.self) else {
                     return
                 }
+                
                 self.dataBase.collection("Share").whereField("userUid", notIn: userModel.blockedUser).order(by: "userUid").order(by: "createdTime", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
 
                     guard let querySnapshot = querySnapshot else {
@@ -71,14 +72,18 @@ class ShareManager {
                     self?.shareList.removeAll()
                     for document in querySnapshot.documents {
                         let shareObject = document.data(with: ServerTimestampBehavior.none)
-                        let shareTime = shareObject["createdTime"] as? Int ?? 0
+                        guard let shareTime = shareObject["createdTime"] as? Timestamp else { return }
                         let shareImage = shareObject["image"] as? String ?? ""
                         let sharePostId = shareObject["postId"] as? String ?? ""
                         let shareContent = shareObject["shareContent"] as? String ?? ""
                         let shareUserUid = shareObject["userUid"] as? String ?? ""
                         
-                        let share = ShareModel(shareContent: shareContent, shareImageUrl: shareImage,
-                                               postId: sharePostId, createdTime: shareTime, userUid: shareUserUid)
+                        let share = ShareModel(shareContent: shareContent,
+                                               shareImageUrl: shareImage,
+                                               postId: sharePostId,
+                                               createdTime: shareTime,
+                                               userUid: shareUserUid)
+                        
                         self?.shareList.append(share)
                     }
                     completion(self?.shareList)
@@ -93,7 +98,9 @@ class ShareManager {
                 self.shareList.removeAll()
                 for document in querySnapshot.documents {
                     let shareObject = document.data(with: ServerTimestampBehavior.none)
-                    let shareTime = shareObject["createdTime"] as? Int ?? 0
+                    guard let shareTime = shareObject["createdTime"] as? Timestamp else { return }
+
+//                    let shareTime = shareObject["createdTime"] as? Int ?? 0
                     let shareImage = shareObject["image"] as? String ?? ""
                     let sharePostId = shareObject["postId"] as? String ?? ""
                     let shareContent = shareObject["shareContent"] as? String ?? ""
@@ -224,7 +231,7 @@ class ShareManager {
             self.shareList.removeAll()
             for document in querySnapshot.documents {
                 let shareObject = document.data(with: ServerTimestampBehavior.none)
-                let shareTime = shareObject["createdTime"] as? Int ?? 0
+                guard let shareTime = shareObject["createdTime"] as? Timestamp else { return }
                 let shareImage = shareObject["image"] as? String ?? ""
                 let sharePostId = shareObject["postId"] as? String ?? ""
                 let shareContent = shareObject["shareContent"] as? String ?? ""

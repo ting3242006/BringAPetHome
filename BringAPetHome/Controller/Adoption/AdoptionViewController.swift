@@ -59,11 +59,15 @@ enum Petable: Int, Codable {
         }
     }
 }
+
 public var isUserBlocked: Bool = false
 
 class AdoptionViewController: UIViewController {
     
     let database = Firestore.firestore()
+    let selectedBackgroundView = UIView()
+    var publishButton = UIButton()
+    var refreshControl: UIRefreshControl!
     var databaseRef: DatabaseReference!
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -72,8 +76,7 @@ class AdoptionViewController: UIViewController {
     }
     var adoptionFirebaseModel = AdoptionModel()
     var userData: UserModel?
-    var publishButton = UIButton()
-    let selectedBackgroundView = UIView()
+    var adoptionList = [AdoptionModel]()
     
     enum Adoption: String {
         case age = "age"
@@ -115,11 +118,19 @@ class AdoptionViewController: UIViewController {
         databaseRef = Database.database().reference().child("Adoption")
         tableView.dataSource = self
         tableView.delegate = self
-        fetchData()
+        
         tableView.reloadData()
         selectedBackgroundView.backgroundColor = UIColor.clear
         navigationController?.navigationBar.backgroundColor = .clear
         setButtonLayout()
+        fetchData()
+        refresh()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchData()
+//        refresh()
     }
     
     @IBAction func addAdoptionArticles(_ sender: Any) {
@@ -162,7 +173,7 @@ class AdoptionViewController: UIViewController {
         self.navigationController?.pushViewController(publishAdoptionViewController, animated: true)
     }
     
-    func fetchData() {
+    @objc func fetchData() {
         if let uid = Auth.auth().currentUser?.uid {
             database.collection("User").document(uid).getDocument { snapshot, error in
                 guard let snapshot = snapshot,
@@ -173,20 +184,27 @@ class AdoptionViewController: UIViewController {
                 print("userModel.blockedUser", userModel.blockedUser)
                 self.database.collection("Adoption").whereField("userId", notIn: userModel.blockedUser).order(by: "userId")
                     .order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
-                    self?.dbModels = []
-                    if let error = error {
-                        print("Error fetching documents: \(error)")
-                    } else {
-                        print("querySnapshot!.documents", querySnapshot!.documents.count)
-                        for document in querySnapshot!.documents {
-                            //                    self?.userData.
-                            self?.dbModels.insert(document.data(), at: 0)
-                            print("============\(document.data())")
+                        self?.dbModels = []
+                        if let error = error {
+                            print("Error fetching documents: \(error)")
+                        } else {
+                            print("querySnapshot!.documents", querySnapshot!.documents.count)
+                            for document in querySnapshot!.documents {
+                                self?.dbModels.insert(document.data(), at: 0)
+                                print("============\(document.data())")
+                                self?.dbModels.sort {
+                                    let time0Number = $0["createdTime"] as? Double ?? 0.0
+                                    let time0 = Date(timeIntervalSince1970: time0Number)
+                                    let time1Number = $1["createdTime"] as? Double ?? 0.0
+                                    let time1 = Date(timeIntervalSince1970: time1Number)
+                                    return time0 > time1
+                                }
+                            }
+                            self?.refreshControl!.endRefreshing()
                         }
                     }
-                }
             }
-        } else {            
+        } else {
             self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
                 self?.dbModels = []
                 if let error = error {
@@ -199,8 +217,15 @@ class AdoptionViewController: UIViewController {
                         print("============\(document.data())")
                     }
                 }
+                self?.refreshControl!.endRefreshing()
             }
         }
+    }
+    
+    func refresh() {
+        refreshControl = UIRefreshControl()
+        tableView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(fetchData), for: UIControl.Event.valueChanged)
     }
     
     func showLoginVC() {
@@ -218,14 +243,17 @@ class AdoptionViewController: UIViewController {
             let firebaseData = dbModels[indexPath.row]
             controller?.adoptionId = firebaseData[Adoption.postId.rawValue] as? String ?? ""
             //            controller.userData?.blockedUser = firebaseData[User[blockedUser].rawValue] as [String] ?? ""
+            tabBarController?.tabBar.isHidden = true
         }
         return controller
     }
     
     func confirmBlocked(userId: String) {
-        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎?", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.database.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])
+            self.fetchData()
+            self.tableView.reloadData()
         }
         let noAction = UIAlertAction(title: "取消", style: .cancel)
         
@@ -233,6 +261,7 @@ class AdoptionViewController: UIViewController {
         alert.addAction(yesAction)
         
         present(alert, animated: true, completion: nil)
+        
     }
     
     func checkBlockedUser() {
@@ -290,7 +319,8 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
         
         //        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
         //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "")
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        //        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")") { result in
             switch result {
             case let .success(user):
                 self.userData = user
@@ -318,6 +348,7 @@ extension AdoptionViewController: AdoptionTableViewCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else {
             return
         }
-        self.confirmBlocked(userId: Auth.auth().currentUser?.uid ?? "")
+        let firebaseData = dbModels[indexPath.row]
+        self.confirmBlocked(userId: "\(firebaseData[Adoption.userId.rawValue] ?? "")")
     }
 }

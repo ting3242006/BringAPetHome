@@ -22,7 +22,6 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tabBarController?.tabBar.isHidden = true
         self.navigationItem.title = "收容所位置"
         //myLocationManager.requestWhenInUseAuthorization()
 //        myMapView.showsUserLocation = true
@@ -76,6 +75,11 @@ class MapViewController: UIViewController {
         super.viewDidDisappear(animated)
         // 停止定位自身位置
         myLocationManager.stopUpdatingLocation()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     @IBAction func showLocation(_ sender: Any) {

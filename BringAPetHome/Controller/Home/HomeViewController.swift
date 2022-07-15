@@ -56,10 +56,12 @@ class HomeViewController: UIViewController {
         header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
         self.collectionView.mj_header = header
 //        layoutLottie()
+        updateNavBarColor()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+        updateNavBarColor()
     }
     
     @objc func headerRefresh() {
@@ -96,10 +98,10 @@ class HomeViewController: UIViewController {
                                                                 target: self,
                                                                 action: #selector(didTap))
         }
-        
     }
     
     func fetchData() {
+        self.setupLottie()
         ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
             switch result {
             case .success(let animalDatas):
@@ -107,25 +109,34 @@ class HomeViewController: UIViewController {
                 // 把沒照片的排到後面
                 self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
                 })
-                //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
-                //                })
-//                DispatchQueue.main.async {
-//                    self?.setupLottie()
-//                }
             case .failure(let error):
                 print(error)
             }
         }
     }
     
+    func updateNavBarColor() {
+            if #available(iOS 15.0, *) {
+                let barAppearance = UINavigationBarAppearance()
+                barAppearance.configureWithOpaqueBackground()
+                barAppearance.backgroundColor = UIColor(named: "CulturedWhite")
+                        navigationController?.navigationBar.standardAppearance = barAppearance
+                navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+                navigationController?.navigationBar.compactAppearance = barAppearance
+                navigationController?.navigationBar.compactScrollEdgeAppearance = barAppearance
+            } else {
+                navigationController?.navigationBar.barTintColor = UIColor(named: "CulturedWhite")
+            }
+        }
+    
     func setupLottie() {
-        let animationView = AnimationView(name: "92612-cats-cats-cats")
-        animationView.frame = CGRect(x: 0, y: 0, width: UIScreen.width, height: 350)
+        let animationView = AnimationView(name: "lf30_editor_wgvv5jrs")
+        animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
         
         view.addSubview(animationView)
-        animationView.play(fromFrame: 173, toFrame: 255, loopMode: .playOnce, completion: { (finished) in
+        animationView.play(fromFrame: 0, toFrame: 288, loopMode: .playOnce, completion: { (finished) in
             animationView.isHidden = true
         })
     }
@@ -156,11 +167,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if newAnimalList.isEmpty {
-            //            print(":)))\(animalDatas.count)")
             return animalDatas.count
             
         } else {
-            //            print("~~~\(newAnimalList.count)")
             return newAnimalList.count
         }
     }
@@ -261,9 +270,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
-        
-        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self] result  in
+        self.setupLottie()
+        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self]
+            result  in
+            
             switch result {
+
             case .success(let animalDatas):
                 self?.animalDatas = animalDatas
                 // 把沒照片的排到後面

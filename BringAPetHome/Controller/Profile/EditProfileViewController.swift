@@ -18,15 +18,21 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var deleteAccountButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
     
+    let dataBase = Firestore.firestore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
     }
     
     @IBAction func deleteAccount(_ sender: Any) {
-        let alert  = UIAlertController(title: "刪除帳號", message: "確定要刪除嗎?", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "刪除帳號", message: "確定要刪除嗎? 如要刪除，請先登出再登入一次", preferredStyle: .alert)
                let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
+                   self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").delete()
                    self.deleteAccount()
+                   
+                   let vc = ProfileViewController()
+                       self.present(vc, animated: true)
                }
                let noAction = UIAlertAction(title: "取消", style: .cancel)
 
@@ -41,6 +47,21 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
         self.navigationController?.pushViewController(homeVC, animated: true)
+    }
+    
+    func deleteShare() {
+        let documentRef = dataBase.collection("Share").whereField("userUid", isEqualTo: Auth.auth().currentUser?.uid ?? "").getDocuments { querySnapshot, error in
+            if error != nil {
+                print("Error")
+            } else {
+                guard let querySnapshot = querySnapshot else {
+                    return
+                }
+                for doc in querySnapshot.documents {
+                    doc.reference.delete()
+                }
+            }
+        }
     }
     
     @IBAction func uploadInfo(_ sender: Any) {
