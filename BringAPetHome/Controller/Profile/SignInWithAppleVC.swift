@@ -32,13 +32,13 @@ class SignInWithAppleVC: UIViewController {
         self.observeAppleIDState()
         self.checkAppleIDCredentialState(userID: appleUserID ?? "")
         
-        Auth.auth().addStateDidChangeListener { auth, user in
-            if let user = user {
-                print("\(user.uid) login")
-            } else {
-                print("not login")
-            }
-        }
+//        Auth.auth().addStateDidChangeListener { auth, user in
+//            if let user = user {
+//                print("\(user.uid) login")
+//            } else {
+//                print("not login")
+//            }
+//        }
         let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
         //        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
         changeRequest?.commitChanges(completion: { error in
@@ -62,9 +62,6 @@ class SignInWithAppleVC: UIViewController {
                 return
             }
         }
-        let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
-        animatedIconImage.image = animatedImage
-        animatedIconImage.layer.cornerRadius = 20
         
         playVideo()
     }
@@ -75,6 +72,9 @@ class SignInWithAppleVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         bgView.layer.cornerRadius = 25
+        let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
+        animatedIconImage.image = animatedImage
+        animatedIconImage.layer.cornerRadius = 30
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
@@ -256,32 +256,30 @@ extension SignInWithAppleVC {
         self.dismiss(animated: true)
         presentingViewController?.viewWillAppear(true)
     }
-    
-    
+        
     func checkUserEmail(userId: String) {
         print("checkUserEmail")
         let dataBase = Firestore.firestore()
         dataBase.collection("User").whereField("id", isEqualTo: userId).getDocuments { (querySnapshot, _) in
-            print(querySnapshot, querySnapshot?.documents.count)
             
             if let querySnapshot = querySnapshot {
                 if let document = querySnapshot.documents.first {
                     for data in querySnapshot.documents {
-                        let userData = data.data(with: ServerTimestampBehavior.none)
-                        let userName = userData["name"] as? String ?? ""
-                        let userEmail = userData["email"] as? String ?? ""
-                        let userId = userData["id"] as? String ?? ""
-                        let userImage = userData["image"] as? String ?? ""
-                        let blockList = userData["blockedUser"] as? [String] ?? [""]
-                        
-                        let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockList)
+//                        let userData = data.data(with: ServerTimestampBehavior.none)
+//                        let userName = userData["name"] as? String ?? ""
+//                        let userEmail = userData["email"] as? String ?? ""
+//                        let userId = userData["id"] as? String ?? ""
+//                        let userImage = userData["image"] as? String ?? ""
+//                        let blockList = userData["blockedUser"] as? [String] ?? [""]
+//
+//                        let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockList)
                     }
                     print("Account is exist")
                 } else {
                     UserFirebaseManager.shared.addUser(name: "name",
                                                        uid: Auth.auth().currentUser?.uid ?? "",
                                                        email: Auth.auth().currentUser?.email ?? "",
-                                                       image: "image", blockedUser: ["blockedUser"])
+                                                       image: "image", blockedUser: [""])
                 }
             }
         }

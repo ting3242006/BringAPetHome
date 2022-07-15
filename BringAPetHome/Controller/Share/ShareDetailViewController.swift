@@ -13,6 +13,7 @@ class ShareDetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let selectedBackgroundView = UIView()
+    var refreshControl: UIRefreshControl!
     var shareManager = ShareManager()
     var dataBase = Firestore.firestore()
     var shareList = [ShareModel]()
@@ -32,45 +33,15 @@ class ShareDetailViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-//        guard let userData = userData else {
-//            return
-//        }
-//
-//        UserFirebaseManager.shared.fetchUser(userId: user ?? "") { result in
-//            switch result {
-//            case let .success(user):
-////                self.userData = user
-//                let url = user.imageURLString
-//                userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
-//                userNameLabel.text = user.name
-//
-//                self.shareManager.fetchSharing(blockedUser: userData.blockedUser ,completion: { shareList in
-//                    self.shareList = shareList ?? []
-//                    self.tableView.reloadData()
-//                    let index = self.shareList.firstIndex {
-//                        $0.postId == self.shareItem?.postId
-//                    }
-//                    if let index = index {
-//                        self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
-//                    }
-//                })
-//            case .failure(_):
-//                print("Error")
-//            }
-//        }
-
-        shareManager.fetchSharing(completion: { shareList in
-            self.shareList = shareList ?? []
-            self.tableView.reloadData()
-            let index = self.shareList.firstIndex {
-                $0.postId == self.shareItem?.postId
-            }
-            if let index = index {
-                self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
-            }
-        })
-        //        refresh()
+        
         setButtonLayout()
+        refresh()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchShareData()
+        tabBarController?.tabBar.isHidden = false
     }
     
     @IBAction func showComment(_ sender: Any) {
@@ -90,6 +61,7 @@ class ShareDetailViewController: UIViewController {
             controller?.postId = shareModel.postId
             //            let userData = userData[indexPath.row]
             //            controller.userData?.blockedUser = userData.blockedUser
+            tabBarController?.tabBar.isHidden = true
         }
         return controller
     }
@@ -131,29 +103,41 @@ class ShareDetailViewController: UIViewController {
     }
     
     func refresh() {
-        let refreshControl = UIRefreshControl()
-        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.yellow]
-        refreshControl.attributedTitle = NSAttributedString(string: "正在更新", attributes: attributes)
-        refreshControl.tintColor = UIColor.white
-        refreshControl.backgroundColor = UIColor.black
+        refreshControl = UIRefreshControl()
         tableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(fetchData), for: UIControl.Event.valueChanged)
+        refreshControl.addTarget(self, action: #selector(fetchShareData), for: UIControl.Event.valueChanged)
     }
     
-    @objc func fetchData() {
-//        guard let userData = userData else {
-//            return
-//        }
+//    @objc func fetchData() {
+//        shareManager.fetchSharing(completion: { shareList in
+//            self.shareList = shareList ?? []
+//            self.tableView.reloadData()
+//        })
+//    }
+    
+    @objc func fetchShareData() {
         shareManager.fetchSharing(completion: { shareList in
             self.shareList = shareList ?? []
+            self.shareList.sort {
+                $0.createdTime.seconds > $1.createdTime.seconds
+            }
+            self.refreshControl.endRefreshing()
             self.tableView.reloadData()
+            let index = self.shareList.firstIndex {
+                $0.postId == self.shareItem?.postId
+            }
+            if let index = index {
+                self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .top, animated: false)
+            }
         })
     }
     
     func confirmBlocked(userId: String) {
-        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎?", preferredStyle: .alert)
+        let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])
+            self.fetchShareData()
+            self.tableView.reloadData()
         }
         let noAction = UIAlertAction(title: "取消", style: .cancel)
         
@@ -161,6 +145,7 @@ class ShareDetailViewController: UIViewController {
         alert.addAction(yesAction)
         
         present(alert, animated: true, completion: nil)
+        tableView.reloadData()
     }
 }
 // DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
@@ -207,6 +192,7 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
 extension ShareDetailViewController: ShareDetailTableViewCellDelegate {
     func tappedBlock(_ cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
+        print("confirmBlocked", shareList[indexPath.row].userUid)
         self.confirmBlocked(userId: shareList[indexPath.row].userUid)
     }
 }

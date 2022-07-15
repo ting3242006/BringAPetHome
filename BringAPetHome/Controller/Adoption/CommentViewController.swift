@@ -33,7 +33,8 @@ class CommentViewController: UIViewController {
             tableView.reloadData()
         }
     }
-//    var postId: String
+    var blackView = UIView(frame: UIScreen.main.bounds)
+    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var bgView: UIView!
@@ -44,7 +45,22 @@ class CommentViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         bgView.layer.cornerRadius = 25
+        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         fetchCommetData()
+        blackViewDynamic()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchCommetData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        dismiss(animated: true)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0
+        }
     }
     
     @IBAction func sendComment(_ sender: Any) {
@@ -66,7 +82,14 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func closePopVC(_ sender: Any) {
-        dismiss(animated: true)
+//        dismiss(animated: true)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0
+        }
+        let presentingVC = self.presentingViewController
+        self.dismiss(animated: false) {
+            presentingVC?.tabBarController?.tabBar.isHidden = false
+        }
     }
     
     func showLoginVC() {
@@ -86,9 +109,8 @@ class CommentViewController: UIViewController {
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
-//            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
-            Comments.userUid.rawValue: userData?.id
-            
+            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
+//            Comments.userUid.rawValue: userData?.id            
 //            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
@@ -108,10 +130,18 @@ class CommentViewController: UIViewController {
                 print("Error fetching documents: \(error)")
             } else {
                 for document in querySnapshot!.documents {
-                    self?.dbModels.insert(document.data(), at: 0)
-                    print("3333\(self?.dbModels.count)")
+                    let commentDic = document.data()
+//                    commentDic["profileUrlString"] = "profileUrlString"
+//                    commentDic[Comments.userUid.rawValue]
+//                    { result in
+//                        switch result {
+//                        case let .success(user):
+//                            self.userData = user
+                    self?.dbModels.insert(commentDic, at: 0)
+//                        case .failure(_):
+//                            print("Error")
+//                        }
                 }
-                print("4444\(self?.dbModels.count)")
             }
         }
     }
@@ -127,6 +157,22 @@ class CommentViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func blackViewDynamic() {
+        blackView.backgroundColor = .black
+        blackView.alpha = 0
+        blackView.isUserInteractionEnabled = true
+        blackView.addGestureRecognizer(tapGestureRecognizer)
+        presentingViewController?.view.addSubview(blackView)
+        UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
+            self.blackView.alpha = 0.5
+        }
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController(_:)))
+    }
+    
+    @objc func dismissController(_ sender: UITapGestureRecognizer) {
+        self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -153,7 +199,8 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            date: formatter.string(from: date as Date))
         
 //        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
-        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { result in
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
+        { result in
             switch result {
             case let .success(user):
                 self.userData = user

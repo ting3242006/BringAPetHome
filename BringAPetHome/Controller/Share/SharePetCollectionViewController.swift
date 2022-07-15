@@ -13,27 +13,18 @@ class SharePetCollectionViewController: UICollectionViewController {
     var shareManager = ShareManager()
     var shareList = [ShareModel]()
     var publishButton = UIButton()
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setButtonLayout()
         configureCellSize()
-        //        guard let userData = userData else {
-        //            return
-        //        }
-
-        shareManager.fetchSharing(completion: { shareList in
-            self.shareList = shareList ?? []
-            self.collectionView.reloadData()
-        })
+        refresh()
     }
-    //    guard let userData = userData else {
-    //        return
-    //    }
-    override func viewDidAppear(_ animated: Bool) {
-        shareManager.fetchSharing(completion: { shareList in self.shareList = shareList ?? []
-            self.collectionView.reloadData()
-        })
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getData()
     }
     
     @IBAction func goSharingPost(_ sender: Any) {
@@ -44,6 +35,26 @@ class SharePetCollectionViewController: UICollectionViewController {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let postSharingVC = mainStoryboard.instantiateViewController(withIdentifier: "PostSharingViewController") as? PostSharingViewController else { return }
         self.navigationController?.pushViewController(postSharingVC, animated: true)
+    }
+    
+    @objc func getData() {
+        shareManager.fetchSharing(completion: { shareList in
+
+            self.shareList = shareList ?? []
+            self.shareList.sort {
+                $0.createdTime.seconds > $1.createdTime.seconds
+            }
+            self.refreshControl.endRefreshing()
+            UIView.performWithoutAnimation {
+                self.collectionView.reloadData()
+            }
+        })
+    }
+    
+    func refresh() {
+        refreshControl = UIRefreshControl()
+        collectionView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(getData), for: UIControl.Event.valueChanged)
     }
     
     func setButtonLayout() {
@@ -117,8 +128,8 @@ class SharePetCollectionViewController: UICollectionViewController {
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShareCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? ShareCollectionViewCell else { return UICollectionViewCell() }
-        let urls = shareList[indexPath.row].shareImageUrl
-        cell.shareImage.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
+        let url = shareList[indexPath.row].shareImageUrl
+        cell.shareImage.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
         
         return cell
     }

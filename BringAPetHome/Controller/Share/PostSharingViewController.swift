@@ -51,26 +51,34 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     @IBAction func sentSharingPost(_ sender: Any) {
-        postBarButton.isEnabled = false
-        setupLottie()
-        guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.5) else { return }
-        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        
-        fileReference.putData(imageData, metadata: nil) { result in
-            switch result {
-            case .success:
-                fileReference.downloadURL { [self] result in
-                    switch result {
-                    case .success(let url):
-                        let userUid = Auth.auth().currentUser?.uid ?? ""
-                        shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
-                    case .failure:
-                        break
+        if shareImageView.image == nil || shareTextView.text == "" {
+            let alert = UIAlertController(title: "錯誤", message: "請輸入內容",   preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "確認", style: .default))
+            self.present(alert, animated: true)
+        } else {            
+            guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.3) else { return }
+            let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
+            
+            self.postBarButton.isEnabled = false
+            self.setupLottie()
+            
+            fileReference.putData(imageData, metadata: nil) { result in
+                switch result {
+                case .success:
+                    
+                    fileReference.downloadURL { [self] result in
+                        switch result {
+                        case .success(let url):
+                            let userUid = Auth.auth().currentUser?.uid ?? ""
+                            shareManager.addSharing(uid: userUid, shareContent: shareTextView.text, image: "\(url)")
+                        case .failure:
+                            break
+                        }
+                        navigationController?.popToRootViewController(animated: true)
                     }
-                    navigationController?.popToRootViewController(animated: true)
+                case .failure:
+                    break
                 }
-            case .failure:
-                break
             }
         }
     }
@@ -127,24 +135,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model failed to process image.")
             }
-            //            let filteredResult = results.contains(where: { observation in
-            //                observation.identifier == "cat" || observation.identifier == "dog"
-            //            })
-            //
-            //            print(filteredResult)
-            //            enum Animal {
-            //                case dog(String)
-            //                case cat(String)
-            //            }
-            //            let animals: [Animal] = [.cat("cat"), .dog("dog")]
-            let animals = ["cat", "Border collie", "bird"]
-            //            let animalData = "This is animalData"
-            //            let result = !animals.filter({ animalData.contains($0)}).isEmpty
             if let firstResult = results.first {
                 print("firstResult", firstResult.identifier)
-                //                if firstResult.identifier.contains(where: animalData.contains) {
+
                 if firstResult.identifier.contains("cat") {
-//                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("Border collie") {
                     self.correctAnimation()
@@ -170,7 +164,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
-//                    self.postBarButton.isEnabled = false
+                    //                    self.postBarButton.isEnabled = false
                 }
                 
             }
@@ -194,7 +188,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func setupLottie() {
-        let animationView = AnimationView(name: "lf20_x0zdphwq")
+        let animationView = AnimationView(name: "lf30_editor_5phd8cww")
         animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
@@ -204,7 +198,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func correctAnimation() {
-        let animationView = AnimationView(name: "lf20_nq4j1vj5")
+        let animationView = AnimationView(name: "lf30_editor_yqqlpukj")
         animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
@@ -214,14 +208,4 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             animationView.isHidden = true
         })
     }
-    //    let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
-    //           let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
-    //               self.deleteAccount()
-    //           }
-    //           let noAction = UIAlertAction(title: "Cancel", style: .cancel)
-    //
-    //           alert.addAction(noAction)
-    //           alert.addAction(yesAction)
-    //
-    //           present(alert, animated: true, completion: nil)
 }

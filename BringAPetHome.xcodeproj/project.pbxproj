@@ -30,11 +30,7 @@
 		251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251CF7FE28586FC7004BDEC9 /* HomeViewController.swift */; };
 		251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80028586FC7004BDEC9 /* Main.storyboard */; };
 		251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */; };
-		251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */; };
 		251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251FF2B02876BB64005945A1 /* EULAViewController.swift */; };
-		251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */; };
-		251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */; };
-		251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */; };
 		251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */; };
 		2529E4F92871E4BB00373C90 /* Time+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2529E4F82871E4BB00373C90 /* Time+Extension.swift */; };
 		252D807C28597CFE0076236B /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */; };
@@ -46,6 +42,9 @@
 		25317A4C28741AF1003093C7 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */; };
 		25349ABD286C484A00C5F76B /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25349ABC286C484A00C5F76B /* EditProfileViewController.swift */; };
 		253773BE285AE5B300B28A3D /* HomeDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */; };
+		253E18A3287ECE48000A1808 /* lf30_editor_5phd8cww.json in Resources */ = {isa = PBXBuildFile; fileRef = 253E18A2287ECE48000A1808 /* lf30_editor_5phd8cww.json */; };
+		253E18A5287ECF23000A1808 /* lf30_editor_yqqlpukj.json in Resources */ = {isa = PBXBuildFile; fileRef = 253E18A4287ECF23000A1808 /* lf30_editor_yqqlpukj.json */; };
+		253E18A7287ECFDF000A1808 /* lf30_editor_wgvv5jrs.json in Resources */ = {isa = PBXBuildFile; fileRef = 253E18A6287ECFDF000A1808 /* lf30_editor_wgvv5jrs.json */; };
 		254861B62865AE7B00A4C177 /* ShareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */; };
 		256793AE2871684E00703002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 256793AD2871684B00703002 /* Assets.xcassets */; };
 		2577885C28733BF700B888A1 /* Inceptionv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */; };
@@ -90,11 +89,7 @@
 		251CF80128586FC7004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		251CF80628586FC8004BDEC9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		251CF80828586FC8004BDEC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "92612-cats-cats-cats.json"; sourceTree = "<group>"; };
 		251FF2B02876BB64005945A1 /* EULAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
-		251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_x0zdphwq.json; sourceTree = "<group>"; };
-		251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf20_nq4j1vj5.json; sourceTree = "<group>"; };
-		251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-ekaterina-bolovtsova-7131682.mp4"; sourceTree = "<group>"; };
 		251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pexels-cottonbro-6853336.mp4"; sourceTree = "<group>"; };
 		2529E4F82871E4BB00373C90 /* Time+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Time+Extension.swift"; sourceTree = "<group>"; };
 		252D807B28597CFE0076236B /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -106,6 +101,9 @@
 		25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		25349ABC286C484A00C5F76B /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		253773BD285AE5B300B28A3D /* HomeDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailTableViewCell.swift; sourceTree = "<group>"; };
+		253E18A2287ECE48000A1808 /* lf30_editor_5phd8cww.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_5phd8cww.json; sourceTree = "<group>"; };
+		253E18A4287ECF23000A1808 /* lf30_editor_yqqlpukj.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_yqqlpukj.json; sourceTree = "<group>"; };
+		253E18A6287ECFDF000A1808 /* lf30_editor_wgvv5jrs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lf30_editor_wgvv5jrs.json; sourceTree = "<group>"; };
 		254861B52865AE7B00A4C177 /* ShareCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCollectionViewCell.swift; sourceTree = "<group>"; };
 		256793AD2871684B00703002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = Inceptionv3.mlmodel; sourceTree = "<group>"; };
@@ -204,9 +202,9 @@
 				251CF7FA28586FC7004BDEC9 /* AppDelegate.swift */,
 				251CF7FC28586FC7004BDEC9 /* SceneDelegate.swift */,
 				256793AD2871684B00703002 /* Assets.xcassets */,
-				251FF2AC28768B29005945A1 /* 92612-cats-cats-cats.json */,
-				251FF2B42876E347005945A1 /* lf20_nq4j1vj5.json */,
-				251FF2B22876E269005945A1 /* lf20_x0zdphwq.json */,
+				253E18A2287ECE48000A1808 /* lf30_editor_5phd8cww.json */,
+				253E18A4287ECF23000A1808 /* lf30_editor_yqqlpukj.json */,
+				253E18A6287ECFDF000A1808 /* lf30_editor_wgvv5jrs.json */,
 				2577885B28733BF700B888A1 /* Inceptionv3.mlmodel */,
 				257CA5F128589B2C0009BE17 /* Extension */,
 				25C4818D2858E47D000C6D7F /* Model */,
@@ -272,7 +270,6 @@
 				251CF80028586FC7004BDEC9 /* Main.storyboard */,
 				251CF80528586FC8004BDEC9 /* LaunchScreen.storyboard */,
 				251FF2B92877105E005945A1 /* pexels-cottonbro-6853336.mp4 */,
-				251FF2B72877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -396,13 +393,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				251CF80728586FC8004BDEC9 /* LaunchScreen.storyboard in Resources */,
+				253E18A5287ECF23000A1808 /* lf30_editor_yqqlpukj.json in Resources */,
 				257CA5ED285895620009BE17 /* GoogleService-Info.plist in Resources */,
 				256793AE2871684E00703002 /* Assets.xcassets in Resources */,
+				253E18A3287ECE48000A1808 /* lf30_editor_5phd8cww.json in Resources */,
 				251CF80228586FC7004BDEC9 /* Main.storyboard in Resources */,
-				251FF2AD28768B29005945A1 /* 92612-cats-cats-cats.json in Resources */,
-				251FF2B82877104D005945A1 /* pexels-ekaterina-bolovtsova-7131682.mp4 in Resources */,
-				251FF2B52876E347005945A1 /* lf20_nq4j1vj5.json in Resources */,
-				251FF2B32876E269005945A1 /* lf20_x0zdphwq.json in Resources */,
+				253E18A7287ECFDF000A1808 /* lf30_editor_wgvv5jrs.json in Resources */,
 				251FF2BA2877105E005945A1 /* pexels-cottonbro-6853336.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -684,16 +680,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BringAPetHome/BringAPetHome.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機拍攝動物圖片";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "需要你的同意，才能開啟定位";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿來上傳動物圖片";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿來上傳動物圖片";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -705,12 +701,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -722,14 +718,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BringAPetHome/BringAPetHome.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機拍攝動物圖片";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "需要你的同意，才能開啟定位";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要你的同意，才能寫入相簿來上傳動物圖片";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要你的同意，才能使用相簿來上傳動物圖片";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -741,12 +737,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.YiTing.BringAPetHome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
