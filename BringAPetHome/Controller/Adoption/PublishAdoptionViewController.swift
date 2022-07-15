@@ -267,11 +267,7 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                     fileReference.downloadURL { [self] result in
                         switch result {
                         case .success(let url):
-                            //                        if inputContentTextField.text == "" || locationTextField.text == "" || imageView.image == nil {
-                            //                            let alert = UIAlertController(title: "錯誤", message: "請輸入內容", preferredStyle: .alert)
-                            //                            alert.addAction(UIAlertAction(title: "確認", style: .default))
-                            //                            self.present(alert, animated: true)
-                            //                        } else {
+
                             let userUid = Auth.auth().currentUser?.uid ?? ""
                             let age = selectedAge
                             let sex = selectedSex

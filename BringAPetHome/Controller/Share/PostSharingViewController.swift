@@ -135,24 +135,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             guard let results = request.results as? [VNClassificationObservation] else {
                 fatalError("Model failed to process image.")
             }
-            //            let filteredResult = results.contains(where: { observation in
-            //                observation.identifier == "cat" || observation.identifier == "dog"
-            //            })
-            //
-            //            print(filteredResult)
-            //            enum Animal {
-            //                case dog(String)
-            //                case cat(String)
-            //            }
-            //            let animals: [Animal] = [.cat("cat"), .dog("dog")]
-            let animals = ["cat", "Border collie", "bird"]
-            //            let animalData = "This is animalData"
-            //            let result = !animals.filter({ animalData.contains($0)}).isEmpty
             if let firstResult = results.first {
                 print("firstResult", firstResult.identifier)
-                //                if firstResult.identifier.contains(where: animalData.contains) {
+
                 if firstResult.identifier.contains("cat") {
-                    //                    CustomFunc.customAlert(title: "照片中有動物", message: "", vc: self, actionHandler: nil)
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("Border collie") {
                     self.correctAnimation()
@@ -222,14 +208,4 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             animationView.isHidden = true
         })
     }
-    //    let alert  = UIAlertController(title: "Delete Account", message: "Are you sure?", preferredStyle: .alert)
-    //           let yesAction = UIAlertAction(title: "YES", style: .destructive) { (_) in
-    //               self.deleteAccount()
-    //           }
-    //           let noAction = UIAlertAction(title: "Cancel", style: .cancel)
-    //
-    //           alert.addAction(noAction)
-    //           alert.addAction(yesAction)
-    //
-    //           present(alert, animated: true, completion: nil)
 }

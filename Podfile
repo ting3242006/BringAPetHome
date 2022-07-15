@@ -18,7 +18,6 @@ pod 'Alamofire'
 pod 'FirebaseFirestoreSwift'
 pod 'lottie-ios'
 pod 'Firebase/Crashlytics'
-pod 'LZViewPager', '~> 1.2.5'
 pod 'MJRefresh'
 
 

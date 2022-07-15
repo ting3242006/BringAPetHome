@@ -110,8 +110,7 @@ class CommentViewController: UIViewController {
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
             Comments.userUid.rawValue: Auth.auth().currentUser?.uid
-//            Comments.userUid.rawValue: userData?.id
-            
+//            Comments.userUid.rawValue: userData?.id            
 //            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
@@ -169,10 +168,10 @@ class CommentViewController: UIViewController {
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
             self.blackView.alpha = 0.5
         }
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController))
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController(_:)))
     }
     
-    @objc func dismissController() {
+    @objc func dismissController(_ sender: UITapGestureRecognizer) {
         self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 }

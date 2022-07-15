@@ -109,11 +109,6 @@ class HomeViewController: UIViewController {
                 // 把沒照片的排到後面
                 self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
                 })
-                //                self?.newAnimalList = self!.newAnimalList.filter({ $0.albumFile != ""
-                //                })
-//                DispatchQueue.main.async {
-//                    self?.setupLottie()
-//                }
             case .failure(let error):
                 print(error)
             }
@@ -172,11 +167,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if newAnimalList.isEmpty {
-            //            print(":)))\(animalDatas.count)")
             return animalDatas.count
             
         } else {
-            //            print("~~~\(newAnimalList.count)")
             return newAnimalList.count
         }
     }
