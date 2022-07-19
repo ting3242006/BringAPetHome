@@ -37,7 +37,6 @@ class HomeViewController: UIViewController {
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
-        //        collectionView.isPagingEnabled = true
         collectionView.allowsSelection = true
         
         // style
@@ -55,7 +54,6 @@ class HomeViewController: UIViewController {
         header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
         header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
         self.collectionView.mj_header = header
-//        layoutLottie()
         updateNavBarColor()
     }
     
@@ -71,14 +69,6 @@ class HomeViewController: UIViewController {
         // 结束刷新
         self.collectionView.mj_header?.endRefreshing()
     }
-    
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        navigationController?.isNavigationBarHidden = true // 初始畫面不要顯示 NavigationBar
-    //    }
-    //
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        navigationController?.isNavigationBarHidden = false // 下一頁出現 NavigationBar
-    //    }
     
     private func reloadData() {
         guard Thread.isMainThread == true else {
@@ -168,7 +158,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if newAnimalList.isEmpty {
             return animalDatas.count
-            
         } else {
             return newAnimalList.count
         }
@@ -179,7 +168,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() } // 要拆開寫
-        //        DispatchQueue.main.async {
         let item = self.animalDatas[indexPath.item]
         let url = item.albumFile
         cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
@@ -207,7 +195,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.layer.shadowOffset = CGSize(width: 0, height: 5)
         cell.layer.shadowRadius = 3
         cell.layer.shadowOpacity = 0.3
-        //        }
+
         return cell
     }
     
@@ -224,7 +212,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
               self.pageStatus == .notLoadingMore else { return }
         if scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y) <= -10 {
             self.pageStatus = .loadingMore
-            //            self.collectionView.reloadData {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
                 self.skip += 100
                 print("skip = \(self.skip)")
@@ -232,7 +219,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self.newAnimalList.append(contentsOf: self.animalDatas)
                 self.pageStatus = .notLoadingMore
                 self.collectionView.reloadData()
-                //                }
             }
         }
     }
@@ -249,17 +235,17 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 0
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView,
-//                        layout collectionViewLayout: UICollectionViewLayout,
-//                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 5
-//    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,

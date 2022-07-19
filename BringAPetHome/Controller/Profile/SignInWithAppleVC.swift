@@ -47,9 +47,7 @@ class SignInWithAppleVC: UIViewController {
                 return
             }
         })
-        //        if let user = Auth.auth().currentUser {
-        //           print(user.uid, user.email, user.displayName, user.photoURL)
-        //        }
+        
         // Do any additional setup after loading the view.
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if user != nil {
@@ -62,7 +60,6 @@ class SignInWithAppleVC: UIViewController {
                 return
             }
         }
-        
         playVideo()
     }
     

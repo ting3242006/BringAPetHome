@@ -192,11 +192,18 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("American Staffordshire terrier") {
                     self.correctAnimation()
+                } else if firstResult.identifier.contains("Labrador retriever") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Chihuahua") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("Blenheim spaniel") {
+                    self.correctAnimation()
+                } else if firstResult.identifier.contains("otter hound") {
+                    self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
                     self.postBarButton.isEnabled = false
-                }
-                
+                }                
             }
         }
         let handler = VNImageRequestHandler(ciImage: image)

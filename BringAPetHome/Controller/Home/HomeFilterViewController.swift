@@ -25,6 +25,10 @@ class HomeFilterViewController: UIViewController {
     
     var filter = Filter()
     var delegate: HomeFilterViewControllerDelegate?
+    var selectedButton = UIButton()
+    var dataSource = [String]()
+    let transparentView = UIView()
+    let tableView = UITableView()
     
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var dogButton: UIButton!
@@ -40,20 +44,15 @@ class HomeFilterViewController: UIViewController {
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var colorButton: UIButton!
     
-    let transparentView = UIView()
-    let tableView = UITableView()
-    var selectedButton = UIButton()
-    var dataSource = [String]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-
+        layoutButton()
+        
         view.backgroundColor = .white
         self.navigationItem.title = "篩選"
         self.tabBarController?.tabBar.isHidden = true
-        layoutButton()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left")?
                 .withTintColor(UIColor.darkGray)
@@ -70,10 +69,10 @@ class HomeFilterViewController: UIViewController {
             action: #selector(cleanFilter))
     }
     
-        override func viewWillDisappear(_ animated: Bool) {
-            self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
-        }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
+    }
+    
     
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
@@ -190,7 +189,7 @@ class HomeFilterViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func layoutButton() {
+    private func layoutButton() {
         dogButton.layer.cornerRadius = 15
         dogButton.layer.borderColor = UIColor.lightGray.cgColor
         dogButton.layer.borderWidth = 1
