@@ -19,23 +19,22 @@ class HomeDetailViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var pet: AnimalData?
-    //    var animalDatas = [AnimalData]()
     var skip: Int = 100
     var cllocation = CLLocationCoordinate2D()
     let selectedBackgroundView = UIView()
     let getFile = MapViewController()
     var latitude = 0.0
     var longitude = 0.0
-    func someMethodIWantToCall(cell: UITableViewCell) {
-        let indexPathTapped = tableView.indexPath(for: cell)
-//        let photo = pet[indexPathTapped!.item]
-    }
     var saveAnimal: Animal?
-        
+    
+//    func someMethodIWantToCall(cell: UITableViewCell) {
+//        let indexPathTapped = tableView.indexPath(for: cell)
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        selectedBackgroundView.backgroundColor = UIColor.clear
         self.tabBarController?.tabBar.isHidden = true
+        selectedBackgroundView.backgroundColor = UIColor.clear
         tableView.dataSource = self
         tableView.delegate = self
         tableView.anchor(top: view.topAnchor,
@@ -43,10 +42,6 @@ class HomeDetailViewController: UIViewController {
                          bottom: view.bottomAnchor,
                          trailing: view.trailingAnchor,
                          padding: .init(top: 0, left: 0, bottom: 0, right: 0))
-//        getFile.geocode(address:pet.shelterAddress) { (data, error) in
-//            self.cllocation = data
-//            print(self.cllocation)
-//        }
         
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
@@ -68,7 +63,6 @@ class HomeDetailViewController: UIViewController {
             style: .plain,
             target: self,
             action: #selector(didTapClose))
-//        tableView.automaticallyAdjustsScrollIndicatorInsets =
         let barAppearance = UINavigationBarAppearance()
         barAppearance.configureWithTransparentBackground()
         UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
@@ -92,10 +86,10 @@ class HomeDetailViewController: UIViewController {
     
     @IBAction func clickMapButton(_ sender: Any) {
         guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
-        mapVC.address = pet?.shelterAddress 
-//        mapVC.cllocation = self.cllocation
-//        mapVC.titlename = (pet?.shelterName != nil)
-            self.navigationController?.pushViewController(mapVC, animated: true)
+        mapVC.address = pet?.shelterAddress
+        //        mapVC.cllocation = self.cllocation
+        //        mapVC.titlename = (pet?.shelterName != nil)
+        self.navigationController?.pushViewController(mapVC, animated: true)
     }
     
     // MARK: - 打電話
@@ -123,7 +117,7 @@ class HomeDetailViewController: UIViewController {
     
     // MARK: - 分享資訊
     @IBAction func shareInfoButton(_ sender: Any) {
-        let activity = UIActivityViewController(activityItems: [pet?.albumFile, pet?.sex, pet?.kind, pet?.shelterAddress], applicationActivities: nil)
+        let activity = UIActivityViewController(activityItems: [pet?.albumFile, pet?.kind, pet?.shelterAddress], applicationActivities: nil)
         present(activity, animated: true)
     }
     
@@ -150,17 +144,17 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         let urls = pet?.albumFile
         cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
         cell.albumFileImageView.contentMode = .scaleAspectFill
-//        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
+        //        cell.areaPkidLabel.text = "所屬縣市：\( ShelterManager.shared.areaName(pkid: pet?.areaPkid ?? 0))"
         cell.sexLabel.text = "性別：\( ShelterManager.shared.sexCh(sex: pet?.sex ?? ""))"
-//        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
+        //        cell.statusLabel.text = ShelterManager.shared.status(status: pet?.status ?? "")
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
         cell.animalIdLabel.text = "流水編號：\(pet?.animalId ?? 0)"
-//        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
+        //        cell.animalVarietyLabel.text = "品種：\(pet?.animalVariety ?? "")"
         cell.bodytypeLabel.text = "品種：\(ShelterManager.shared.bodytypeCh(bodytype: pet?.bodytype ?? ""))\(pet?.animalVariety ?? "")"
-//        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
+        //        cell.cDateLabel.text = "資料更新時間：\(String(describing: pet?.cDate ?? ""))"
         cell.colourLabel.text = "毛色：\(String(describing: pet?.colour ?? ""))"
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"
-//        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
+        //        cell.kindLabel.text = "動物類型：\(String(describing: pet?.kind ?? ""))"
         cell.remarkLabel.text = "備註： \(String(describing: pet?.remark ?? ""))"
         cell.opendateLabel.text = "開放認養時間：\(String(describing: pet?.opendate ?? ""))"
         cell.shelterNameLabel.text = "收容所名稱：\(String(describing: pet?.shelterName ?? ""))"
@@ -237,7 +231,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
                 }
             } catch {
                 
-            }            
+            }
         }
     }
 }

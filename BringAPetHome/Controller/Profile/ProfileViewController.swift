@@ -36,7 +36,6 @@ class ProfileViewController: UIViewController {
         } else {
             return
         }
-        //        getUserProfile()
         let userUid = Auth.auth().currentUser?.uid ?? ""
         shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
@@ -65,10 +64,8 @@ class ProfileViewController: UIViewController {
         shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { shareList in self.shareList = shareList ?? []
             self.tableView.reloadData()
         })
-        //        showLoginVC()
         if Auth.auth().currentUser == nil {
             showLoginVC()
-//            userImageView.image = UIImage(named: "dketch-4")
             userNameLabel.text = "暱稱"
             logoutBarButton.tintColor = UIColor.clear
             logoutBarButton.isEnabled = false
@@ -135,9 +132,7 @@ class ProfileViewController: UIViewController {
                 }
             }
         } else {
-//            userImageView.image = UIImage(named: "dketch-4")
             userNameLabel.text = "暱稱"
-            
         }
     }
 }
@@ -162,7 +157,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.profileImageView.layer.shadowOffset = CGSize(width: 3, height: 3)
         cell.profileImageView.layer.shadowRadius = 3
         cell.profileImageView.layer.shadowOpacity = 0.5
-        //        cell.profileImageView.layer.masksToBounds = false
         let urls = shareList[indexPath.row].shareImageUrl
         cell.profileImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
         cell.profileContent.text = shareList[indexPath.row].shareContent
