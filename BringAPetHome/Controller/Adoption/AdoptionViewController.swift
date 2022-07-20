@@ -148,7 +148,6 @@ extension AdoptionViewController: UITableViewDelegate, UITableViewDataSource {
         let age = Age(rawValue: firebaseData[Adoption.age.rawValue] as? Int ?? 0)
         let sex = Sex(rawValue: firebaseData[Adoption.sex.rawValue] as? Int ?? 0)
         let adoptionAnimalImage = firebaseData[Adoption.imageFileUrl.rawValue] as? [String: Any] ?? [:]
-        let commentId = firebaseData[Comments.commentId.rawValue] as? [String: Any] ?? [:]
         let date = NSDate(timeIntervalSince1970: createdTime)
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd HH:mm"

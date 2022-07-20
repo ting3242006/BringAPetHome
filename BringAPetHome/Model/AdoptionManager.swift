@@ -14,7 +14,7 @@ class AdoptionManager {
     
     static let shared = AdoptionManager()
     let database = Firestore.firestore()
-    let adoptionFirebaseModel = AdoptionModel()
+//    let adoptionFirebaseModel = AdoptionModel()
     var comment = [
         "commentId": "",
         "userId": ""

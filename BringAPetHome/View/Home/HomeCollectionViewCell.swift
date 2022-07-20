@@ -52,11 +52,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
                         leading: sexImageView.trailingAnchor,
                         padding: .init(top: 12, left: 10, bottom: 0, right: 0),
                         height: 22)
-        //        colorLabel.anchor(top: shelterImageView.bottomAnchor,
-        //                        leading: shelterImageView.leadingAnchor,
-        //                        trailing: shelterImageView.trailingAnchor,
-        //                        padding: .init(top: 12, left: 2, bottom: 0, right: 0),
-        //                        height: 22)
         placeLabel.anchor(top: shelterImageView.bottomAnchor,
                           trailing: backgroundImageView.trailingAnchor,
                           padding: .init(top: 12, left: 10, bottom: 0, right: 15),
@@ -65,10 +60,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
                             leading: shelterImageView.leadingAnchor,
                             padding: .init(top: 12, left: 10, bottom: 0, right: 0),
                             width: 22, height: 22)
-        //        sexImageView.anchor(bottom: backgroundImageView.bottomAnchor,
-        //                            trailing: backgroundImageView.trailingAnchor,
-        //                            padding: .init(top: 0, left: 0, bottom: 28, right: 8),
-        //                            width: 18, height: 20)
         sexImageView.contentMode = .scaleAspectFit
     }
     required init?(coder: NSCoder) {
