@@ -20,7 +20,7 @@ class UserFirebaseManager {
     var currentUser: UserModel?
     var userData: UserModel?
     var friendData: UserModel?
-    var isUserBlocked: Bool = false
+    public var isUserBlocked: Bool = false
     
     func addUser(name: String, uid: String, email: String, image: String, blockedUser: [String]) {
         let user = dataBase.collection("User")

@@ -71,7 +71,6 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
         
         let animal = animalList[indexPath.row]
         cell.idLabel.text = "ID:\(animal.id)"
-//        cell.sex.text = "性別:\(animal.sex ?? "")"
         cell.opendate.text = "\(animal.openDate ?? "")"
         cell.sterilization.text = ShelterManager.shared.sterilization(sterilization: animal.steriization ?? "")
         cell.place.text = animal.place
@@ -118,13 +117,8 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
                                     title: animal.title ?? "",
                                     cDate: animal.cDate ?? "",
                                     albumUpdate: "")
-//    like: animal.like
-        
         detailVC.pet = animalData
-        print(detailVC.pet)
-//        detailVC.pet = animal
         self.navigationController?.pushViewController(detailVC, animated: true)
-//        show(detailVC, sender: nil)
     }
     // swiftlint:ensable all
 }
