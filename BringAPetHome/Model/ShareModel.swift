@@ -8,28 +8,16 @@
 import Foundation
 import FirebaseFirestore
 
-struct ShareModel: Codable {
-//    static func == (lhs: ShareModel, rhs: ShareModel) -> Bool {
-//        return lhs.createdTime < rhs.createdTime
-//    }
-//    static func < (lhs: ShareModel, rhs: ShareModel) -> Bool {
-//        return lhs.createdTime < rhs.createdTime
-//    }
-    
+struct ShareModel: Codable {    
     var shareContent: String
     var shareImageUrl: String
     var postId: String
-//    var user: User
     var createdTime: Timestamp
-//    var comments: ShareComment
-//    var userName: String
     var userUid: String
 }
 
 struct ShareComment: Codable {
     var commentId: String
-//    var userId: String
-//    var userName: String
     var time: Date
     var text: String
     var userUid: String

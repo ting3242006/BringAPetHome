@@ -8,107 +8,20 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 class AdoptionManager {
     
     static let shared = AdoptionManager()
-    
-    enum Adoption: String {
-        case age = "age"
-        case comment = "comment"
-        case content = "content"
-        case userId = "userId"
-        case createdTime = "createdTime"
-        case sendId = "sendId"
-        case imageFileUrl = "imageFileUrl"
-        case location = "location"
-        case petable = "petable"
-        case sex = "sex"
-        case postId = "postId"
-//        case userUid = "userUid"
-    }
-    
+    let database = Firestore.firestore()
+//    let adoptionFirebaseModel = AdoptionModel()
     var comment = [
         "commentId": "",
         "userId": ""
     ]
+    var dbModels: [[String: Any]] = []
+    var refreshControl: UIRefreshControl!
     
-    enum Comment: String {
-//        case commentContent = ""
-        case commentId = "commentId"
-//        case time = ""
-        case userId = ""
-    }
-    
-    enum Comments: String {
-        case commentText = "commentText"
-        case commentId = "commentId"
-        case time = "time"
-        case creator = "creator"
-    }
-    
-    var creator: [String: Any] = [
-        "id": "",
-        "name": ""
-    ]
-    
-//    enum Age: Int {
-//        case threeMonthOld
-//        case sixMonthOld
-//        case oneYearOld
-//        case biggerThanOneYear
-//
-//        var ageString: String {
-//            switch self {
-//            case .threeMonthOld:
-//                return "三個月內"
-//            case .sixMonthOld:
-//                return "六個月內"
-//            case .oneYearOld:
-//                return "六個月到一年"
-//            case .biggerThanOneYear:
-//                return "一歲以上"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
-//
-//    enum Sex: Int {
-//        case boy
-//        case girl
-//
-//        var sexString: String {
-//            switch self {
-//            case .boy:
-//                return "Boy"
-//            case .girl:
-//                return "Girl"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
-//
-//    enum Petable: Int {
-//        case adopt = 0
-//        case adopted = 1
-//
-//        var petable: String {
-//            switch self {
-//            case .adopt:
-//                return "送養"
-//            case .adopted:
-//                return "已領養"
-//            default:
-//                return ""
-//            }
-//        }
-//    }
-    
-    var dataBase = Firestore.firestore() // 初始化 Firestore
-    let adoptionFirebaseModel = AdoptionModel()
-    // swiftlint:disable all
     func addAdoption(age: Int, content: String, imageFileUrl: String,
                      location: String, sex: Int, commentId: String,
                      postId: String, userId: String) {
@@ -121,12 +34,11 @@ class AdoptionManager {
             Adoption.content.rawValue: content,
             Adoption.postId.rawValue: document.documentID,
             Adoption.createdTime.rawValue: NSDate().timeIntervalSince1970,
-            //            Adoption.sendId.rawValue: document.documentID,
             Adoption.imageFileUrl.rawValue: imageFileUrl,
             Adoption.location.rawValue: location,
             Comment.commentId.rawValue: commentId,
             Adoption.sex.rawValue: sex,
-            Adoption.userId.rawValue : userId
+            Adoption.userId.rawValue: userId
         ]
         document.setData(data) { error in
             if let error = error {
@@ -136,5 +48,50 @@ class AdoptionManager {
             }
         }
     }
-    // swiftlint:ensable all
+    
+    func fetchAdoption(uid: String, completion: @escaping ([[String: Any]]?) -> Void) {
+        if let uid = Auth.auth().currentUser?.uid {
+            database.collection("User").document(uid).getDocument { snapshot, error in
+                guard let snapshot = snapshot,
+                      snapshot.exists,
+                      let userModel = try? snapshot.data(as: UserModel.self) else {
+                    return
+                }
+                self.database.collection("Adoption").whereField("userId", notIn: userModel.blockedUser).order(by: "userId")
+                    .order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                        self?.dbModels = []
+                        if let error = error {
+                            print("Error fetching documents: \(error)")
+                        } else {
+                            print("querySnapshot!.documents", querySnapshot!.documents.count)
+                            for document in querySnapshot!.documents {
+                                self?.dbModels.insert(document.data(), at: 0)
+                                self?.dbModels.sort {
+                                    let time0Number = $0["createdTime"] as? Double ?? 0.0
+                                    let time0 = Date(timeIntervalSince1970: time0Number)
+                                    let time1Number = $1["createdTime"] as? Double ?? 0.0
+                                    let time1 = Date(timeIntervalSince1970: time1Number)
+                                    return time0 > time1
+                                }
+                            }
+                            completion(self?.dbModels)
+                        }
+                    }
+            }
+        } else {
+            self.database.collection("Adoption").order(by: Adoption.createdTime.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
+                self?.dbModels = []
+                if let error = error {
+                    print("Error fetching documents: \(error)")
+                } else {
+                    print("querySnapshot!.documents", querySnapshot!.documents.count)
+                    for document in querySnapshot!.documents {
+                        self?.dbModels.insert(document.data(), at: 0)
+                        document.data()
+                    }
+                    completion(self?.dbModels)
+                }
+            }
+        }
+    }
 }

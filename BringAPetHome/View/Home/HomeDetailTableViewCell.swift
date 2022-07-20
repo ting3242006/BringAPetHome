@@ -32,7 +32,6 @@ class HomeDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var shelterTel: UILabel!
     @IBOutlet weak var animalVarietyLabel: UILabel!
     @IBOutlet weak var animalSterilizationLabel: UILabel!
-//    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var cDateLabel: UILabel!
     
     var heartButton = UIButton(type: .system)
