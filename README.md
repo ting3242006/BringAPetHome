@@ -3,8 +3,16 @@
 <p align="center">
 <img src="https://user-images.githubusercontent.com/86846867/181139022-64418b37-a384-4778-a181-ea9f44e81132.png?raw=true" width="300" height="300"/>
 </p>
-
-<h4 align="center">Pet lovers can search for a pet that the best matches their desired furry friend and also provide shelter’s information discovering what service it offers. BFFs also included discussion forum to exchange information. Help changing status from pet to family member.</p>
+<p align="center">
+    <img src="https://img.shields.io/badge/platform-iOS-lightgray">
+    <img src="https://img.shields.io/badge/release-v1.0.2-green">
+    <img src="https://img.shields.io/badge/license-MIT-blue">
+</p>
+<h4 align="center">Pet lovers can search for a pet that the best matches their desired furry friend and also provide shelter’s information discovering what service it offers. BFFs also included discussion forum to exchange information. Help changing status from pet to family member.<br>
+  <br>
+  讓你可以找到毛孩家人的寵物認養平台，即時查看全台收容所待認養的動物資訊，送養平台可以讓愛媽愛爸做送養，<br>
+  及分享以領養寵物的社群，期望大家以領養代替購買，讓毛孩們都有個家：）
+  </p>
 <br>
 
 <p align="center"><a href="https://apps.apple.com/tw/app/%E8%AE%93%E6%B5%AA%E5%9B%9E%E5%AE%B6/id1630655937">
@@ -18,7 +26,6 @@
 <img src="https://user-images.githubusercontent.com/86846867/181173133-cb7f15d3-f040-4253-9a18-7f36b1b9d95a.png" width="200" height="400"/>
 <img src="https://user-images.githubusercontent.com/86846867/181173336-d1aa6257-9910-4c36-82d0-564554c529e5.png" width="200" height="400"/>
 <img src="https://user-images.githubusercontent.com/86846867/181185813-a95f5d27-8a72-49fe-8872-873574dd1c64.png" width="200" height="400"/>
-
 </p>
 
 #### Adoption Platform
