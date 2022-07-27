@@ -25,14 +25,10 @@ class ShareCommentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bgView.layer.cornerRadius = 25
-        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         tableView.dataSource = self
         tableView.delegate = self
-        //        ShareManager.shared.fetchSharingComment(completion: { commentList in self.commentList = commentList ?? []
-        //            self.tableView.reloadData()
-        //        })
         blackViewDynamic()
+        layout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,12 +94,17 @@ class ShareCommentViewController: UIViewController {
         blackView.backgroundColor = .black
         blackView.alpha = 0
         blackView.isUserInteractionEnabled = true
-        blackView.addGestureRecognizer(tapGestureRecognizer)
+ 
         presentingViewController?.view.addSubview(blackView)
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
             self.blackView.alpha = 0.5
         }
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController))
+    }
+    
+    func layout() {
+        bgView.layer.cornerRadius = 25
+        bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
     @objc func dismissController() {

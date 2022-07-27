@@ -12,20 +12,15 @@ import FirebaseFirestore
 class ShareDetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    
     let selectedBackgroundView = UIView()
     var refreshControl: UIRefreshControl!
-    var shareManager = ShareManager()
+    var publishButton = UIButton()
+    var shareManager = ShareManager.shared
     var dataBase = Firestore.firestore()
     var shareList = [ShareModel]()
     var shareItem: ShareModel?
-    var userData: UserModel?
-    var publishButton = UIButton()
     var user = Auth.auth().currentUser?.uid
-//    var blockList: [UserModel] = [] {
-//        didSet {
-//            tableView.reloadData()
-//        }
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,31 +54,9 @@ class ShareDetailViewController: UIViewController {
            let indexPath = tableView.indexPathForRow(at: point) {
             let shareModel = shareList[indexPath.row]
             controller?.postId = shareModel.postId
-            //            let userData = userData[indexPath.row]
-            //            controller.userData?.blockedUser = userData.blockedUser
             tabBarController?.tabBar.isHidden = true
         }
         return controller
-    }
-    
-    func setButtonLayout() {
-        view.addSubview(publishButton)
-        publishButton.backgroundColor = UIColor(named: "HoneyYellow")
-        //        publishButton.layer.masksToBounds = true
-        publishButton.layer.cornerRadius = 30
-        publishButton.tintColor = .white
-        publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        publishButton.layer.shadowOpacity = 0.75
-        publishButton.layer.shadowOffset = .zero
-        publishButton.layer.shadowRadius = 8
-        publishButton.layer.shadowPath = UIBezierPath(roundedRect: publishButton.bounds,
-                                                      cornerRadius: publishButton.layer.cornerRadius).cgPath
-        publishButton.layer.shadowColor = UIColor.darkGray.cgColor
-        publishButton.addTarget(self, action: #selector(didTapped), for: .touchUpInside)
-        publishButton.anchor(bottom: view.bottomAnchor,
-                             trailing: view.trailingAnchor,
-                             padding: .init(top: 0, left: 0, bottom: 95, right: 20),
-                             width: 60, height: 60)
     }
     
     @objc func didTapped() {
@@ -95,25 +68,6 @@ class ShareDetailViewController: UIViewController {
         guard let postSharingVC = mainStoryboard.instantiateViewController(withIdentifier: "PostSharingViewController") as? PostSharingViewController else { return }
         self.navigationController?.pushViewController(postSharingVC, animated: true)
     }
-    
-    func showLoginVC() {
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
-        self.navigationController?.present(loginVC, animated: true)
-    }
-    
-    func refresh() {
-        refreshControl = UIRefreshControl()
-        tableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(fetchShareData), for: UIControl.Event.valueChanged)
-    }
-    
-//    @objc func fetchData() {
-//        shareManager.fetchSharing(completion: { shareList in
-//            self.shareList = shareList ?? []
-//            self.tableView.reloadData()
-//        })
-//    }
     
     @objc func fetchShareData() {
         shareManager.fetchSharing(completion: { shareList in
@@ -132,6 +86,31 @@ class ShareDetailViewController: UIViewController {
         })
     }
     
+    func setButtonLayout() {
+        view.addSubview(publishButton)
+        publishButton.backgroundColor = UIColor(named: "HoneyYellow")
+        publishButton.layer.cornerRadius = 30
+        publishButton.tintColor = .white
+        publishButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        publishButton.addTarget(self, action: #selector(didTapped), for: .touchUpInside)
+        publishButton.anchor(bottom: view.bottomAnchor,
+                             trailing: view.trailingAnchor,
+                             padding: .init(top: 0, left: 0, bottom: 95, right: 20),
+                             width: 60, height: 60)
+    }
+    
+    func showLoginVC() {
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
+        self.navigationController?.present(loginVC, animated: true)
+    }
+    
+    func refresh() {
+        refreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(fetchShareData), for: UIControl.Event.valueChanged)
+    }
+    
     func confirmBlocked(userId: String) {
         let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
@@ -148,9 +127,6 @@ class ShareDetailViewController: UIViewController {
         tableView.reloadData()
     }
 }
-// DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-//    refreshControl.endRefreshing()
-// } 要寫停止refresh
 
 extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -167,16 +143,13 @@ extension ShareDetailViewController: UITableViewDelegate, UITableViewDataSource 
         cell.shareDetailTableViewCellDelegate = self
         let urls = shareList[indexPath.row].shareImageUrl
         cell.shareImageView.kf.setImage(with: URL(string: urls), placeholder: UIImage(named: "dketch-4"))
-//        cell.postTimeLabel.text = "\(shareList[indexPath.row].createdTime)"
         cell.contentLabel.text = shareList[indexPath.row].shareContent
-        //        cell.userImageView.image = UIImage(named: "dketch-1")
         cell.selectedBackgroundView = selectedBackgroundView
         cell.userImageView.layer.cornerRadius = 15
         
         UserFirebaseManager.shared.fetchUser(userId: shareList[indexPath.row].userUid) { result in
             switch result {
             case let .success(user):
-//                self.userData = user
                 let url = user.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.userNameLabel.text = user.name

@@ -92,11 +92,11 @@ class AdoptionViewController: UIViewController {
     }
     
     @objc func fetchData() {
-        AdoptionManager.shared.fetchAdoption(uid: Auth.auth().currentUser?.uid ?? "") { dbModels in
+        AdoptionManager.shared.fetchAdoption(uid: Auth.auth().currentUser?.uid ?? "") { [weak self] dbModels in
             if let dbModels = dbModels {
-                self.dbModels = dbModels
-                guard let refreshControl = self.refreshControl else { return }
-                self.refreshControl.endRefreshing()
+                self?.dbModels = dbModels
+                guard let refreshControl = self?.refreshControl else { return }
+                self?.refreshControl.endRefreshing()
             }
         }
     }

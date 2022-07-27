@@ -18,36 +18,17 @@ class CellClass: UITableViewCell {
 class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDelegate,
                                      UINavigationControllerDelegate {
     
-    //    var dataBase = Firestore.firestore()
-    var docRef: DocumentReference? = nil // 建立資料庫參考
-//    let adoptionFirebaseModel = AdoptionModel()
     let transparentView = UIView()
     let tableView = UITableView()
     var selectedButton = UIButton()
     var dataSource = [String]()
     var adoptionManager = AdoptionManager()
-    
-    enum Adoption: String {
-        case age = "age"
-        case comment = "comment"
-        case content = "content"
-        case userId = "userId"
-        case createdTime = "createdTime"
-        case sendId = "sendId"
-        case imageFileUrl = "imageFileUrl"
-        case location = "location"
-        case petable = "petable"
-        case sex = "sex"
-        case postId = "postId"
-    }
-    
     var comment: [String: Any] = [
         "commentContent": "",
         "commentId": "",
         "time": 0,
         "userId": ""
     ]
-    
     var selectedSex: Sex?
     var selectedAge: Age?
     var selectedPetable: Petable?
@@ -69,14 +50,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         tableView.dataSource = self
         tableView.register(CellClass.self, forCellReuseIdentifier: "Cell")
         setupButton()
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left")?
-                .withTintColor(UIColor.darkGray)
-                .withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(didTapClose))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,9 +79,6 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         selectedButton = petableButton
         selectedButton.tag = 2
         addTransparentView(frames: petableButton.frame)
-    }
-    
-    @IBAction func inputLocationText(_ sender: Any) {
     }
     
     @IBAction func openCameraButton(_ sender: Any) {
@@ -269,18 +239,15 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
             fileReference.putData(imageData, metadata: nil) { result in
                 switch result {
                     
-                case .success(_):
-                    
+                case .success(_):                    
                     fileReference.downloadURL { [self] result in
                         switch result {
                         case .success(let url):
-
                             let userUid = Auth.auth().currentUser?.uid ?? ""
                             let age = selectedAge
                             let sex = selectedSex
                             let petable = selectedPetable
                             let postId = postId
-                            //                            let commentId = commentId
                             let content = self.inputContentTextField.text ?? ""
                             let location = self.locationTextField.text ?? ""
                             self.adoptionManager.addAdoption(age: age.rawValue, content: content,
@@ -290,13 +257,10 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
                                                              commentId: commentId as? String ?? "",
                                                              postId: postId ?? "",
                                                              userId: userUid)
-//                            postBarButton.isEnabled = false
-//                            setupLottie()
                             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             guard let adoptionViewController = mainStoryboard.instantiateViewController(withIdentifier: "AdoptionViewController") as? AdoptionViewController else { return }
-                            
                             self.navigationController?.popToRootViewController(animated: true)
-                            //                        }
+                            
                         case .failure(_):
                             let age = Age(rawValue: 0)
                             let sex = Sex(rawValue: 0)
@@ -320,7 +284,14 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         sexButton.layer.cornerRadius = 5
         ageButton.backgroundColor = UIColor(named: "CulturedWhite")
         ageButton.layer.cornerRadius = 5
-        
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
     }
     
     func setupLottie() {

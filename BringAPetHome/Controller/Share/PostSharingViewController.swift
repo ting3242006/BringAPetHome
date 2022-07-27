@@ -8,18 +8,13 @@
 import UIKit
 import Firebase
 import FirebaseStorage
-import simd
 import CoreML
 import Vision
-import Alamofire
 import Lottie
 
 class PostSharingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    var shareManager = ShareManager()
-    //    var dataBase = Firestore.firestore() // 初始化 Firestore
-    //    var docRef: DocumentReference? = nil // 建立資料庫參考
-    //    var shareList = [ShareModel]() // 取得 Struct 內容
+    var shareManager = ShareManager.shared
     
     @IBOutlet weak var addSharIngImageButton: UIButton!
     @IBOutlet weak var shareTextView: UITextView!
@@ -30,15 +25,6 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         super.viewDidLoad()
         setLayout()
         addSharIngImageButton.layer.cornerRadius = 15
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left")?
-                .withTintColor(UIColor.darkGray)
-                .withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(didTapClose))
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -164,12 +150,10 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                     self.correctAnimation()
                 } else {
                     CustomFunc.customAlert(title: "照片中沒動物", message: "", vc: self, actionHandler: nil)
-                    //                    self.postBarButton.isEnabled = false
                 }
-                
             }
         }
-        //guard let image = image else { return }
+        
         let handler = VNImageRequestHandler(ciImage: image)
         do {
             try handler.perform([request])
@@ -185,6 +169,14 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         shareTextView.layer.borderWidth = 0.5
         addSharIngImageButton.layer.cornerRadius = 20
         addSharIngImageButton.clipsToBounds = true
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
     }
     
     func setupLottie() {

@@ -27,41 +27,19 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBAction func deleteAccount(_ sender: Any) {
         let alert  = UIAlertController(title: "刪除帳號", message: "確定要刪除嗎? 如要刪除，請先登出再登入一次", preferredStyle: .alert)
-               let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
-                   self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").delete()
-                   self.deleteAccount()
-                   
-                   let vc = ProfileViewController()
-                       self.present(vc, animated: true)
-               }
-               let noAction = UIAlertAction(title: "取消", style: .cancel)
-
-               alert.addAction(noAction)
-               alert.addAction(yesAction)
-
-               present(alert, animated: true, completion: nil)
-    }
-    
-    func deleteAccount() {
-        UserFirebaseManager.shared.deleteAccount()
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-        self.navigationController?.pushViewController(homeVC, animated: true)
-    }
-    
-    func deleteShare() {
-        let documentRef = dataBase.collection("Share").whereField("userUid", isEqualTo: Auth.auth().currentUser?.uid ?? "").getDocuments { querySnapshot, error in
-            if error != nil {
-                print("Error")
-            } else {
-                guard let querySnapshot = querySnapshot else {
-                    return
-                }
-                for doc in querySnapshot.documents {
-                    doc.reference.delete()
-                }
-            }
+        let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
+            self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").delete()
+            self.deleteAccount()
+            
+            let vc = ProfileViewController()
+            self.present(vc, animated: true)
         }
+        let noAction = UIAlertAction(title: "取消", style: .cancel)
+        
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func uploadInfo(_ sender: Any) {
@@ -78,9 +56,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 fileReference.downloadURL { [self] result in
                     switch result {
                     case .success(let url):
-                        
-                        //        let name = user.displayName
-                        
                         UserFirebaseManager.shared.updateUserInfo(id: user.uid, image: "\(url)",
                                                                   name: usernameTextField.text ?? "") { result in
                             switch result {
@@ -99,9 +74,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                 break
             }
         }
-        //        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //        guard let profileVC = mainStoryboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController else { return }
-        //        self.navigationController?.pushViewController(profileVC, animated: true)
     }
     
     @IBAction func addPicButton(_ sender: Any) {
@@ -139,10 +111,16 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     func layout() {
         userImageView.layer.cornerRadius = 10
-        uploadImageButton.layer.cornerRadius = 10
-        uploadImageButton.clipsToBounds = true
         sendInfoButton.layer.cornerRadius = 10
         deleteAccountButton.layer.cornerRadius = 10
         uploadImageButton.layer.cornerRadius = 20
+        uploadImageButton.clipsToBounds = true
+    }
+    
+    func deleteAccount() {
+        UserFirebaseManager.shared.deleteAccount()
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
+        self.navigationController?.pushViewController(homeVC, animated: true)
     }
 }

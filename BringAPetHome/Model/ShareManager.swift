@@ -13,6 +13,7 @@ import FirebaseFirestoreSwift
 class ShareManager {
     
     static let shared = ShareManager()
+    private init() {}
     var dataBase = Firestore.firestore()
     var shareList = [ShareModel]()
     var postId: String?
