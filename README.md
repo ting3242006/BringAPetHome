@@ -89,3 +89,6 @@
 宋佾庭 Yi-Ting Sung <br>
 ting3242006@gmail.com <br>
 https://www.linkedin.com/in/yitingsung/
+
+## License
+BFFs is released under the MIT license. See [LICENSE](https://github.com/ting3242006/BringAPetHome/blob/main/LICENCE) for details.
