@@ -20,9 +20,7 @@ class ShareCommentViewController: UIViewController {
     var blackView = UIView(frame: UIScreen.main.bounds)
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
-    // var shareModel: ShareModel?
     // segue or prepare 傳值
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -72,7 +70,7 @@ class ShareCommentViewController: UIViewController {
         }
     }
     
-    func fetchSharingComment() {
+    private func fetchSharingComment() {
         ShareManager.shared.fetchSharingComment(postId: postId ?? "") { [weak self] result in
             switch result {
             case .success(let shareComments):
@@ -84,13 +82,13 @@ class ShareCommentViewController: UIViewController {
         }
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         present(loginVC, animated: true)
     }
     
-    func blackViewDynamic() {
+    private func blackViewDynamic() {
         blackView.backgroundColor = .black
         blackView.alpha = 0
         blackView.isUserInteractionEnabled = true
@@ -102,7 +100,7 @@ class ShareCommentViewController: UIViewController {
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController))
     }
     
-    func layout() {
+    private func layout() {
         bgView.layer.cornerRadius = 25
         bgView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
@@ -121,9 +119,7 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ShareCommentTableViewCell",
                                                        for: indexPath) as? ShareCommentTableViewCell else { return UITableViewCell() }
-        //        cell.userImageView.image = UIImage(named: "dketch-4")
         cell.contentLabel.text = commentList[indexPath.row].text
-        //        cell.userNameLabel.text = commentList[indexPath.row].userUid
         cell.commentTimeLabel.text = commentList[indexPath.row].time.displayTimeInSocialMediaStyle()
         
         UserFirebaseManager.shared.fetchUser(userId: commentList[indexPath.row].userUid) { result in
@@ -133,7 +129,7 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
                 let url = self.userData?.image
                 cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
                 cell.userNameLabel.text = self.userData?.name
-            case .failure(_):
+            case .failure:
                 print("Error")
             }
         }

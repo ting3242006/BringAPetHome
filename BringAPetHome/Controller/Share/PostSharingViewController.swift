@@ -41,7 +41,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             let alert = UIAlertController(title: "錯誤", message: "請輸入內容",   preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "確認", style: .default))
             self.present(alert, animated: true)
-        } else {            
+        } else {
             guard let imageData = self.shareImageView.image?.jpegData(compressionQuality: 0.3) else { return }
             let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
             
@@ -91,7 +91,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     //  指定 data source / delegate 選取相簿照片或照相
-    func selectPhoto(sourceType: UIImagePickerController.SourceType) {
+    private func selectPhoto(sourceType: UIImagePickerController.SourceType) {
         let controller = UIImagePickerController()
         controller.sourceType = sourceType
         controller.delegate = self
@@ -99,7 +99,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+                                       didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         // 取得相片
         if let userPickedImage = info[.originalImage] as? UIImage {
             shareImageView.image = userPickedImage
@@ -113,7 +113,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     // swiftlint:disable all
-    func detect(image: CIImage) {
+    private func detect(image: CIImage) {
         guard let model = try? VNCoreMLModel(for: Inceptionv3().model) else {
             fatalError("Loading CoreML Model failed")
         }
@@ -123,7 +123,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             }
             if let firstResult = results.first {
                 print("firstResult", firstResult.identifier)
-
+                
                 if firstResult.identifier.contains("cat") {
                     self.correctAnimation()
                 } else if firstResult.identifier.contains("Border collie") {
@@ -153,7 +153,6 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                 }
             }
         }
-        
         let handler = VNImageRequestHandler(ciImage: image)
         do {
             try handler.perform([request])
@@ -162,9 +161,9 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             print(error)
         }
     }
-    // swiftlint:ensable all
     
-    func setLayout() {
+    // swiftlint:ensable all
+    private func setLayout() {
         shareTextView.layer.borderColor = UIColor.systemGray3.cgColor
         shareTextView.layer.borderWidth = 0.5
         addSharIngImageButton.layer.cornerRadius = 20
@@ -179,7 +178,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
             action: #selector(didTapClose))
     }
     
-    func setupLottie() {
+    private func setupLottie() {
         let animationView = AnimationView(name: "lf30_editor_5phd8cww")
         animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         animationView.center = self.view.center
@@ -189,7 +188,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
         animationView.play()
     }
     
-    func correctAnimation() {
+    private func correctAnimation() {
         let animationView = AnimationView(name: "lf30_editor_yqqlpukj")
         animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
         animationView.center = self.view.center

@@ -12,19 +12,10 @@ import CoreData
 
 class HomeDetailViewController: UIViewController {
     
-    static var identifier: String {
-        return String(describing: self)
-    }
-    
     @IBOutlet weak var tableView: UITableView!
     
     var pet: AnimalData?
-    var skip: Int = 100
-    var cllocation = CLLocationCoordinate2D()
     let selectedBackgroundView = UIView()
-    let getFile = MapViewController()
-    var latitude = 0.0
-    var longitude = 0.0
     var saveAnimal: Animal?
     
     override func viewDidLoad() {
@@ -33,37 +24,8 @@ class HomeDetailViewController: UIViewController {
         selectedBackgroundView.backgroundColor = UIColor.clear
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.anchor(top: view.topAnchor,
-                         leading: view.leadingAnchor,
-                         bottom: view.bottomAnchor,
-                         trailing: view.trailingAnchor,
-                         padding: .init(top: 0, left: 0, bottom: 0, right: 0))
-        
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        guard let context = appDelegate?.persistentContainer.viewContext else { return }
-        let predicate = NSPredicate(format: "id == %d",
-                                    pet?.animalId ?? 0)
-        let request: NSFetchRequest<Animal> = Animal.fetchRequest()
-        request.predicate = predicate
-        do {
-            saveAnimal = try context.fetch(request).first
-            print("saveAnimal", pet?.animalId, saveAnimal)
-        } catch {
-            print("error", error )
-        }
-        
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left")?
-                .withTintColor(UIColor.darkGray)
-                .withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(didTapClose))
-        let barAppearance = UINavigationBarAppearance()
-        barAppearance.configureWithTransparentBackground()
-        UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
-        
-        tableView.contentInsetAdjustmentBehavior = .never
+        saveFavorites()
+        layout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +34,7 @@ class HomeDetailViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
@@ -117,6 +80,41 @@ class HomeDetailViewController: UIViewController {
     
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func layout() {
+        tableView.anchor(top: view.topAnchor,
+                         leading: view.leadingAnchor,
+                         bottom: view.bottomAnchor,
+                         trailing: view.trailingAnchor,
+                         padding: .init(top: 0, left: 0, bottom: 0, right: 0))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
+        let barAppearance = UINavigationBarAppearance()
+        barAppearance.configureWithTransparentBackground()
+        UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
+        
+        tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    private func saveFavorites() {
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        guard let context = appDelegate?.persistentContainer.viewContext else { return }
+        let predicate = NSPredicate(format: "id == %d",
+                                    pet?.animalId ?? 0)
+        let request: NSFetchRequest<Animal> = Animal.fetchRequest()
+        request.predicate = predicate
+        do {
+            saveAnimal = try context.fetch(request).first
+            print("saveAnimal", pet?.animalId, saveAnimal)
+        } catch {
+            print("error", error)
+        }
     }
 }
 

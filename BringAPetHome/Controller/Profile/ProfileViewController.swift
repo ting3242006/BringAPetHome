@@ -26,9 +26,9 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        selectedBackgroundView.backgroundColor = UIColor.clear
         tableView.dataSource = self
         tableView.delegate = self
+        selectedBackgroundView.backgroundColor = UIColor.clear
         checkUserLogin()
     }
     
@@ -84,13 +84,13 @@ class ProfileViewController: UIViewController {
         present(controller, animated: true, completion: nil)
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         self.navigationController?.present(loginVC, animated: true)
     }
     
-    func getUserProfile() {
+    private func getUserProfile() {
         if Auth.auth().currentUser != nil {
             UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
                 switch result {
@@ -108,7 +108,7 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    func checkUserLogin() {
+    private func checkUserLogin() {
         if Auth.auth().currentUser == nil {
             showLoginVC()
         } else {

@@ -10,7 +10,6 @@ import WebKit
 
 class EULAViewController: UIViewController, WKNavigationDelegate {
     
-//    let fullScreenSize = UIScreen.main.bounds.size
     var webView: WKWebView!
     
     override func viewDidLoad() {

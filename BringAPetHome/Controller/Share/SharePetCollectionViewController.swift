@@ -21,7 +21,7 @@ class SharePetCollectionViewController: UICollectionViewController {
         configureCellSize()
         refresh()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         getData()
@@ -60,13 +60,13 @@ class SharePetCollectionViewController: UICollectionViewController {
         self.navigationController?.pushViewController(postSharingVC, animated: true)
     }
     
-    func refresh() {
+    private func refresh() {
         refreshControl = UIRefreshControl()
         collectionView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(getData), for: UIControl.Event.valueChanged)
     }
     
-    func setButtonLayout() {
+    private func setButtonLayout() {
         view.addSubview(publishButton)
         publishButton.backgroundColor = UIColor(named: "HoneyYellow")
         publishButton.layer.cornerRadius = 30
@@ -79,13 +79,13 @@ class SharePetCollectionViewController: UICollectionViewController {
                              width: 60, height: 60)
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         present(loginVC, animated: true)
     }
     
-    func configureCellSize() {
+    private func configureCellSize() {
         let itemSpace: Double = 3
         let columnCount: Double = 3
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout

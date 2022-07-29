@@ -86,7 +86,7 @@ class ShareDetailViewController: UIViewController {
         })
     }
     
-    func setButtonLayout() {
+    private func setButtonLayout() {
         view.addSubview(publishButton)
         publishButton.backgroundColor = UIColor(named: "HoneyYellow")
         publishButton.layer.cornerRadius = 30
@@ -99,19 +99,19 @@ class ShareDetailViewController: UIViewController {
                              width: 60, height: 60)
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         self.navigationController?.present(loginVC, animated: true)
     }
     
-    func refresh() {
+    private func refresh() {
         refreshControl = UIRefreshControl()
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(fetchShareData), for: UIControl.Event.valueChanged)
     }
     
-    func confirmBlocked(userId: String) {
+    private func confirmBlocked(userId: String) {
         let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])

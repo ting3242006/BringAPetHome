@@ -15,7 +15,8 @@ import Vision
 class CellClass: UITableViewCell {
 }
 
-class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDelegate,
+class PublishAdoptionViewController: UIViewController,
+                                     UIImagePickerControllerDelegate,
                                      UINavigationControllerDelegate {
     
     let transparentView = UIView()
@@ -79,6 +80,9 @@ class PublishAdoptionViewController: UIViewController, UIImagePickerControllerDe
         selectedButton = petableButton
         selectedButton.tag = 2
         addTransparentView(frames: petableButton.frame)
+    }
+    
+    @IBAction func inputLocationText(_ sender: Any) {
     }
     
     @IBAction func openCameraButton(_ sender: Any) {

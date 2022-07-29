@@ -78,13 +78,13 @@ class CommentViewController: UIViewController {
         }
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         present(loginVC, animated: true)
     }
     
-    func addCommend(text: String) {
+    private func addCommend(text: String) {
         let comment = Firestore.firestore().collection("Comments")
         let document = comment.document()
         let timeInterval = Date()
@@ -105,7 +105,7 @@ class CommentViewController: UIViewController {
         }
     }
     
-    func fetchCommetData() {
+    private func fetchCommetData() {
         dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").order(by: "time", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
@@ -119,7 +119,7 @@ class CommentViewController: UIViewController {
         }
     }
     
-    func blackViewDynamic() {
+    private func blackViewDynamic() {
         blackView.backgroundColor = .black
         blackView.alpha = 0
         blackView.isUserInteractionEnabled = true

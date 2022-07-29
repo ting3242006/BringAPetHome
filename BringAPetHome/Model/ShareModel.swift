@@ -22,8 +22,3 @@ struct ShareComment: Codable {
     var text: String
     var userUid: String
 }
-
-struct User: Codable {
-    var id: String
-    var name: String
-}

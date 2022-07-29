@@ -9,18 +9,14 @@ import UIKit
 import WebKit
 
 class PrivacyPolicyViewController: UIViewController, WKNavigationDelegate {
-    
-//    let fullScreenSize = UIScreen.main.bounds.size
+
     var webView: WKWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // style
         view.backgroundColor = .white
-        title = "隱私權政策"
-        webView = WKWebView(frame: CGRect(x: 0, y: 0,
-                                          width: UIScreen.fullScreenSize.width,
-                                          height: UIScreen.fullScreenSize.height))
+        title = "隱私權政策"        
         webView.navigationDelegate = self
         self.view.addSubview(webView)
         self.start()
@@ -42,7 +38,7 @@ class PrivacyPolicyViewController: UIViewController, WKNavigationDelegate {
         print(error.localizedDescription)
     }
     
-    func layout() {
+    private func layout() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left")?
                 .withTintColor(UIColor.darkGray)
@@ -51,5 +47,8 @@ class PrivacyPolicyViewController: UIViewController, WKNavigationDelegate {
             target: self,
             action: #selector(didTapClose)
         )
+        webView = WKWebView(frame: CGRect(x: 0, y: 0,
+                                          width: UIScreen.fullScreenSize.width,
+                                          height: UIScreen.fullScreenSize.height))
     }
 }
