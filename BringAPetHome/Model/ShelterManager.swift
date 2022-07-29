@@ -16,8 +16,6 @@ class ShelterManager {
     
     private init() { }
     
-//    var skip: Int = 100
-    
     func fetchData(skip: Int, filter: Filter? = nil, completion: @escaping (Result<[AnimalData]>) -> Void) {
         
         var urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=\(skip)"
@@ -54,26 +52,6 @@ class ShelterManager {
         }.resume()
     }
     // 拉回 mainThread
-    
-    // MARK:CLGeocoder地理編碼 地址轉換經緯度位置
-    func geocode(address: String, completion: @escaping (CLLocationCoordinate2D, Error?) -> Void)  {
-        CLGeocoder().geocodeAddressString(address) { placemarks, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            if let placemarks = placemarks {
-                // 取得第一個地點標記
-                let placemark = placemarks[0]
-                // 加上標記
-                let annotation = MKPointAnnotation()
-                if let location = placemark.location {
-                    annotation.coordinate = location.coordinate
-                }
-                completion(annotation.coordinate, nil)
-            }
-        }
-    }
     
     // swiftlint:disable all
     func areaName(pkid: Int) -> String {

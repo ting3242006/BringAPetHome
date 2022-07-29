@@ -13,8 +13,7 @@ protocol HomeDetailTableViewCellDelegate: AnyObject {
 
 class HomeDetailTableViewCell: UITableViewCell {
     weak var delegate: HomeDetailTableViewCellDelegate?
-    static let reuseIdentifier = "\(HomeDetailTableViewCell.self)"
-    var link: HomeDetailViewController?    
+  
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var sexLabel: UILabel!
     @IBOutlet weak var animalIdLabel: UILabel!
@@ -35,10 +34,11 @@ class HomeDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var cDateLabel: UILabel!
     
     var heartButton = UIButton(type: .system)
-
+    var link: HomeDetailViewController?
+    static let reuseIdentifier = "\(HomeDetailTableViewCell.self)"
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         heartButton = makeTabButton(imageName: "Group 55-1", unselectedImageName: "Group 56-1")
         heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         addSubview(heartButton)
@@ -60,7 +60,6 @@ class HomeDetailTableViewCell: UITableViewCell {
     
     // MARK: - Action
     @objc func heartButtonTapped() {
-//        link?.someMethodIWantToCall(cell: self)
         heartButton.isSelected = !heartButton.isSelected
         delegate?.heartButtonTapped()
     }

@@ -63,12 +63,12 @@ class AdoptionViewController: UIViewController {
         return controller
     }
     
-    func layout() {
+    private func layout() {
         navigationController?.navigationBar.backgroundColor = .clear
         selectedBackgroundView.backgroundColor = UIColor.clear
     }
     
-    func setButtonLayout() {
+    private func setButtonLayout() {
         view.addSubview(publishButton)
         publishButton.backgroundColor = UIColor(named: "HoneyYellow")
         publishButton.layer.cornerRadius = 30
@@ -92,28 +92,28 @@ class AdoptionViewController: UIViewController {
     }
     
     @objc func fetchData() {
-        AdoptionManager.shared.fetchAdoption(uid: Auth.auth().currentUser?.uid ?? "") { dbModels in
+        AdoptionManager.shared.fetchAdoption(uid: Auth.auth().currentUser?.uid ?? "") { [weak self] dbModels in
             if let dbModels = dbModels {
-                self.dbModels = dbModels
-                guard let refreshControl = self.refreshControl else { return }
-                self.refreshControl.endRefreshing()
+                self?.dbModels = dbModels
+                guard let refreshControl = self?.refreshControl else { return }
+                self?.refreshControl.endRefreshing()
             }
         }
     }
     
-    func refresh() {
+    private func refresh() {
         refreshControl = UIRefreshControl()
         tableView.addSubview(refreshControl)
         refreshControl.addTarget(self, action: #selector(fetchData), for: UIControl.Event.valueChanged)
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
         present(loginVC, animated: true)
     }
     
-    func confirmBlocked(userId: String) {
+    private func confirmBlocked(userId: String) {
         let alert  = UIAlertController(title: "封鎖用戶", message: "確認要封鎖此用戶嗎? 封鎖後將看不到此用戶貼文", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
             self.database.collection("User").document(Auth.auth().currentUser?.uid ?? "").updateData(["blockedUser": FieldValue.arrayUnion([userId])])

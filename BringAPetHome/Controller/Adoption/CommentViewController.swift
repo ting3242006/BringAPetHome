@@ -11,22 +11,11 @@ import Firebase
 class CommentViewController: UIViewController {
     var adoptionId: String?
     var userData: UserModel?
-    
-    enum Comments: String {
-        case commentText = "commentText"
-        case commentId = "commentId"
-        case adoptionId = "adoptionId"
-        case time = "time"
-        case creator = "creator"
-        case userUid = "userUid"
-    }
-    
     var creator: [String: Any] = [
         "id": "",
         "name": ""
     ]
-    
-//    let db = Firestore.firestore()
+
     var dataBase = Firestore.firestore()
     var dbModels: [[String: Any]] = [] {
         didSet {
@@ -34,7 +23,6 @@ class CommentViewController: UIViewController {
         }
     }
     var blackView = UIView(frame: UIScreen.main.bounds)
-    var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     
     @IBOutlet weak var commentTextField: UITextField!
     @IBOutlet weak var bgView: UIView!
@@ -74,7 +62,6 @@ class CommentViewController: UIViewController {
             self.present(alert, animated: true)
         } else {
             addCommend(text: commentTextField.text ?? "")
-//            dismiss(animated: true, completion: nil)
             fetchCommetData()
             commentTextField.text = ""
             tableView.reloadData()
@@ -82,7 +69,6 @@ class CommentViewController: UIViewController {
     }
     
     @IBAction func closePopVC(_ sender: Any) {
-//        dismiss(animated: true)
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
             self.blackView.alpha = 0
         }
@@ -92,14 +78,13 @@ class CommentViewController: UIViewController {
         }
     }
     
-    func showLoginVC() {
+    private func showLoginVC() {
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let loginVC = mainStoryboard.instantiateViewController(withIdentifier: "SignInWithAppleVC") as? SignInWithAppleVC else { return }
-        //self.navigationController?.present(loginVC, animated: true)
         present(loginVC, animated: true)
     }
     
-    func addCommend(text: String) {
+    private func addCommend(text: String) {
         let comment = Firestore.firestore().collection("Comments")
         let document = comment.document()
         let timeInterval = Date()
@@ -110,8 +95,6 @@ class CommentViewController: UIViewController {
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
             Comments.userUid.rawValue: Auth.auth().currentUser?.uid
-//            Comments.userUid.rawValue: userData?.id            
-//            Comments.postId.rawValue: postId
         ]
         document.setData(data) { error in
             if let error = error {
@@ -122,57 +105,28 @@ class CommentViewController: UIViewController {
         }
     }
     
-    func fetchCommetData() {
+    private func fetchCommetData() {
         dataBase.collection("Comments").whereField("adoptionId", isEqualTo: adoptionId ?? "").order(by: "time", descending: true).getDocuments() { [weak self] (querySnapshot, error) in
-//        db.collection("Comments").order(by: Comments.time.rawValue).getDocuments() { [weak self] (querySnapshot, error) in
             self?.dbModels = []
             if let error = error {
                 print("Error fetching documents: \(error)")
             } else {
                 for document in querySnapshot!.documents {
                     let commentDic = document.data()
-//                    commentDic["profileUrlString"] = "profileUrlString"
-//                    commentDic[Comments.userUid.rawValue]
-//                    { result in
-//                        switch result {
-//                        case let .success(user):
-//                            self.userData = user
                     self?.dbModels.insert(commentDic, at: 0)
-//                        case .failure(_):
-//                            print("Error")
-//                        }
                 }
             }
         }
     }
     
-    func listen() {
-        dataBase.collection("Adoption").addSnapshotListener { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                print("Error fetching snapshots: \(error!)")
-                return
-            }
-            snapshot.documentChanges.forEach { diff in
-                if (diff.type == .added) {
-                }
-            }
-        }
-    }
-    
-    func blackViewDynamic() {
+    private func blackViewDynamic() {
         blackView.backgroundColor = .black
         blackView.alpha = 0
         blackView.isUserInteractionEnabled = true
-        blackView.addGestureRecognizer(tapGestureRecognizer)
         presentingViewController?.view.addSubview(blackView)
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.5, delay: 0) {
             self.blackView.alpha = 0.5
         }
-        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissController(_:)))
-    }
-    
-    @objc func dismissController(_ sender: UITapGestureRecognizer) {
-        self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -198,7 +152,6 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
-//        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
         UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
         { result in
             switch result {

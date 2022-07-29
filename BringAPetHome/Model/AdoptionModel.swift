@@ -85,4 +85,6 @@ enum Comments: String {
     case commentId = "commentId"
     case time = "time"
     case creator = "creator"
+    case adoptionId = "adoptionId"
+    case userUid = "userUid"
 }

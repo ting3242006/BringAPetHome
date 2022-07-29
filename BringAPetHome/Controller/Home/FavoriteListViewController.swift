@@ -11,10 +11,6 @@ class FavoriteListViewController: UIViewController {
 
     @IBOutlet weak var favoriteTableView: UITableView!
     
-    static var identifier: String {
-        return String(describing: self)
-    }
-    
     // 宣告 Core Data 常數
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var animalList: [Animal] = []

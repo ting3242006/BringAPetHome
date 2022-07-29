@@ -23,7 +23,6 @@ class SignInWithAppleVC: UIViewController {
     var avPlayer: AVPlayer!
     var avPlayerLayer: AVPlayerLayer!
     var videoPlayer: AVPlayerLooper?
-    var paused: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,15 +31,7 @@ class SignInWithAppleVC: UIViewController {
         self.observeAppleIDState()
         self.checkAppleIDCredentialState(userID: appleUserID ?? "")
         
-//        Auth.auth().addStateDidChangeListener { auth, user in
-//            if let user = user {
-//                print("\(user.uid) login")
-//            } else {
-//                print("not login")
-//            }
-//        }
         let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-        //        changeRequest?.photoURL = URL(string: "https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg")
         changeRequest?.commitChanges(completion: { error in
             guard error == nil else {
                 print(error?.localizedDescription)
@@ -116,8 +107,6 @@ class SignInWithAppleVC: UIViewController {
                 CustomFunc.customAlert(title: "使用者憑證已被註銷！",
                                        message: "請到\n「設定 → Apple ID → 密碼與安全性 → 使用 Apple ID 的 App」\n將此 App 停止使用 Apple ID\n並再次使用 Apple ID 登入本 App！",
                                        vc: self, actionHandler: nil)
-                //            case .notFound:
-                //                CustomFunc.customAlert(title: "", message: "使用者尚未使用過 Apple ID 登入！", vc: self, actionHandler: nil)
             case .transferred:
                 CustomFunc.customAlert(title: "請與開發者團隊進行聯繫，以利進行使用者遷移！", message: "", vc: self, actionHandler: nil)
             default:
@@ -189,7 +178,6 @@ class SignInWithAppleVC: UIViewController {
                 if (remainingLength == 0) {
                     return
                 }
-                
                 if (random < charset.count) {
                     result.append(charset[Int(random)])
                     remainingLength -= 1
@@ -207,11 +195,6 @@ class SignInWithAppleVC: UIViewController {
         }.joined()
         return hashString
     }
-    //    @IBAction func closeLogin(_ sender: Any) {
-    //        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-    //        guard let homeVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController else { return }
-    //        self.navigationController?.pushViewController(homeVC, animated: true)
-    //    }
 }
 
 extension SignInWithAppleVC {
@@ -226,10 +209,6 @@ extension SignInWithAppleVC {
                 return
             }
             CustomFunc.customAlert(title: "登入成功！", message: "", vc: self, actionHandler: self.getFirebaseUserInfo)
-            //            let tabController =  self.view.window?.rootViewController as? UITabBarController
-            //            self.dismiss(animated: false) {
-            //                tabController?.selectedIndex = 0
-            //            }
         }
     }
     
@@ -241,15 +220,7 @@ extension SignInWithAppleVC {
             return
         }
         checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "")
-        //        let uid = user.uid
-        //        let email = user.email
-        //
-        //        UserFirebaseManager.shared.checkUserEmail(userId: Auth.auth().currentUser?.uid ?? "") { result in
-        //    }
-        //        let tabController =  self.view.window?.rootViewController as? UITabBarController
-        //        self.dismiss(animated: false) {
-        //            tabController?.selectedIndex = 0
-        //        }
+
         self.dismiss(animated: true)
         presentingViewController?.viewWillAppear(true)
     }
@@ -262,14 +233,6 @@ extension SignInWithAppleVC {
             if let querySnapshot = querySnapshot {
                 if let document = querySnapshot.documents.first {
                     for data in querySnapshot.documents {
-//                        let userData = data.data(with: ServerTimestampBehavior.none)
-//                        let userName = userData["name"] as? String ?? ""
-//                        let userEmail = userData["email"] as? String ?? ""
-//                        let userId = userData["id"] as? String ?? ""
-//                        let userImage = userData["image"] as? String ?? ""
-//                        let blockList = userData["blockedUser"] as? [String] ?? [""]
-//
-//                        let user = UserModel(id: userId, name: userName, email: userEmail, image: userImage, blockedUser: blockList)
                     }
                     print("Account is exist")
                 } else {
