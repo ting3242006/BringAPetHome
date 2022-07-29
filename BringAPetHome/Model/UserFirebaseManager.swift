@@ -20,18 +20,15 @@ class UserFirebaseManager {
     var currentUser: UserModel?
     var userData: UserModel?
     var friendData: UserModel?
-    var isUserBlocked: Bool = false
+    public var isUserBlocked: Bool = false
     
     func addUser(name: String, uid: String, email: String, image: String, blockedUser: [String]) {
         let user = dataBase.collection("User")
         let document = user.document(uid)
         let timeInterval = Date()
-        //        let userId = document.documentID
         let data: [String: Any] = [
             "email": email,
-            //            "auth": Auth.auth().currentUser?.displayName ?? "",
             "auth": currentUser,
-            //            "auth": Auth.auth().currentUser?.displayName ?? "nil",
             "id": uid,
             "name": name,
             "createdTime": timeInterval,
@@ -73,25 +70,6 @@ class UserFirebaseManager {
         ])
         completion(.success(()))
     }
-    
-    //    func fetchUserInfo(uid: String, completion: @escaping ([UserModel]?) -> Void) {
-    //        dataBase.collection("User").whereField("id", isEqualTo: uid).getDocuments { (querySnapshot, _) in
-    //            guard let querySnapshot = querySnapshot else {
-    //                return
-    //            }
-    //            //            self.shareList.removeAll()
-    //            for data in querySnapshot.documents {
-    //                let userData = data.data(with: ServerTimestampBehavior.none)
-    //                let userName = userData["name"] as? String ?? ""
-    //                let userEmail = userData["email"] as? String ?? ""
-    //                let userId = userData["id"] as? String ?? ""
-    //                let userImage = userData["userImage"] as? String ?? ""
-    //                let user = UserModel(id: userId, name: userName, email: userEmail, imageURLString: userImage)
-    //                self.userData = user
-    //            }
-    //            completion(.success(self.userData ?? UserModel(id: "", name: "", email: "", imageURLString: "")))
-    //        }
-    //    }
     
     func deleteAccount() {
         let user = Auth.auth().currentUser
@@ -138,7 +116,7 @@ class UserFirebaseManager {
                         alertController.present(alertController, animated: true)
                         
                     } else if self.isUserBlocked == false {
-                        //                        self.confirm()
+                        
                     }
                 }
                 print("Account is exist")                

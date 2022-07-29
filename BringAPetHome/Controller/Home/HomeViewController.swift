@@ -18,22 +18,20 @@ enum PageStatus {
 
 class HomeViewController: UIViewController {
     
+    let header = MJRefreshStateHeader()
+    var newAnimalList: [AnimalData] = []
+    var skip: Int = 100
+    var pageStatus: PageStatus = .notLoadingMore
     var animalDatas = [AnimalData]() {
         didSet {
             reloadData()
         }
     }
     
-    let header = MJRefreshHeader()
-    var newAnimalList: [AnimalData] = []
-    var skip: Int = 100
-    var pageStatus: PageStatus = .notLoadingMore
-    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationItem()
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -46,14 +44,12 @@ class HomeViewController: UIViewController {
         // layout
         view.addSubview(collectionView)
         collectionView.fillSuperView()
-        
         collectionView.register(HomeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
         fetchData()
-        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
-        header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
-        self.collectionView.mj_header = header
+        setupMJRefresh()
+        setupNavigationItem()
         updateNavBarColor()
     }
     
@@ -80,17 +76,7 @@ class HomeViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    func setupNavigationItem() {
-        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
-            let resizeImage = resizeImage(image: image, width: 30)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
-                                                                style: .plain,
-                                                                target: self,
-                                                                action: #selector(didTap))
-        }
-    }
-    
-    func fetchData() {
+    private func fetchData() {
         self.setupLottie()
         ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
             switch result {
@@ -105,7 +91,17 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func updateNavBarColor() {
+    private func setupNavigationItem() {
+        if let image = UIImage(systemName: "waveform.and.magnifyingglass") {
+            let resizeImage = resizeImage(image: image, width: 30)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: resizeImage.withRenderingMode(.alwaysOriginal).withTintColor(UIColor.darkGray ).withRenderingMode(.alwaysOriginal),
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(didTap))
+        }
+    }
+    
+    private func updateNavBarColor() {
             if #available(iOS 15.0, *) {
                 let barAppearance = UINavigationBarAppearance()
                 barAppearance.configureWithOpaqueBackground()
@@ -119,7 +115,7 @@ class HomeViewController: UIViewController {
             }
         }
     
-    func setupLottie() {
+    private func setupLottie() {
         let animationView = AnimationView(name: "lf30_editor_wgvv5jrs")
         animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
         animationView.center = self.view.center
@@ -131,7 +127,7 @@ class HomeViewController: UIViewController {
         })
     }
     
-    func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
+    private func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
         let size = CGSize(width: width, height:
                             image.size.height * width / image.size.width)
         let renderer = UIGraphicsImageRenderer(size: size)
@@ -141,10 +137,17 @@ class HomeViewController: UIViewController {
         return newImage
     }
     
+    private func setupMJRefresh() {
+        header.setRefreshingTarget(self, refreshingAction: #selector(self.headerRefresh))
+        header.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
+        self.collectionView.mj_header = header
+    }
+    
     // MARK: - Action
     @objc private func didTap() {
         let filterVC = UIStoryboard(name: "Main",
-                                    bundle: nil).instantiateViewController(withIdentifier: "HomeFilterViewController") as? HomeFilterViewController
+                                    bundle: nil).instantiateViewController(
+                                        withIdentifier: "HomeFilterViewController") as? HomeFilterViewController
         filterVC?.delegate = self
         navigationController?.pushViewController(filterVC!, animated: true)
     }
@@ -167,7 +170,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.reuseIdentifier,
                                                             for: indexPath) as? HomeCollectionViewCell
-        else { return UICollectionViewCell() } // 要拆開寫
+        else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
         let url = item.albumFile
         cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
@@ -175,8 +178,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         cell.shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         cell.layer.cornerRadius = 10
         cell.shelterImageView.clipsToBounds = true
-//        cell.sexLabel.text = String(item.sex)
-//        cell.colorLabel.text = item.colour
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.sexLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.textColor = UIColor(named: "RichBlack")
@@ -258,7 +259,7 @@ extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
         self.setupLottie()
         ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self]
-            result  in
+            result in
             
             switch result {
 

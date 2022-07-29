@@ -10,9 +10,10 @@ import UIKit
 class ShareCollectionViewCell: UICollectionViewCell {
     
     static let reuseIdentifier = "\(ShareCollectionViewCell.self)"
+    static let width = floor((UIScreen.main.bounds.width - 4 * 2) / 3)
+    
     @IBOutlet weak var shareImage: UIImageView!
     @IBOutlet weak var imageWidthConstraint: NSLayoutConstraint!
-    static let width = floor((UIScreen.main.bounds.width - 4 * 2) / 3)
     
     override func awakeFromNib() {
           super.awakeFromNib()

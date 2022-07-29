@@ -17,18 +17,10 @@ protocol HomeFilterViewControllerDelegate: AnyObject {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter)
 }
 
-var orginalanimalResults = [AnimalData]()
-var animalResults = [AnimalData]()
-var skip: Int = 100
-
 class HomeFilterViewController: UIViewController {
     
     var filter = Filter()
     var delegate: HomeFilterViewControllerDelegate?
-    var selectedButton = UIButton()
-    var dataSource = [String]()
-    let transparentView = UIView()
-    let tableView = UITableView()
     
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var dogButton: UIButton!
@@ -42,38 +34,17 @@ class HomeFilterViewController: UIViewController {
     @IBOutlet weak var bigButton: UIButton!
     
     @IBOutlet weak var locationButton: UIButton!
-    @IBOutlet weak var colorButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
         layoutButton()
-        
         view.backgroundColor = .white
-        self.navigationItem.title = "篩選"
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left")?
-                .withTintColor(UIColor.darkGray)
-                .withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(didTapClose))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: "fluent_filter-dismiss")?
-                .withTintColor(UIColor.darkGray)
-                .withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(cleanFilter))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
     }
-    
-    
+        
     @IBAction func selectDog(_ sender: Any) {
         filter.kind = "狗"
         self.dogButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
@@ -134,32 +105,6 @@ class HomeFilterViewController: UIViewController {
         self.mediumButton.tintColor = .lightGray
     }
     
-    func addTransparentView(frames: CGRect) {
-        let window = UIApplication.shared.keyWindow
-        transparentView.frame = window?.frame ?? self.view.frame
-        self.view.addSubview(transparentView)
-        
-        tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-        self.view.addSubview(tableView)
-        tableView.layer.cornerRadius = 5
-        
-        transparentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
-        tableView.reloadData()
-        let tapgesture = UITapGestureRecognizer(target: self, action: #selector(removeTransparentView))
-        transparentView.addGestureRecognizer(tapgesture)
-        transparentView.alpha = 0
-        UIView.animate(withDuration: 0.4,
-                       delay: 0.0, usingSpringWithDamping: 1.0,
-                       initialSpringVelocity: 1.0,
-                       options: .curveEaseInOut,
-                       animations: {
-            self.transparentView.alpha = 0.5
-            self.tableView.frame = CGRect(x: frames.origin.x,
-                                          y: frames.origin.y + frames.height + 5, width: frames.width,
-                                          height: CGFloat(self.dataSource.count * 50))
-        }, completion: nil)
-    }
-    
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
     }
@@ -170,18 +115,6 @@ class HomeFilterViewController: UIViewController {
         filter.sex = ""
         delegate?.selectFilterViewController(self, didSelect: filter)
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    @objc func removeTransparentView() {
-        let frames = selectedButton.frame
-        UIView.animate(withDuration: 0.4,
-                       delay: 0.0, usingSpringWithDamping: 1.0,
-                       initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.transparentView.alpha = 0
-            self.tableView.frame = CGRect(x: frames.origin.x,
-                                          y: frames.origin.y + frames.height,
-                                          width: frames.width, height: 0)
-        }, completion: nil)
     }
     
     @IBAction func sendFilterButton(_ sender: UIButton) {
@@ -218,26 +151,21 @@ class HomeFilterViewController: UIViewController {
         bigButton.layer.borderWidth = 1
         filterButton.layer.cornerRadius = 15
         filterButton.clipsToBounds = true
-    }
-}
-
-extension HomeFilterViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = dataSource[indexPath.row]
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedButton.setTitle(dataSource[indexPath.row], for: .normal)
-        removeTransparentView()
+        self.navigationItem.title = "篩選"
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "chevron.left")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(didTapClose))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(named: "fluent_filter-dismiss")?
+                .withTintColor(UIColor.darkGray)
+                .withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(cleanFilter))
     }
 }

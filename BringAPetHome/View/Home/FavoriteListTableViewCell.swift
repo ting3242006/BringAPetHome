@@ -20,8 +20,7 @@ class FavoriteListTableViewCell: UITableViewCell {
     @IBOutlet weak var sexImageView: UIImageView!
     
     override func awakeFromNib() {
-        super.awakeFromNib()
-        
+        super.awakeFromNib()        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
