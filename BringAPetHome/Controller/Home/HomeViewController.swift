@@ -20,7 +20,7 @@ class HomeViewController: UIViewController {
     
     let header = MJRefreshStateHeader()
     var newAnimalList: [AnimalData] = []
-    var skip: Int = 100
+    var skip: Int = 0
     var pageStatus: PageStatus = .notLoadingMore
     var animalDatas = [AnimalData]() {
         didSet {

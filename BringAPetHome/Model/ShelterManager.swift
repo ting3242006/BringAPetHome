@@ -18,7 +18,7 @@ class ShelterManager {
     
     func fetchData(skip: Int, filter: Filter? = nil, completion: @escaping (Result<[AnimalData]>) -> Void) {
         
-        var urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=\(skip)"
+        var urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=\(skip)"
         if let filter = filter {
             if let kind = filter.kind {
                 urlString.append("&animal_kind=\(kind)")
@@ -40,7 +40,7 @@ class ShelterManager {
         
         URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
-                completion(.failure(error!))
+                completion(.failure(error ?? STHTTPClientError.unexpectedError))
                 return
             }
             do {
