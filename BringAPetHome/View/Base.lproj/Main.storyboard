@@ -2007,7 +2007,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZCs-yh-3bO">
                                 <rect key="frame" x="0.0" y="316" width="414" height="580"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-13" translatesAutoresizingMaskIntoConstraints="NO" id="lbM-Iy-v3G">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_splash_13" translatesAutoresizingMaskIntoConstraints="NO" id="lbM-Iy-v3G">
                                         <rect key="frame" x="157" y="90" width="100" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="0ag-LT-Sfg"/>
@@ -2120,7 +2120,7 @@
         <image name="dketch-9" width="800" height="800"/>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
-        <image name="logo-13" width="801" height="801"/>
+        <image name="logo_splash_13" width="801" height="801"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>
         <image name="paperplane.fill" catalog="system" width="128" height="118"/>
         <image name="person" catalog="system" width="128" height="117"/>
