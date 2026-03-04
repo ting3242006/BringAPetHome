@@ -8,7 +8,6 @@
 import Foundation
 import Firebase
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 class ShareManager {
     

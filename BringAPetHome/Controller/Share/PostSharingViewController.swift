@@ -179,7 +179,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     private func setupLottie() {
-        let animationView = AnimationView(name: "lf30_editor_5phd8cww")
+        let animationView = LottieAnimationView(name: "lf30_editor_5phd8cww")
         animationView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
@@ -189,7 +189,7 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     private func correctAnimation() {
-        let animationView = AnimationView(name: "lf30_editor_yqqlpukj")
+        let animationView = LottieAnimationView(name: "lf30_editor_yqqlpukj")
         animationView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill

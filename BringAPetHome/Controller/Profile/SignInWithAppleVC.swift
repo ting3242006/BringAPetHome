@@ -269,8 +269,9 @@ extension SignInWithAppleVC: ASAuthorizationControllerDelegate {
                 return
             }
             // 產生 Apple ID 登入的 Credential
-            let credential = OAuthProvider.credential(withProviderID: "apple.com",
-                                                      idToken: idTokenString, rawNonce: nonce)
+            let credential = OAuthProvider.credential(providerID: .apple,
+                                                      idToken: idTokenString,
+                                                      rawNonce: nonce)
             // 與 Firebase Auth 進行串接
             firebaseSignInWithApple(credential: credential)
         }

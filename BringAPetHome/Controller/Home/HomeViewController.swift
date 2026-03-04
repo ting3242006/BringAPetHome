@@ -116,7 +116,7 @@ class HomeViewController: UIViewController {
         }
     
     private func setupLottie() {
-        let animationView = AnimationView(name: "lf30_editor_wgvv5jrs")
+        let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
         animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
         animationView.center = self.view.center
         animationView.contentMode = .scaleAspectFill
