@@ -20,8 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         let cache = ImageCache.default
-        cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 2000
-//        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 100
+        cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 300
+        cache.memoryStorage.config.countLimit = 300
+        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 500
+        cache.diskStorage.config.expiration = .days(7)
+        
+        let downloader = ImageDownloader.default
+        downloader.downloadTimeout = 12
+        downloader.sessionConfiguration.waitsForConnectivity = false
+        downloader.sessionConfiguration.timeoutIntervalForRequest = 12
+        downloader.sessionConfiguration.requestCachePolicy = .returnCacheDataElseLoad
         
         return true
     }

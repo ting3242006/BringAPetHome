@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class HomeCollectionViewCell: UICollectionViewCell {
     
@@ -64,5 +65,11 @@ class HomeCollectionViewCell: UICollectionViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        shelterImageView.kf.cancelDownloadTask()
+        shelterImageView.image = UIImage(named: "dketch-4")
     }
 }

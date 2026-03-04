@@ -19,8 +19,22 @@ enum PageStatus {
 class HomeViewController: UIViewController {
     
     let header = MJRefreshStateHeader()
-    var newAnimalList: [AnimalData] = []
-    var skip: Int = 0
+    private let initialPageSize = 20
+    private let pageSize = 50
+    private var skip: Int = 0
+    private var isFetching = false
+    private var hasMoreData = true
+    private var hasPrefetchedAfterInitialLoad = false
+    private var currentFilter: Filter?
+    private var imagePrefetcher: ImagePrefetcher?
+    private lazy var loadingAnimationView: LottieAnimationView = {
+        let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
+        animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
+        animationView.center = self.view.center
+        animationView.contentMode = .scaleAspectFill
+        animationView.isHidden = true
+        return animationView
+    }()
     var pageStatus: PageStatus = .notLoadingMore
     var animalDatas = [AnimalData]() {
         didSet {
@@ -35,6 +49,7 @@ class HomeViewController: UIViewController {
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.prefetchDataSource = self
         collectionView.allowsSelection = true
         
         // style
@@ -47,7 +62,8 @@ class HomeViewController: UIViewController {
         collectionView.register(HomeCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeCollectionViewCell.reuseIdentifier)
         
-        fetchData()
+        view.addSubview(loadingAnimationView)
+        fetchData(reset: true)
         setupMJRefresh()
         setupNavigationItem()
         updateNavBarColor()
@@ -59,11 +75,9 @@ class HomeViewController: UIViewController {
     }
     
     @objc func headerRefresh() {
-        // 更新資料
-        fetchData()
-        self.collectionView.reloadData()
-        // 结束刷新
-        self.collectionView.mj_header?.endRefreshing()
+        fetchData(reset: true) { [weak self] in
+            self?.collectionView.mj_header?.endRefreshing()
+        }
     }
     
     private func reloadData() {
@@ -76,17 +90,54 @@ class HomeViewController: UIViewController {
         collectionView.reloadData()
     }
     
-    private func fetchData() {
-        self.setupLottie()
-        ShelterManager.shared.fetchData(skip: skip) { [weak self] result in
-            switch result {
-            case .success(let animalDatas):
-                self?.animalDatas = animalDatas
-                // 把沒照片的排到後面
-                self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
-                })
-            case .failure(let error):
-                print(error)
+    private func fetchData(reset: Bool = false, isBackgroundPrefetch: Bool = false, completion: (() -> Void)? = nil) {
+        guard isFetching == false else {
+            completion?()
+            return
+        }
+        guard hasMoreData || reset else {
+            completion?()
+            return
+        }
+
+        if reset {
+            skip = 0
+            hasMoreData = true
+            hasPrefetchedAfterInitialLoad = false
+        }
+
+        let fetchCount = (reset && !hasPrefetchedAfterInitialLoad) ? initialPageSize : pageSize
+        isFetching = true
+        if reset && !isBackgroundPrefetch {
+            setupLottie()
+        }
+        ShelterManager.shared.fetchData(skip: skip, top: fetchCount, filter: currentFilter) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let fetchedAnimals):
+                    let filteredAnimals = fetchedAnimals.filter { !$0.albumFile.isEmpty }
+                    self.hasMoreData = fetchedAnimals.count >= fetchCount
+                    self.skip += fetchedAnimals.count
+                    if reset {
+                        self.animalDatas = filteredAnimals
+                    } else {
+                        self.animalDatas.append(contentsOf: filteredAnimals)
+                    }
+                    self.prefetchImages(from: filteredAnimals, limit: 30)
+                    if reset {
+                        self.hasPrefetchedAfterInitialLoad = true
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+                self.isFetching = false
+                self.pageStatus = .notLoadingMore
+                self.loadingAnimationView.isHidden = true
+                completion?()
+                if reset && !isBackgroundPrefetch && self.hasMoreData {
+                    self.fetchData(isBackgroundPrefetch: true)
+                }
             }
         }
     }
@@ -116,15 +167,23 @@ class HomeViewController: UIViewController {
         }
     
     private func setupLottie() {
-        let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
-        animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
-        animationView.center = self.view.center
-        animationView.contentMode = .scaleAspectFill
-        
-        view.addSubview(animationView)
-        animationView.play(fromFrame: 0, toFrame: 288, loopMode: .playOnce, completion: { (finished) in
-            animationView.isHidden = true
+        loadingAnimationView.isHidden = false
+        loadingAnimationView.play(fromFrame: 0, toFrame: 288, loopMode: .playOnce, completion: { [weak self] _ in
+            self?.loadingAnimationView.isHidden = true
         })
+    }
+    
+    private func prefetchImages(from animals: [AnimalData], limit: Int) {
+        let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
+        guard !urls.isEmpty else { return }
+        imagePrefetcher = ImagePrefetcher(
+            urls: urls,
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode
+            ]
+        )
+        imagePrefetcher?.start()
     }
     
     private func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
@@ -159,11 +218,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if newAnimalList.isEmpty {
-            return animalDatas.count
-        } else {
-            return newAnimalList.count
-        }
+        animalDatas.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -173,7 +228,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
         let url = item.albumFile
-        cell.shelterImageView.kf.setImage(with: URL(string: url), placeholder: UIImage(named: "dketch-4"))
+        let imageSize = cell.shelterImageView.bounds.size == .zero ? CGSize(width: 300, height: 300) : cell.shelterImageView.bounds.size
+        let processor = DownsamplingImageProcessor(size: imageSize)
+        cell.shelterImageView.kf.setImage(
+            with: URL(string: url),
+            placeholder: UIImage(named: "dketch-4"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode,
+                .cacheOriginalImage
+            ]
+        )
         cell.shelterImageView.contentMode = .scaleAspectFill
         cell.shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         cell.layer.cornerRadius = 10
@@ -210,17 +276,11 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard scrollView.contentSize.height > self.collectionView.frame.height,
-              self.pageStatus == .notLoadingMore else { return }
+              self.pageStatus == .notLoadingMore,
+              hasMoreData else { return }
         if scrollView.contentSize.height - (scrollView.frame.size.height + scrollView.contentOffset.y) <= -10 {
             self.pageStatus = .loadingMore
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                self.skip += 100
-                print("skip = \(self.skip)")
-                self.fetchData()
-                self.newAnimalList.append(contentsOf: self.animalDatas)
-                self.pageStatus = .notLoadingMore
-                self.collectionView.reloadData()
-            }
+            self.fetchData()
         }
     }
 }
@@ -257,23 +317,29 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
-        self.setupLottie()
-        ShelterManager.shared.fetchData(skip: 0, filter: filter) { [weak self]
-            result in
-            
-            switch result {
+        currentFilter = filter
+        fetchData(reset: true)
+    }
+}
 
-            case .success(let animalDatas):
-                self?.animalDatas = animalDatas
-                // 把沒照片的排到後面
-                self?.animalDatas = animalDatas.filter({ $0.albumFile != ""
-                })
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
-            }
+extension HomeViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let urls = indexPaths.compactMap { indexPath -> URL? in
+            guard animalDatas.indices.contains(indexPath.item) else { return nil }
+            return URL(string: animalDatas[indexPath.item].albumFile)
         }
+        guard !urls.isEmpty else { return }
+        imagePrefetcher = ImagePrefetcher(
+            urls: urls,
+            options: [
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode
+            ]
+        )
+        imagePrefetcher?.start()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        // Keep prefetch alive to reduce visible image blanking while fast scrolling.
     }
 }
