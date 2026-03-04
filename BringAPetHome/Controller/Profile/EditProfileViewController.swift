@@ -8,21 +8,81 @@
 import UIKit
 import Firebase
 import FirebaseStorage
+import Kingfisher
 
-class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
-    
+class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+
     @IBOutlet weak var sendInfoButton: UIButton!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var uploadImageButton: UIButton!
     @IBOutlet weak var deleteAccountButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
-    
+
     let dataBase = Firestore.firestore()
-    
+    private var originalViewY: CGFloat = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        usernameTextField.delegate = self
+        loadUserData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        originalViewY = view.frame.origin.y
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let window = view.window else { return }
+        let buttonFrameInWindow = sendInfoButton.convert(sendInfoButton.bounds, to: window)
+        let overlap = buttonFrameInWindow.maxY - keyboardFrame.minY + 16
+        if overlap > 0 {
+            UIView.animate(withDuration: duration) {
+                self.view.frame.origin.y = self.originalViewY - overlap
+            }
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        guard let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
+        UIView.animate(withDuration: duration) {
+            self.view.frame.origin.y = self.originalViewY
+        }
+    }
+
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+
+    private func loadUserData() {
+        guard let user = UserFirebaseManager.shared.userData else { return }
+        usernameTextField.text = user.name
+        if let url = URL(string: user.image) {
+            userImageView.kf.setImage(with: url)
+        }
     }
     
     @IBAction func deleteAccount(_ sender: Any) {
@@ -44,12 +104,11 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBAction func uploadInfo(_ sender: Any) {
         guard let imageData = self.userImageView.image?.jpegData(compressionQuality: 0.5) else { return }
-        let currentUser = Auth.auth().currentUser
-        guard let user = currentUser else {
-            return
-        }
+        guard let user = Auth.auth().currentUser else { return }
+
+        sendInfoButton.isEnabled = false
+
         let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        
         fileReference.putData(imageData, metadata: nil) { result in
             switch result {
             case .success:
@@ -57,21 +116,20 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
                     switch result {
                     case .success(let url):
                         UserFirebaseManager.shared.updateUserInfo(id: user.uid, image: "\(url)",
-                                                                  name: usernameTextField.text ?? "") { result in
+                                                                  name: self.usernameTextField.text ?? "") { result in
                             switch result {
                             case .success:
-                                print("~~~~~Success")
+                                self.navigationController?.popToRootViewController(animated: true)
                             case .failure:
-                                print("Error")
+                                self.sendInfoButton.isEnabled = true
                             }
                         }
-                        navigationController?.popToRootViewController(animated: true)
                     case .failure:
-                        break
+                        self.sendInfoButton.isEnabled = true
                     }
                 }
             case .failure:
-                break
+                self.sendInfoButton.isEnabled = true
             }
         }
     }

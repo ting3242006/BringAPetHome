@@ -66,8 +66,15 @@ class UserFirebaseManager {
         dataBase.collection("User").document(id).updateData([
             "name": name,
             "image": image
-        ])
-        completion(.success(()))
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                self.userData?.name = name
+                self.userData?.image = image
+                completion(.success(()))
+            }
+        }
     }
     
     func deleteAccount() {

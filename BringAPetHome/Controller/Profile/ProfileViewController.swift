@@ -91,20 +91,25 @@ class ProfileViewController: UIViewController {
     }
     
     private func getUserProfile() {
-        if Auth.auth().currentUser != nil {
-            UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
-                switch result {
-                case let .success(user):
-                    self.userData = user
-                    let urls = self.userData?.image
-                    self.userImageView.kf.setImage(with: URL(string: urls ?? ""))
-                    self.userNameLabel.text = self.userData?.name
-                case .failure(_):
-                    print("Error")
-                }
-            }
-        } else {
+        guard Auth.auth().currentUser != nil else {
             userNameLabel.text = "暱稱"
+            return
+        }
+        // 先用記憶體快取立即顯示（updateUserInfo 成功後已更新）
+        if let cached = UserFirebaseManager.shared.userData {
+            userImageView.kf.setImage(with: URL(string: cached.image))
+            userNameLabel.text = cached.name
+        }
+        // 再從 Firestore 同步最新資料
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+            switch result {
+            case let .success(user):
+                self.userData = user
+                self.userImageView.kf.setImage(with: URL(string: user.image))
+                self.userNameLabel.text = user.name
+            case .failure(let error):
+                print("[getUserProfile] fetchUser 失敗: \(error)")
+            }
         }
     }
     
