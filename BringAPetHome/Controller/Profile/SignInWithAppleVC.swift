@@ -59,10 +59,12 @@ class SignInWithAppleVC: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         bgView.layer.cornerRadius = 25
         let animatedImage = UIImage.animatedImageNamed("logo_1-", duration: 3.5)
         animatedIconImage.image = animatedImage
         animatedIconImage.layer.cornerRadius = 30
+        avPlayerLayer?.frame = bgView.bounds
     }
     
     @IBAction func goPrivacyWeb(_ sender: Any) {
@@ -83,16 +85,15 @@ class SignInWithAppleVC: UIViewController {
     
     func playVideo() {
         guard let path = Bundle.main.path(forResource: "pexels-cottonbro-6853336", ofType: "mp4") else { return }
-        
+
         let player = AVQueuePlayer()
         let item = AVPlayerItem(url: URL(fileURLWithPath: path))
         videoPlayer = AVPlayerLooper(player: player, templateItem: item)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = view.bounds
-        playerLayer.videoGravity = .resize
-        playerLayer.frame = bgView.layer.bounds
-        bgView.layer.insertSublayer(playerLayer, at: 0)
-        
+        avPlayerLayer = AVPlayerLayer(player: player)
+        avPlayerLayer.videoGravity = .resizeAspectFill
+        avPlayerLayer.frame = bgView.bounds
+        bgView.layer.insertSublayer(avPlayerLayer, at: 0)
+
         player.play()
     }
     
