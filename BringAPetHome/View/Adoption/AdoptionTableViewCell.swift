@@ -75,8 +75,6 @@ class AdoptionTableViewCell: UITableViewCell {
         case 3: return "一歲以上"
         default: return ""
         }
-        let age = showAge
-        ageLabel.text = age
     }
     
     func setupSex(sex: Int) -> String {
@@ -85,7 +83,5 @@ class AdoptionTableViewCell: UITableViewCell {
         case 1: return "Girl"
         default: return ""
         }
-        let sex = showSex
-        adoptionSexLabel.text = sex
     }
 }

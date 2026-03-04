@@ -28,7 +28,6 @@ class UserFirebaseManager {
         let timeInterval = Date()
         let data: [String: Any] = [
             "email": email,
-            "auth": currentUser,
             "id": uid,
             "name": name,
             "createdTime": timeInterval,
@@ -64,7 +63,7 @@ class UserFirebaseManager {
     }
     
     func updateUserInfo(id: String, image: String, name: String, completion: @escaping (Result<Void>) -> Void) {
-        let docRef = dataBase.collection("User").document(id).updateData([
+        dataBase.collection("User").document(id).updateData([
             "name": name,
             "image": image
         ])

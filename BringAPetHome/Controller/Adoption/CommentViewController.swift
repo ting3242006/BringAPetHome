@@ -87,14 +87,14 @@ class CommentViewController: UIViewController {
     private func addCommend(text: String) {
         let comment = Firestore.firestore().collection("Comments")
         let document = comment.document()
-        let timeInterval = Date()
+        let currentUserUid = Auth.auth().currentUser?.uid ?? ""
         let data: [String: Any] = [ // postid userid
             Comments.commentId.rawValue: document.documentID,
             Comments.commentText.rawValue: text,
             Comments.creator.rawValue: creator,
             Comments.time.rawValue: NSDate().timeIntervalSince1970,
             Comments.adoptionId.rawValue: adoptionId ?? "",
-            Comments.userUid.rawValue: Auth.auth().currentUser?.uid
+            Comments.userUid.rawValue: currentUserUid
         ]
         document.setData(data) { error in
             if let error = error {
@@ -141,7 +141,6 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                                                        for: indexPath) as? CommentTableViewCell else { return UITableViewCell() }
         
         let firebaseData = dbModels[indexPath.row]
-        let text: [String: Any] = firebaseData[Comments.commentText.rawValue] as? [String: Any] ?? [:]
         let time = firebaseData[Comments.time.rawValue] as? Double ?? 0.0
         let date = NSDate(timeIntervalSince1970: time)
         let formatter = DateFormatter()

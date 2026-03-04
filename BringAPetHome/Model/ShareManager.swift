@@ -24,20 +24,18 @@ class ShareManager {
         let document = share.document()
         let postId = document.documentID
         let timeInterval = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM.dd HH:mm"
-        formatter.timeZone = TimeZone.init(secondsFromGMT: 0)
-        let dates = formatter.string(from: timeInterval)
+        let currentUserName = Auth.auth().currentUser?.displayName ?? ""
+        let currentUserUid = Auth.auth().currentUser?.uid ?? ""
         
         let data: [String: Any] = [
             "user": [
                 "id": "ting",
-                "name": Auth.auth().currentUser?.displayName],
+                "name": currentUserName],
             "postId": "\(postId)",
             "image": image,
             "createdTime": timeInterval,
             "shareContent": shareContent,
-            "userUid": Auth.auth().currentUser?.uid
+            "userUid": currentUserUid
         ]
         document.setData(data) { error in
             if let error = error {
@@ -111,15 +109,13 @@ class ShareManager {
         let comment = dataBase.collection("ShareComment")
         let document = comment.document()
         let timeInterval = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM.dd HH:mm"
-        formatter.timeZone = TimeZone.init(secondsFromGMT: 0)
-        let dates = formatter.string(from: timeInterval)
+        let currentUserName = Auth.auth().currentUser?.displayName ?? ""
+        let currentUserUid = Auth.auth().currentUser?.uid ?? ""
         
         let data: [String: Any] = [
             "user": [
                 "id": "ting3242006",
-                "name": Auth.auth().currentUser?.displayName],
+                "name": currentUserName],
             //            "comments": [
             //                "commentId": document.documentID,
             //                "text": "\(comments)"],
@@ -127,7 +123,7 @@ class ShareManager {
             "text": "\(comments)",
             "time": timeInterval,
             "postId": postId,
-            "userUid": Auth.auth().currentUser?.uid
+            "userUid": currentUserUid
         ]
         document.setData(data) { error in
             if let error = error {
