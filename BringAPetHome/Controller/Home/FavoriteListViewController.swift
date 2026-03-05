@@ -24,13 +24,6 @@ class FavoriteListViewController: UIViewController {
         super.viewDidLoad()
         favoriteTableView.delegate = self
         favoriteTableView.dataSource = self
-        guard let context = context else { return }
-        
-        do {
-            animalList = try context.fetch(Animal.fetchRequest())
-        } catch {
-            print("error")
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

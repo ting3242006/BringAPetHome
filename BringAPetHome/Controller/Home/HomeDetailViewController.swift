@@ -160,7 +160,20 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
         
         if let saveAnimal = saveAnimal {
+            // 刪除對應的圖片檔案
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let imageUrl = documentsDirectory.appendingPathComponent("\(saveAnimal.id)").appendingPathExtension("jpg")
+            // 刪除前先 FileManager.removeItem
+            try? FileManager.default.removeItem(at: imageUrl)
+
             context.delete(saveAnimal)
+            // 刪除後呼叫 saveContext()，以免刪除只存在記憶體，app 關掉後又回來了。
+            appDelegate?.saveContext()
+            // 刪除後重設 saveAnimal
+            self.saveAnimal = nil
+
+            let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
+            cell?.heartButton.isSelected = false
         } else {
             saveAnimal = Animal(context: context)
             let id = pet?.animalId ?? 0
