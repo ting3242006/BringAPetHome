@@ -151,14 +151,13 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                            id: "\(firebaseData[Comments.commentId.rawValue] ?? "")",
                            date: formatter.string(from: date as Date))
         
-        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")")
-        { result in
+        UserFirebaseManager.shared.fetchUser(userId: "\(firebaseData[Comments.userUid.rawValue] ?? "")") { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.image
-                cell.commentUserImage.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
-                cell.commentUserId.text = self.userData?.name
+                cell.commentUserImage.kf.setImage(with: URL(string: user.image ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.commentUserId.text = user.name
             case .failure(_):
                 print("Error")
             }

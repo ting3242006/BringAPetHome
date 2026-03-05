@@ -70,7 +70,8 @@ class ShareDetailViewController: UIViewController {
     }
     
     @objc func fetchShareData() {
-        shareManager.fetchSharing(completion: { shareList in
+        shareManager.fetchSharing(completion: { [weak self] shareList in
+            guard let self = self else { return }
             self.shareList = shareList ?? []
             self.shareList.sort {
                 $0.createdTime.seconds > $1.createdTime.seconds

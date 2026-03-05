@@ -23,6 +23,7 @@ class SignInWithAppleVC: UIViewController {
     var avPlayer: AVPlayer!
     var avPlayerLayer: AVPlayerLayer!
     var videoPlayer: AVPlayerLooper?
+    private var authStateListener: AuthStateDidChangeListenerHandle?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,22 +41,22 @@ class SignInWithAppleVC: UIViewController {
         })
         
         // Do any additional setup after loading the view.
-        Auth.auth().addStateDidChangeListener { (auth, user) in
-            if user != nil {
-                guard let vc = self.storyboard?.instantiateViewController(
-                    withIdentifier: "HomeViewController") as? HomeViewController else {
-                    fatalError("can't find HomeViewController")
-                }
-                self.navigationController?.pushViewController(vc, animated: true)
-            } else {
-                return
+        authStateListener = Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+            guard let self = self, user != nil else { return }
+            guard let vc = self.storyboard?.instantiateViewController(
+                withIdentifier: "HomeViewController") as? HomeViewController else {
+                fatalError("can't find HomeViewController")
             }
+            self.navigationController?.pushViewController(vc, animated: true)
         }
         playVideo()
     }
     
     deinit {
         videoPlayer = nil
+        if let handle = authStateListener {
+            Auth.auth().removeStateDidChangeListener(handle)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -119,7 +120,8 @@ class SignInWithAppleVC: UIViewController {
     // 被動監聽 (使用 Apple ID 登入或登出都會觸發)
     func observeAppleIDState() {
         NotificationCenter.default.addObserver(forName: ASAuthorizationAppleIDProvider.credentialRevokedNotification,
-                                               object: nil, queue: nil) { (notification: Notification) in
+                                               object: nil, queue: nil) { [weak self] (notification: Notification) in
+            guard let self = self else { return }
             CustomFunc.customAlert(title: "使用者登入或登出", message: "", vc: self, actionHandler: nil)
         }
     }

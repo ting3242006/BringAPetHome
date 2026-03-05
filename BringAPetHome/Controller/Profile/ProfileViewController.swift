@@ -41,8 +41,9 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getUserProfile()
-        shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { shareList in self.shareList = shareList ?? []
-            self.tableView.reloadData()
+        shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { [weak self] shareList in
+            self?.shareList = shareList ?? []
+            self?.tableView.reloadData()
         })
         if Auth.auth().currentUser == nil {
             showLoginVC()
@@ -101,7 +102,8 @@ class ProfileViewController: UIViewController {
             userNameLabel.text = cached.name
         }
         // 再從 Firestore 同步最新資料
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { result in
+        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case let .success(user):
                 self.userData = user
@@ -120,8 +122,9 @@ class ProfileViewController: UIViewController {
             return
         }
         let userUid = Auth.auth().currentUser?.uid ?? ""
-        shareManager.fetchUserSharing(uid: userUid, completion: { shareList in self.shareList = shareList ?? []
-            self.tableView.reloadData()
+        shareManager.fetchUserSharing(uid: userUid, completion: { [weak self] shareList in
+            self?.shareList = shareList ?? []
+            self?.tableView.reloadData()
         })
     }
 }

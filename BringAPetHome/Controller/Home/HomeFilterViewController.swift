@@ -20,7 +20,7 @@ protocol HomeFilterViewControllerDelegate: AnyObject {
 class HomeFilterViewController: UIViewController {
     
     var filter = Filter()
-    var delegate: HomeFilterViewControllerDelegate?
+    weak var delegate: HomeFilterViewControllerDelegate?
     
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var dogButton: UIButton!

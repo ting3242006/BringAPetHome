@@ -52,7 +52,8 @@ class PostSharingViewController: UIViewController, UIImagePickerControllerDelega
                 switch result {
                 case .success:
                     
-                    fileReference.downloadURL { [self] result in
+                    fileReference.downloadURL { [weak self] result in
+                        guard let self = self else { return }
                         switch result {
                         case .success(let url):
                             let userUid = Auth.auth().currentUser?.uid ?? ""

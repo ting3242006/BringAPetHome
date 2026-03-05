@@ -112,7 +112,8 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
         fileReference.putData(imageData, metadata: nil) { result in
             switch result {
             case .success:
-                fileReference.downloadURL { [self] result in
+                fileReference.downloadURL { [weak self] result in
+                    guard let self = self else { return }
                     switch result {
                     case .success(let url):
                         UserFirebaseManager.shared.updateUserInfo(id: user.uid, image: "\(url)",

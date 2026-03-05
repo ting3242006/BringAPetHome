@@ -122,13 +122,13 @@ extension ShareCommentViewController: UITableViewDelegate, UITableViewDataSource
         cell.contentLabel.text = commentList[indexPath.row].text
         cell.commentTimeLabel.text = commentList[indexPath.row].time.displayTimeInSocialMediaStyle()
         
-        UserFirebaseManager.shared.fetchUser(userId: commentList[indexPath.row].userUid) { result in
+        UserFirebaseManager.shared.fetchUser(userId: commentList[indexPath.row].userUid) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case let .success(user):
                 self.userData = user
-                let url = self.userData?.image
-                cell.userImageView.kf.setImage(with: URL(string: url ?? ""), placeholder: UIImage(named: "dketch-4"))
-                cell.userNameLabel.text = self.userData?.name
+                cell.userImageView.kf.setImage(with: URL(string: user.image ?? ""), placeholder: UIImage(named: "dketch-4"))
+                cell.userNameLabel.text = user.name
             case .failure:
                 print("Error")
             }
