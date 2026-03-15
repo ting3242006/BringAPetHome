@@ -134,7 +134,17 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         cell.delegate = self
         cell.selectedBackgroundView = selectedBackgroundView
         let urls = pet?.albumFile
-        cell.albumFileImageView.kf.setImage(with: URL(string: urls!), placeholder: UIImage(named: "dketch-4"))
+        let screenWidth = UIScreen.main.bounds.width
+        let processor = DownsamplingImageProcessor(size: CGSize(width: screenWidth, height: screenWidth))
+        cell.albumFileImageView.kf.setImage(
+            with: URL(string: urls!),
+            placeholder: UIImage(named: "dketch-4"),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode
+            ]
+        )
         cell.albumFileImageView.contentMode = .scaleAspectFill
         cell.sexLabel.text = "性別：\( ShelterManager.shared.sexCh(sex: pet?.sex ?? ""))"
         cell.ageLabel.text = "年齡：\(ShelterManager.shared.ageCh(age: pet?.age ?? ""))"

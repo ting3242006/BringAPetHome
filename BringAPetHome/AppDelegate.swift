@@ -26,9 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cache.diskStorage.config.expiration = .days(7)
         
         let downloader = ImageDownloader.default
-        downloader.downloadTimeout = 12
-        downloader.sessionConfiguration.waitsForConnectivity = false
-        downloader.sessionConfiguration.timeoutIntervalForRequest = 12
+        downloader.downloadTimeout = 30
+        downloader.sessionConfiguration.waitsForConnectivity = true
+        downloader.sessionConfiguration.timeoutIntervalForRequest = 30
         downloader.sessionConfiguration.requestCachePolicy = .returnCacheDataElseLoad
         
         return true

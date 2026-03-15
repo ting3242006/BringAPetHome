@@ -26,7 +26,7 @@ class HomeViewController: UIViewController {
     private var hasMoreData = true
     private var hasPrefetchedAfterInitialLoad = false
     private var currentFilter: Filter?
-    private var imagePrefetcher: ImagePrefetcher?
+    private var imagePrefetchers: [ImagePrefetcher] = []
     private lazy var loadingAnimationView: LottieAnimationView = {
         let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
         animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
@@ -36,11 +36,7 @@ class HomeViewController: UIViewController {
         return animationView
     }()
     var pageStatus: PageStatus = .notLoadingMore
-    var animalDatas = [AnimalData]() {
-        didSet {
-            reloadData()
-        }
-    }
+    var animalDatas = [AnimalData]()
     
     @IBOutlet weak var collectionView: UICollectionView!
     
@@ -80,16 +76,6 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func reloadData() {
-        guard Thread.isMainThread == true else {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadData()
-            }
-            return
-        }
-        collectionView.reloadData()
-    }
-    
     private func fetchData(reset: Bool = false, isBackgroundPrefetch: Bool = false, completion: (() -> Void)? = nil) {
         guard isFetching == false else {
             completion?()
@@ -104,6 +90,8 @@ class HomeViewController: UIViewController {
             skip = 0
             hasMoreData = true
             hasPrefetchedAfterInitialLoad = false
+            imagePrefetchers.forEach { $0.stop() }
+            imagePrefetchers.removeAll()
         }
 
         let fetchCount = (reset && !hasPrefetchedAfterInitialLoad) ? initialPageSize : pageSize
@@ -121,10 +109,17 @@ class HomeViewController: UIViewController {
                     self.skip += fetchedAnimals.count
                     if reset {
                         self.animalDatas = filteredAnimals
+                        self.collectionView.reloadData()
                     } else {
-                        self.animalDatas.append(contentsOf: filteredAnimals)
+                        let startIndex = self.animalDatas.count
+                        let indexPaths = (startIndex..<(startIndex + filteredAnimals.count)).map {
+                            IndexPath(item: $0, section: 0)
+                        }
+                        self.collectionView.performBatchUpdates({
+                            self.animalDatas.append(contentsOf: filteredAnimals)
+                            self.collectionView.insertItems(at: indexPaths)
+                        })
                     }
-                    self.prefetchImages(from: filteredAnimals, limit: 30)
                     if reset {
                         self.hasPrefetchedAfterInitialLoad = true
                     }
@@ -176,14 +171,18 @@ class HomeViewController: UIViewController {
     private func prefetchImages(from animals: [AnimalData], limit: Int) {
         let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
         guard !urls.isEmpty else { return }
-        imagePrefetcher = ImagePrefetcher(
+        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
+        let prefetcher = ImagePrefetcher(
             urls: urls,
             options: [
+                .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
-                .backgroundDecode
+                .backgroundDecode,
+                .downloadPriority(URLSessionTask.lowPriority)
             ]
         )
-        imagePrefetcher?.start()
+        imagePrefetchers.append(prefetcher)
+        prefetcher.start()
     }
     
     private func resizeImage(image: UIImage, width: CGFloat) -> UIImage {
@@ -228,8 +227,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
         let url = item.albumFile
-        let imageSize = cell.shelterImageView.bounds.size == .zero ? CGSize(width: 300, height: 300) : cell.shelterImageView.bounds.size
-        let processor = DownsamplingImageProcessor(size: imageSize)
+        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
         cell.shelterImageView.kf.setImage(
             with: URL(string: url),
             placeholder: UIImage(named: "dketch-4"),
@@ -237,7 +235,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .cacheOriginalImage
+                .downloadPriority(1.0)
             ]
         )
         cell.shelterImageView.contentMode = .scaleAspectFill
@@ -329,14 +327,18 @@ extension HomeViewController: UICollectionViewDataSourcePrefetching {
             return URL(string: animalDatas[indexPath.item].albumFile)
         }
         guard !urls.isEmpty else { return }
-        imagePrefetcher = ImagePrefetcher(
+        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
+        let prefetcher = ImagePrefetcher(
             urls: urls,
             options: [
+                .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
-                .backgroundDecode
+                .backgroundDecode,
+                .downloadPriority(URLSessionTask.lowPriority)
             ]
         )
-        imagePrefetcher?.start()
+        imagePrefetchers.append(prefetcher)
+        prefetcher.start()
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
