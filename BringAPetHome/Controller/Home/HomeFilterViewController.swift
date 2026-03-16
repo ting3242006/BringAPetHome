@@ -11,6 +11,7 @@ struct Filter {
     var kind: String?
     var sex: String?
     var bodytype: String?
+    var areaPkid: Int?
 }
 
 protocol HomeFilterViewControllerDelegate: AnyObject {
@@ -21,6 +22,7 @@ class HomeFilterViewController: UIViewController {
     
     var filter = Filter()
     weak var delegate: HomeFilterViewControllerDelegate?
+    private var selectedAreaPkid: Int? = nil
     
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var dogButton: UIButton!
@@ -33,7 +35,7 @@ class HomeFilterViewController: UIViewController {
     @IBOutlet weak var mediumButton: UIButton!
     @IBOutlet weak var bigButton: UIButton!
     
-    @IBOutlet weak var locationButton: UIButton!
+    private var locationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,8 +115,30 @@ class HomeFilterViewController: UIViewController {
         filter.kind = ""
         filter.bodytype = ""
         filter.sex = ""
+        filter.areaPkid = nil
+        selectedAreaPkid = nil
+        locationButton.setTitle("地區", for: .normal)
+        locationButton.layer.borderColor = UIColor.lightGray.cgColor
+        locationButton.tintColor = UIColor(named: "DarkGreen")
         delegate?.selectFilterViewController(self, didSelect: filter)
         self.navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func selectLocation() {
+        let alert = UIAlertController(title: "選擇地區", message: nil, preferredStyle: .actionSheet)
+        for pkid in 2...23 {
+            let name = ShelterManager.shared.areaName(pkid: pkid)
+            let action = UIAlertAction(title: name, style: .default) { [weak self] _ in
+                guard let self = self else { return }
+                self.selectedAreaPkid = pkid
+                self.filter.areaPkid = pkid
+                self.locationButton.setTitle(name, for: .normal)
+                self.locationButton.layer.borderColor = UIColor(named: "HoneyYellow")?.cgColor
+            }
+            alert.addAction(action)
+        }
+        alert.addAction(UIAlertAction(title: "取消", style: .cancel))
+        present(alert, animated: true)
     }
     
     @IBAction func sendFilterButton(_ sender: UIButton) {
@@ -123,6 +147,27 @@ class HomeFilterViewController: UIViewController {
     }
     
     private func layoutButton() {
+        let areaLabel = UILabel()
+        areaLabel.text = "地區"
+        areaLabel.font = UIFont.systemFont(ofSize: 17)
+        areaLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(areaLabel)
+
+        locationButton = UIButton(type: .system)
+        locationButton.setTitle("選擇", for: .normal)
+        locationButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(locationButton)
+
+        let bodyTypeStack = smallButton.superview ?? view!
+        NSLayoutConstraint.activate([
+            areaLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            areaLabel.topAnchor.constraint(equalTo: bodyTypeStack.bottomAnchor, constant: 20),
+            locationButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
+            locationButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+            locationButton.topAnchor.constraint(equalTo: areaLabel.bottomAnchor, constant: 20),
+            locationButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+
         dogButton.layer.cornerRadius = 15
         dogButton.layer.borderColor = UIColor.lightGray.cgColor
         dogButton.layer.borderWidth = 1
@@ -149,6 +194,11 @@ class HomeFilterViewController: UIViewController {
         bigButton.layer.cornerRadius = 15
         bigButton.layer.borderColor = UIColor.lightGray.cgColor
         bigButton.layer.borderWidth = 1
+        locationButton.layer.cornerRadius = 15
+        locationButton.layer.borderColor = UIColor.lightGray.cgColor
+        locationButton.layer.borderWidth = 1
+        locationButton.tintColor = UIColor(named: "DarkGreen")
+        locationButton.addTarget(self, action: #selector(selectLocation), for: .touchUpInside)
         filterButton.layer.cornerRadius = 15
         filterButton.clipsToBounds = true
         self.navigationItem.title = "篩選"

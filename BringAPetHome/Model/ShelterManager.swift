@@ -29,6 +29,12 @@ class ShelterManager {
             if let bodytype = filter.bodytype {
                 urlString.append("&animal_bodytype=\(bodytype)")
             }
+            if let areaPkid = filter.areaPkid {
+                let areaName = areaName(pkid: areaPkid)
+                if !areaName.isEmpty {
+                    urlString.append("&animal_place=\(areaName)")
+                }
+            }
         }
             
         guard let urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
