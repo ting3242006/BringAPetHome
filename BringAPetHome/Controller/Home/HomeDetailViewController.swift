@@ -13,6 +13,7 @@ import CoreData
 class HomeDetailViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var backButton: UIButton!
     
     var pet: AnimalData?
     let selectedBackgroundView = UIView()
@@ -100,6 +101,9 @@ class HomeDetailViewController: UIViewController {
         UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
         
         tableView.contentInsetAdjustmentBehavior = .never
+        backButton.backgroundColor = UIColor.black.withAlphaComponent(0.35)
+        backButton.layer.cornerRadius = 20
+        backButton.layer.masksToBounds = true
     }
     
     private func saveFavorites() {

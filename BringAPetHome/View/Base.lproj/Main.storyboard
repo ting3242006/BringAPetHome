@@ -891,6 +891,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="JMh-im-AGu"/>
                     <connections>
+                        <outlet property="backButton" destination="PiZ-Zg-3tB" id="bkB-qR-x7A"/>
                         <outlet property="tableView" destination="gtC-Hr-FV7" id="fTU-J5-75c"/>
                     </connections>
                 </viewController>
