@@ -235,7 +235,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .downloadPriority(1.0)
+                .downloadPriority(1.0),
+                .cacheOriginalImage
             ]
         )
         cell.shelterImageView.contentMode = .scaleAspectFill
@@ -269,6 +270,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
         let pet = animalDatas[indexPath.item]
         detailVC.pet = pet
+        if let cell = collectionView.cellForItem(at: indexPath) as? HomeCollectionViewCell {
+            detailVC.placeholderImage = cell.shelterImageView.image
+        }
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
     

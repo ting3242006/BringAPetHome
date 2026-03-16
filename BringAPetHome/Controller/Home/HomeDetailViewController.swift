@@ -16,6 +16,7 @@ class HomeDetailViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     
     var pet: AnimalData?
+    var placeholderImage: UIImage?
     let selectedBackgroundView = UIView()
     var saveAnimal: Animal?
     
@@ -138,15 +139,12 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
         cell.delegate = self
         cell.selectedBackgroundView = selectedBackgroundView
         let urls = pet?.albumFile
-        let screenWidth = UIScreen.main.bounds.width
-        let processor = DownsamplingImageProcessor(size: CGSize(width: screenWidth, height: screenWidth))
         cell.albumFileImageView.kf.setImage(
             with: URL(string: urls!),
-            placeholder: UIImage(named: "dketch-4"),
+            placeholder: placeholderImage ?? UIImage(named: "dketch-4"),
             options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .backgroundDecode
+                .cacheOriginalImage,
+                .loadDiskFileSynchronously
             ]
         )
         cell.albumFileImageView.contentMode = .scaleAspectFill
