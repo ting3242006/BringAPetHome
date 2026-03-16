@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Filter {
+struct Filter: Equatable {
     var kind: String?
     var sex: String?
     var bodytype: String?

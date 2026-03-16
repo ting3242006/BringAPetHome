@@ -17,9 +17,11 @@ enum PageStatus {
 }
 
 class HomeViewController: UIViewController {
-    
+
     let header = MJRefreshStateHeader()
+    private let thumbnailProcessor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
     private let initialPageSize = 20
+    private let estimatedVisibleCellCount = 18
     private let pageSize = 50
     private var skip: Int = 0
     private var isFetching = false
@@ -27,6 +29,7 @@ class HomeViewController: UIViewController {
     private var hasPrefetchedAfterInitialLoad = false
     private var currentFilter: Filter?
     private var imagePrefetchers: [ImagePrefetcher] = []
+    private var delayedBackgroundFetch: DispatchWorkItem?
     private lazy var loadingAnimationView: LottieAnimationView = {
         let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
         animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
@@ -92,6 +95,8 @@ class HomeViewController: UIViewController {
             hasPrefetchedAfterInitialLoad = false
             imagePrefetchers.forEach { $0.stop() }
             imagePrefetchers.removeAll()
+            delayedBackgroundFetch?.cancel()
+            delayedBackgroundFetch = nil
         }
 
         let fetchCount = (reset && !hasPrefetchedAfterInitialLoad) ? initialPageSize : pageSize
@@ -110,6 +115,13 @@ class HomeViewController: UIViewController {
                     if reset {
                         self.animalDatas = filteredAnimals
                         self.collectionView.reloadData()
+                        // 可見 cell 已經以 high priority 開始下載，
+                        // 接著 prefetch 螢幕外的圖片（跳過前幾張避免 priority 衝突）
+                        let visibleCount = min(self.estimatedVisibleCellCount, filteredAnimals.count)
+                        let remaining = Array(filteredAnimals.dropFirst(visibleCount))
+                        if !remaining.isEmpty {
+                            self.prefetchImages(from: remaining, limit: remaining.count)
+                        }
                     } else {
                         let startIndex = self.animalDatas.count
                         let indexPaths = (startIndex..<(startIndex + filteredAnimals.count)).map {
@@ -131,7 +143,22 @@ class HomeViewController: UIViewController {
                 self.loadingAnimationView.isHidden = true
                 completion?()
                 if reset && !isBackgroundPrefetch && self.hasMoreData {
-                    self.fetchData(isBackgroundPrefetch: true)
+                    if self.currentFilter == nil {
+                        self.fetchData(isBackgroundPrefetch: true)
+                    } else {
+                        // 篩選時延遲 1.5 秒再抓下一頁，讓可見 cell 的 high priority 下載先跑
+                        let filterSnapshot = self.currentFilter
+                        let workItem = DispatchWorkItem { [weak self] in
+                            guard let self = self,
+                                  !self.isFetching,
+                                  self.hasMoreData,
+                                  self.currentFilter == filterSnapshot
+                            else { return }
+                            self.fetchData(isBackgroundPrefetch: true)
+                        }
+                        self.delayedBackgroundFetch = workItem
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: workItem)
+                    }
                 }
             }
         }
@@ -171,11 +198,10 @@ class HomeViewController: UIViewController {
     private func prefetchImages(from animals: [AnimalData], limit: Int) {
         let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
         guard !urls.isEmpty else { return }
-        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
         let prefetcher = ImagePrefetcher(
             urls: urls,
             options: [
-                .processor(processor),
+                .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
                 .downloadPriority(URLSessionTask.lowPriority)
@@ -226,41 +252,25 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
-        let url = item.albumFile
-        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
         cell.shelterImageView.kf.setImage(
-            with: URL(string: url),
+            with: URL(string: item.albumFile),
             placeholder: UIImage(named: "dketch-4"),
             options: [
-                .processor(processor),
+                .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .downloadPriority(1.0),
-                .cacheOriginalImage
+                .downloadPriority(1.0)
             ]
         )
-        cell.shelterImageView.contentMode = .scaleAspectFill
-        cell.shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        cell.layer.cornerRadius = 10
-        cell.shelterImageView.clipsToBounds = true
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
-        cell.sexLabel.textColor = UIColor(named: "RichBlack")
-        cell.placeLabel.textColor = UIColor(named: "RichBlack")
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
-        var name = ""
-        switch cell.sexLabel.text {
-        case "男":
-            name = "BOY-1"
-        case "女":
-            name = "GIRL-1"
-        default:
-            name = "paws"
+        let sexImageName: String
+        switch item.sex {
+        case "M": sexImageName = "BOY-1"
+        case "F": sexImageName = "GIRL-1"
+        default:  sexImageName = "paws"
         }
-        cell.sexImageView.image = UIImage(named: name)
-        cell.layer.shadowColor = UIColor.lightGray.cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 5)
-        cell.layer.shadowRadius = 3
-        cell.layer.shadowOpacity = 0.3
+        cell.sexImageView.image = UIImage(named: sexImageName)
 
         return cell
     }
@@ -272,6 +282,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         detailVC.pet = pet
         if let cell = collectionView.cellForItem(at: indexPath) as? HomeCollectionViewCell {
             detailVC.placeholderImage = cell.shelterImageView.image
+        }
+        if let url = URL(string: pet.albumFile) {
+            KingfisherManager.shared.retrieveImage(with: url, options: [.cacheOriginalImage]) { _ in }
         }
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
@@ -319,7 +332,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: HomeFilterViewControllerDelegate {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter) {
-        currentFilter = filter
+        let isEmpty = (filter.kind ?? "").isEmpty
+            && (filter.sex ?? "").isEmpty
+            && (filter.bodytype ?? "").isEmpty
+            && filter.areaPkid == nil
+        currentFilter = isEmpty ? nil : filter
         fetchData(reset: true)
     }
 }
@@ -331,11 +348,10 @@ extension HomeViewController: UICollectionViewDataSourcePrefetching {
             return URL(string: animalDatas[indexPath.item].albumFile)
         }
         guard !urls.isEmpty else { return }
-        let processor = DownsamplingImageProcessor(size: CGSize(width: 170, height: 150))
         let prefetcher = ImagePrefetcher(
             urls: urls,
             options: [
-                .processor(processor),
+                .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
                 .downloadPriority(URLSessionTask.lowPriority)

@@ -20,13 +20,13 @@ class ShelterManager {
         
         var urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=\(top)&$skip=\(skip)"
         if let filter = filter {
-            if let kind = filter.kind {
+            if let kind = filter.kind, !kind.isEmpty {
                 urlString.append("&animal_kind=\(kind)")
             }
-            if let sex = filter.sex {
+            if let sex = filter.sex, !sex.isEmpty {
                 urlString.append("&animal_sex=\(sex)")
             }
-            if let bodytype = filter.bodytype {
+            if let bodytype = filter.bodytype, !bodytype.isEmpty {
                 urlString.append("&animal_bodytype=\(bodytype)")
             }
             if let areaPkid = filter.areaPkid {

@@ -62,6 +62,23 @@ class HomeCollectionViewCell: UICollectionViewCell {
                             padding: .init(top: 12, left: 10, bottom: 0, right: 0),
                             width: 22, height: 22)
         sexImageView.contentMode = .scaleAspectFit
+
+        // 靜態樣式只設一次
+        shelterImageView.contentMode = .scaleAspectFill
+        shelterImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        shelterImageView.clipsToBounds = true
+        layer.cornerRadius = 10
+        layer.shadowColor = UIColor.lightGray.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 5)
+        layer.shadowRadius = 3
+        layer.shadowOpacity = 0.3
+        sexLabel.textColor = UIColor(named: "RichBlack")
+        placeLabel.textColor = UIColor(named: "RichBlack")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 10).cgPath
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
