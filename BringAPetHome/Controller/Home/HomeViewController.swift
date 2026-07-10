@@ -260,6 +260,7 @@ class HomeViewController: UIViewController {
         let cached = ImageCache.default.imageCachedType(
             forKey: urlString, processorIdentifier: thumbnailProcessor.identifier).cached
         if cached || activeCellDownloads < maxConcurrentCellDownloads {
+            pendingCellLoads.removeAll { $0.indexPath == indexPath }
             startCellDownload(cell, urlString: urlString, at: indexPath)
         } else if !pendingCellLoads.contains(where: { $0.indexPath == indexPath }) {
             cell.shelterImageView.image = UIImage(named: "dketch-4")
