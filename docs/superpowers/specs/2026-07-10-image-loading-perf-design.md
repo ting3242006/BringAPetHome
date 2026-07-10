@@ -49,17 +49,22 @@ Xcode 跑實機 → 冷啟動看首屏 → 下滑 2–3 屏 → 套一次篩選 
   - ❌ prefetch 洪水：全程僅一次 `prefetch start +2`；且發現 `prefetchItemsAt` 滑動時從未觸發（獨立 bug）。
   - ❌ 伺服器慢／單連線限速／HTTP3／IPv6／WAF 指紋：Mac 端 curl 多連線、curl 單連線多工、URLSession 18 並發皆 ≤1.4s 完成；伺服器無 Alt-Svc、無 AAAA。
   - ✅ 裝置端證據：非 PERF 行含 TCP RST（ESTABLISHED 收 [R.]）、`waiting fallback`（WiFi 輔助評估切換蜂窩）、`no path found for pdp_ip`。user 實機 Safari 載單張圖快、無 VPN、WiFi 輔助開啟。
-- 結論：**冷啟動 ~20 張同時下載的爆發，在該裝置的網路路徑（含 WiFi 輔助介入）下造成連線停滯；逾時後無重試放大災情**。伺服器與 app 資料流無罪。
+- 結論（2026-07-10 經 Codex review 校正）：**冷啟動可見 cell 產生 ~8 個並發下載（log 實證 item 0–7，非先前誤估的 ~20），在該裝置的網路路徑（含 WiFi 輔助介入）下完成近乎串行（12s/22s/30s），3 張逾時且無重試**。伺服器與 app 資料流無罪。
 - 量測設計缺陷（記錄供後人）：in-flight 計數僅涵蓋 prefetcher，未計 cellForItemAt 的下載，「inflight=0」不能解讀為無並發。
+- Kingfisher 源碼查證（Pods/Kingfisher ImageDownloader.swift:344）：request 寫死 `.reloadIgnoringLocalCacheData` 且 `timeoutInterval = downloadTimeout`——`downloadTimeout=30` 有效；session 的 `requestCachePolicy` 對圖片下載無作用。`DelayRetryStrategy` 預設 `retryInterval = .seconds(3)`（RetryStrategy.swift:153）。
 
-## Phase 2：修正（依數據核定範圍）
+## Phase 2：修正（依數據核定範圍，經 Codex review 收緊 2026-07-10）
 
-1. 限制並發下載數（削爆發）。
-2. 縮短 timeout + 加 Kingfisher retryStrategy（消滅 30s 永久佔位圖）。
-3. 修 AppDelegate session 設定 no-op（URLSession 建立後改 configuration 屬性無效）。
-4. 查修 `prefetchItemsAt` 不觸發。
+執行順序與驗收條件：
 
-修完實機確認體感 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
+1. **timeout 10s + 顯式短間隔 retry**：首頁 visible image options 加 `DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1))`，`downloadTimeout` 30→10。驗收：逾時後確實發生重試、不會永久卡在首次失敗（以 [PERF] log 佐證）。不承諾「消滅佔位圖」。
+2. **visible path 下載節流**：節流對象是 `cell.shelterImageView.kf.setImage` 路徑（`ImagePrefetcher.maxConcurrentDownloads` 打不到主因）。實作前先把 cellForItemAt 下載納入 in-flight 計數；驗收：修正後 log 顯示同時下載 ≤N（N 於 plan 定案），且爆發樣態消失。
+3. **AppDelegate session 設定清理**（定位：正確性清理，非效能修正）：移除三行對已建立 session 無效的 `sessionConfiguration.*` 賦值；不把 cache policy 當效能手段；`waitsForConnectivity` 一併移除（語意與 fail-fast+retry 相悖）。
+4. **獨立診斷任務（不與 1–3 同 plan）**：`prefetchItemsAt` 不觸發、storyboard `automaticEstimatedItemSize="YES"`（line 24）與 viewDidLoad 重複 addSubview 造成的 constraint breaking、篩選後列表未回頂部。
+
+最終驗收指標（非體感）：修正後重跑三場景 log，比對 timeout 數（基準 3）、首屏全部完成時間、p90（基準 21,771ms）。WiFi 輔助開關實驗僅作佐證，不作結論依據。
+
+修完實機確認 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
 
 ## 清理承諾
 
