@@ -5,6 +5,9 @@
 //  Created by Ting on 2022/6/14.
 //
 
+// [PERF] 量測碼使檔案暫時超過 400 行，Phase 2 清理時連同此註解移除
+// swiftlint:disable file_length
+
 import UIKit
 import Kingfisher
 import Lottie
