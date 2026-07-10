@@ -323,7 +323,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .downloadPriority(1.0)
+                .downloadPriority(1.0),
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
             ],
             completionHandler: { [weak self] result in
                 #if DEBUG
