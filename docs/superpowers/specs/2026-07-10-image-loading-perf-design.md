@@ -39,9 +39,27 @@ Xcode 跑實機 → 冷啟動看首屏 → 下滑 2–3 屏 → 套一次篩選 
 | completion 快但上畫面晚 | 主執行緒/解碼 | 查解碼與 UI 更新路徑 |
 | disk/memory 命中也慢 | 快取讀取或 processor 成本 | 查 processor cache key 與磁碟 IO |
 
-## Phase 2：修正（範圍待 Phase 1 數據決定）
+## Phase 1 量測結論（2026-07-10，實機 WiFi）
 
-依判讀規則對應動作執行，另立 plan。修完實機確認體感 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
+原始數據：user 提供之 console log（521 行，92 行 [PERF]）。
+
+- 冷啟動+滑動：32 張全為 cache=none，中位 6,717ms、p90 21,771ms，3 張於 30s 超時（code 2003，無重試 → 永久佔位圖）。篩選後：44 張中位 1,240ms。
+- API 不慢（apiDone 於 0.180s）；首圖 0.345s 即到，其後斷崖式劣化。
+- 判讀規則命中第二列（單張下載慢），但根因再收斂：
+  - ❌ prefetch 洪水：全程僅一次 `prefetch start +2`；且發現 `prefetchItemsAt` 滑動時從未觸發（獨立 bug）。
+  - ❌ 伺服器慢／單連線限速／HTTP3／IPv6／WAF 指紋：Mac 端 curl 多連線、curl 單連線多工、URLSession 18 並發皆 ≤1.4s 完成；伺服器無 Alt-Svc、無 AAAA。
+  - ✅ 裝置端證據：非 PERF 行含 TCP RST（ESTABLISHED 收 [R.]）、`waiting fallback`（WiFi 輔助評估切換蜂窩）、`no path found for pdp_ip`。user 實機 Safari 載單張圖快、無 VPN、WiFi 輔助開啟。
+- 結論：**冷啟動 ~20 張同時下載的爆發，在該裝置的網路路徑（含 WiFi 輔助介入）下造成連線停滯；逾時後無重試放大災情**。伺服器與 app 資料流無罪。
+- 量測設計缺陷（記錄供後人）：in-flight 計數僅涵蓋 prefetcher，未計 cellForItemAt 的下載，「inflight=0」不能解讀為無並發。
+
+## Phase 2：修正（依數據核定範圍）
+
+1. 限制並發下載數（削爆發）。
+2. 縮短 timeout + 加 Kingfisher retryStrategy（消滅 30s 永久佔位圖）。
+3. 修 AppDelegate session 設定 no-op（URLSession 建立後改 configuration 屬性無效）。
+4. 查修 `prefetchItemsAt` 不觸發。
+
+修完實機確認體感 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
 
 ## 清理承諾
 
