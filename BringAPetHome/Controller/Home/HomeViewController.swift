@@ -60,6 +60,9 @@ class HomeViewController: UIViewController {
     private var currentFilter: Filter?
     private var imagePrefetchers: [ImagePrefetcher] = []
     private var delayedBackgroundFetch: DispatchWorkItem?
+    private let maxConcurrentCellDownloads = 4
+    private var activeCellDownloads = 0
+    private var pendingCellLoads: [(indexPath: IndexPath, urlString: String)] = []
     #if DEBUG
     private var hasLoggedFirstImageSinceReset = false
     #endif
@@ -133,6 +136,7 @@ class HomeViewController: UIViewController {
             imagePrefetchers.removeAll()
             delayedBackgroundFetch?.cancel()
             delayedBackgroundFetch = nil
+            pendingCellLoads.removeAll()
             #if DEBUG
             hasLoggedFirstImageSinceReset = false
             #endif
@@ -252,6 +256,72 @@ class HomeViewController: UIViewController {
     }
     #endif
 
+    private func loadCellImage(_ cell: HomeCollectionViewCell, urlString: String, at indexPath: IndexPath) {
+        let cached = ImageCache.default.imageCachedType(
+            forKey: urlString, processorIdentifier: thumbnailProcessor.identifier).cached
+        if cached || activeCellDownloads < maxConcurrentCellDownloads {
+            startCellDownload(cell, urlString: urlString, at: indexPath)
+        } else if !pendingCellLoads.contains(where: { $0.indexPath == indexPath }) {
+            cell.shelterImageView.image = UIImage(named: "dketch-4")
+            pendingCellLoads.append((indexPath, urlString))
+            #if DEBUG
+            PerfLog.log("cellQueue enqueue item=\(indexPath.item) pending=\(pendingCellLoads.count)")
+            #endif
+        }
+    }
+
+    private func startCellDownload(_ cell: HomeCollectionViewCell, urlString: String, at indexPath: IndexPath) {
+        activeCellDownloads += 1
+        #if DEBUG
+        let requestStart = CFAbsoluteTimeGetCurrent()
+        PerfLog.log("cellStart item=\(indexPath.item) active=\(activeCellDownloads)")
+        #endif
+        cell.shelterImageView.kf.setImage(
+            with: URL(string: urlString),
+            placeholder: UIImage(named: "dketch-4"),
+            options: [
+                .processor(thumbnailProcessor),
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode,
+                .downloadPriority(1.0),
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+            ],
+            completionHandler: { [weak self] result in
+                guard let self = self else { return }
+                self.activeCellDownloads -= 1
+                self.drainPendingCellLoads()
+                #if DEBUG
+                let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000)
+                switch result {
+                case .success(let value):
+                    let cache = String(describing: value.cacheType)
+                    PerfLog.log("cell item=\(indexPath.item) cache=\(cache) \(elapsedMs)ms active=\(self.activeCellDownloads)")
+                    if !self.hasLoggedFirstImageSinceReset {
+                        self.hasLoggedFirstImageSinceReset = true
+                        PerfLog.log("anchor firstImage item=\(indexPath.item)")
+                    }
+                case .failure(let error):
+                    guard !error.isTaskCancelled else { return }
+                    PerfLog.log("cell item=\(indexPath.item) FAIL \(elapsedMs)ms code=\(error.errorCode)")
+                }
+                #endif
+            }
+        )
+    }
+
+    private func drainPendingCellLoads() {
+        while activeCellDownloads < maxConcurrentCellDownloads, !pendingCellLoads.isEmpty {
+            let next = pendingCellLoads.removeFirst()
+            guard let cell = collectionView.cellForItem(at: next.indexPath) as? HomeCollectionViewCell else {
+                #if DEBUG
+                PerfLog.log("cellQueue skip offscreen item=\(next.indexPath.item)")
+                #endif
+                continue
+            }
+            startCellDownload(cell, urlString: next.urlString, at: next.indexPath)
+        }
+    }
+
     private func prefetchImages(from animals: [AnimalData], limit: Int) {
         let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
         guard !urls.isEmpty else { return }
@@ -313,40 +383,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
-        #if DEBUG
-        let requestStart = CFAbsoluteTimeGetCurrent()
-        #endif
-        cell.shelterImageView.kf.setImage(
-            with: URL(string: item.albumFile),
-            placeholder: UIImage(named: "dketch-4"),
-            options: [
-                .processor(thumbnailProcessor),
-                .scaleFactor(UIScreen.main.scale),
-                .backgroundDecode,
-                .downloadPriority(1.0),
-                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
-            ],
-            completionHandler: { [weak self] result in
-                #if DEBUG
-                let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000)
-                switch result {
-                case .success(let value):
-                    let cache = String(describing: value.cacheType)
-                    let inflight = PerfLog.currentInFlight()
-                    PerfLog.log("cell item=\(indexPath.item) cache=\(cache) \(elapsedMs)ms inflight=\(inflight)")
-                    if let self = self, !self.hasLoggedFirstImageSinceReset {
-                        self.hasLoggedFirstImageSinceReset = true
-                        PerfLog.log("anchor firstImage item=\(indexPath.item)")
-                    }
-                case .failure(let error):
-                    guard !error.isTaskCancelled else { return }
-                    PerfLog.log("cell item=\(indexPath.item) FAIL \(elapsedMs)ms code=\(error.errorCode)")
-                }
-                #else
-                _ = result
-                #endif
-            }
-        )
+        loadCellImage(cell, urlString: item.albumFile, at: indexPath)
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
         let sexImageName: String
