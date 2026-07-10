@@ -27,9 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let downloader = ImageDownloader.default
         downloader.downloadTimeout = 10
-        downloader.sessionConfiguration.waitsForConnectivity = true
-        downloader.sessionConfiguration.timeoutIntervalForRequest = 30
-        downloader.sessionConfiguration.requestCachePolicy = .returnCacheDataElseLoad
         
         return true
     }
