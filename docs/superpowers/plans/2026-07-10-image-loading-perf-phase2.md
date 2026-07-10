@@ -104,6 +104,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
         let cached = ImageCache.default.imageCachedType(
             forKey: urlString, processorIdentifier: thumbnailProcessor.identifier).cached
         if cached || activeCellDownloads < maxConcurrentCellDownloads {
+            pendingCellLoads.removeAll { $0.indexPath == indexPath }
             startCellDownload(cell, urlString: urlString, at: indexPath)
         } else if !pendingCellLoads.contains(where: { $0.indexPath == indexPath }) {
             cell.shelterImageView.image = UIImage(named: "dketch-4")
@@ -172,6 +173,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 - 快取命中（memory/disk）繞過 gate 直接載，避免回滑時被慢下載堵住；因此 `active` 可能短暫 >4（軟上限，屬預期）。
 - `prepareForReuse` 取消下載後 completion 仍會以 `isTaskCancelled` 觸發 → slot 釋放在 `#if DEBUG` 之外、guard 之前，任何路徑都不漏。
 - 排隊項的 cell 可能已滾出畫面：`drainPendingCellLoads` 用 `collectionView.cellForItem(at:)` 判斷，不在畫面就跳過（該格重新可見時 cellForItemAt 會再走一次 gate）。
+- 直接下載分支必須先 `removeAll` 同 indexPath 的殘留排隊項（review 抓到的孤兒項 bug：排隊→滾出→回到畫面時有空 slot→直接下載，殘留項稍後被 drain 造成重複下載）。
 
 - [ ] **Step 4: cellForItemAt 改走 gate**
 
