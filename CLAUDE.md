@@ -8,7 +8,7 @@
 
 ```bash
 LOG=$(mktemp -t bap-build).log
-xcodebuild -workspace BringAPetHome.xcworkspace -scheme BringAPetHome \
+xcodebuild -project BringAPetHome.xcodeproj -scheme BringAPetHome \
   -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build > "$LOG" 2>&1
 echo "exit=$?"
 grep -E "error:|BUILD (SUCCEEDED|FAILED)" "$LOG"
@@ -23,7 +23,7 @@ grep "warning:" "$LOG" | grep -F "$PWD/BringAPetHome" \
 - **必須加 `CODE_SIGNING_ALLOWED=NO`**。否則會卡在 `No "iOS Development" signing certificate` 而失敗，與程式碼無關。
 - **不要 `sort` 過濾後的結果再 `head`**。`error:` 行會被重排到後面砍掉，造成「BUILD FAILED 但看不到錯誤」的假象。
 - 失敗時去 `$LOG` 撈 `The following build commands failed` 附近，錯誤未必符合 `error:` 樣式。
-- SPM 套件解析異常時，先跑 `xcodebuild -resolvePackageDependencies -workspace BringAPetHome.xcworkspace -scheme BringAPetHome`。
+- SPM 套件解析異常時，先跑 `xcodebuild -resolvePackageDependencies -project BringAPetHome.xcodeproj -scheme BringAPetHome`。
 - `appintentsmetadataprocessor` 每行帶時間戳與 pid，`sort -u` 去不掉，會讓計數浮動，警告統計時要排除。
 
 判準：`exit=0` 且出現 `** BUILD SUCCEEDED **`。
@@ -46,7 +46,7 @@ fi
 
 ```bash
 LOG=$(mktemp -t bap-test).log
-xcodebuild -workspace BringAPetHome.xcworkspace -scheme BringAPetHome \
+xcodebuild -project BringAPetHome.xcodeproj -scheme BringAPetHome \
   -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.2' \
   -only-testing:BringAPetHomeTests CODE_SIGNING_ALLOWED=NO test > "$LOG" 2>&1
 echo "exit=$?"

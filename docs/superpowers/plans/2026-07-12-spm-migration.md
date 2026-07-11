@@ -26,12 +26,13 @@ Move the app target from CocoaPods to Swift Package Manager while keeping the cu
 
 ## Verification
 
-- `xcodebuild -resolvePackageDependencies -workspace BringAPetHome.xcworkspace -scheme BringAPetHome`
-- `xcodebuild -workspace BringAPetHome.xcworkspace -scheme BringAPetHome -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build`
+- `xcodebuild -resolvePackageDependencies -project BringAPetHome.xcodeproj -scheme BringAPetHome`
+- `xcodebuild -project BringAPetHome.xcodeproj -scheme BringAPetHome -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build`
 
 ## Result
 
 - CocoaPods project wiring was removed.
+- `BringAPetHome.xcworkspace` was removed after confirming the project builds directly from `BringAPetHome.xcodeproj`.
 - `Podfile` and `Podfile.lock` were removed.
 - Firebase-backed features remain linked through Swift Package Manager products.
 - Build verification passed after replacing CocoaPods-era `import Firebase` umbrella imports with explicit Firebase module imports.

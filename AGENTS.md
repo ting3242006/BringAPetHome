@@ -12,17 +12,17 @@
 - **最低版本**: iOS 17.0
 - **語言**: Swift
 - **UI 架構**: UIKit（Storyboard + 程式碼混合）
-- **專案開啟方式**: 用 `BringAPetHome.xcworkspace`（不是 .xcodeproj）
+- **專案開啟方式**: 用 `BringAPetHome.xcodeproj`
 
 ## 建置指令
 
 ```bash
 # SPM 依賴由 Xcode 自動解析；初次建置前可先手動 resolve
 cd /Users/yitingsung/Developer/BringAPetHome
-xcodebuild -resolvePackageDependencies -workspace BringAPetHome.xcworkspace -scheme BringAPetHome
+xcodebuild -resolvePackageDependencies -project BringAPetHome.xcodeproj -scheme BringAPetHome
 
 # CLI 建置（驗證編譯）— 完整指令與過濾方式見文末「驗證指令」節
-xcodebuild -workspace BringAPetHome.xcworkspace -scheme BringAPetHome \
+xcodebuild -project BringAPetHome.xcodeproj -scheme BringAPetHome \
   -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
@@ -38,7 +38,7 @@ xcodebuild -workspace BringAPetHome.xcworkspace -scheme BringAPetHome \
 - **本地收藏**: CoreData（Entity: `Animal`，Model: `AnimalData.xcdatamodeld`）
 
 ### 依賴（Swift Package Manager）
-Package lockfile: `BringAPetHome.xcworkspace/xcshareddata/swiftpm/Package.resolved`
+Package lockfile: `BringAPetHome.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved`
 
 | Package | Products | 用途 |
 |---------|----------|------|
