@@ -78,6 +78,26 @@ Xcode 跑實機 → 冷啟動看首屏 → 下滑 2–3 屏 → 套一次篩選 
 
 Phase 3 候選（依 gate 移除後的 log 決定）：①`timeoutIntervalForResource` 總時長上限 ②連線預熱 ③圖片代理（Cloud Function + CDN）。
 
+## 最終結論（2026-07-11，四輪實機 log）
+
+| 版本 | timeout+retry | gate | WiFi輔助 | 中位 | p90 | 逾時 |
+|---|---|---|---|---|---|---|
+| perf（原始 main） | ✗ | ✗ | 開 | 6,717ms | 21,771ms | 3 |
+| perf2 | ✓ | ✓ | 開 | 2,697ms | 8,761ms | 1 |
+| perf3 | ✓ | ✗ | 關 | 698ms | 2,065ms | 0 |
+| perf4 | ✓ | ✗ | **開** | 1,488ms | 2,051ms | 0 |
+
+**perf3 vs perf4 差異在雜訊範圍內（p90 2,065 vs 2,051）→ WiFi 輔助無關，使用者不需更改系統設定。**
+
+歸因（最終）：
+- **Task 1（downloadTimeout 30→10 + DelayRetryStrategy(2, 1s)）= 唯一有效的修正。** stall 連線在 10s 被砍掉重試，取代乾等 30s。
+- **Task 2（節流 gate）= 有害，已移除（e24e20d）。** 20s stall 的成因即 gate 本身：retry 期間 slot 持續佔用（10+1+10 ≈ 21s，plan 設計注記已預言），N=4 之下單張重試阻塞其餘全部（pending 峰值 11）。無 gate 時該重試只慢那一張。
+- Task 3（AppDelegate session 清理）= 中性（正確性）。
+
+**分析教訓（重要）：`active=N` 欄位在 completion handler 記錄，已執行 `-= 1`，語意是「本張完成時尚有幾張在跑」，非「本張下載時的並發環境」。**先前據此宣告「最慢兩張發生在 active=1/2 → 並發假說推翻」是誤讀——那兩張只是最後完成者。結論（並發非主因）碰巧正確，推理過程錯誤。量測欄位語意須在設計時定義清楚。
+
+最終狀態相對 main 的實質改動僅二：①`cellForItemAt` 的 Kingfisher options 增加 `.retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))` ②`AppDelegate` 的 `downloadTimeout` 30→10 並移除三行無效 sessionConfiguration 賦值。[PERF] 量測碼於收尾時全數移除。
+
 修完實機確認 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
 
 ## 清理承諾
