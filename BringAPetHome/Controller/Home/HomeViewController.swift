@@ -5,9 +5,6 @@
 //  Created by Ting on 2022/6/14.
 //
 
-// [PERF] 量測碼使檔案與類別暫時超過長度上限，效能任務結束清理時連同此註解移除
-// swiftlint:disable file_length
-
 import UIKit
 import Kingfisher
 import Lottie
@@ -19,34 +16,6 @@ enum PageStatus {
     case notLoadingMore
 }
 
-#if DEBUG
-private enum PerfLog {
-    static let appStart = CFAbsoluteTimeGetCurrent()
-    private static let lock = NSLock()
-    private static var inFlightCount = 0
-
-    @discardableResult
-    static func adjustInFlight(by delta: Int) -> Int {
-        lock.lock()
-        defer { lock.unlock() }
-        inFlightCount += delta
-        return inFlightCount
-    }
-
-    static func currentInFlight() -> Int {
-        lock.lock()
-        defer { lock.unlock() }
-        return inFlightCount
-    }
-
-    static func log(_ message: String) {
-        let elapsed = String(format: "%.3f", CFAbsoluteTimeGetCurrent() - appStart)
-        print("[PERF][t+\(elapsed)s] \(message)")
-    }
-}
-#endif
-
-// swiftlint:disable:next type_body_length
 class HomeViewController: UIViewController {
 
     let header = MJRefreshStateHeader()
@@ -61,11 +30,6 @@ class HomeViewController: UIViewController {
     private var currentFilter: Filter?
     private var imagePrefetchers: [ImagePrefetcher] = []
     private var delayedBackgroundFetch: DispatchWorkItem?
-    // 純計數，供 [PERF] log 觀察並發數，不阻擋下載（節流 gate 已於 2026-07-11 移除，見 spec）
-    private var activeCellDownloads = 0
-    #if DEBUG
-    private var hasLoggedFirstImageSinceReset = false
-    #endif
     private lazy var loadingAnimationView: LottieAnimationView = {
         let animationView = LottieAnimationView(name: "lf30_editor_wgvv5jrs")
         animationView.frame = CGRect(x: 0, y: 0, width: 150, height: 120)
@@ -81,9 +45,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        #if DEBUG
-        PerfLog.log("anchor viewDidLoad")
-        #endif
         // setup
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -136,9 +97,6 @@ class HomeViewController: UIViewController {
             imagePrefetchers.removeAll()
             delayedBackgroundFetch?.cancel()
             delayedBackgroundFetch = nil
-            #if DEBUG
-            hasLoggedFirstImageSinceReset = false
-            #endif
         }
 
         let fetchCount = (reset && !hasPrefetchedAfterInitialLoad) ? initialPageSize : pageSize
@@ -146,17 +104,11 @@ class HomeViewController: UIViewController {
         if reset && !isBackgroundPrefetch {
             setupLottie()
         }
-        #if DEBUG
-        PerfLog.log("api request skip=\(skip) top=\(fetchCount) reset=\(reset) bg=\(isBackgroundPrefetch)")
-        #endif
         ShelterManager.shared.fetchData(skip: skip, top: fetchCount, filter: currentFilter) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let fetchedAnimals):
-                    #if DEBUG
-                    PerfLog.log("anchor apiDone fetched=\(fetchedAnimals.count) reset=\(reset)")
-                    #endif
                     let filteredAnimals = fetchedAnimals.filter { !$0.albumFile.isEmpty }
                     self.hasMoreData = fetchedAnimals.count >= fetchCount
                     self.skip += fetchedAnimals.count
@@ -243,73 +195,18 @@ class HomeViewController: UIViewController {
         })
     }
     
-    #if DEBUG
-    private func perfPrefetchProgressBlock() -> PrefetcherProgressBlock {
-        return { skipped, failed, completed in
-            let inflight = PerfLog.adjustInFlight(by: -1)
-            let done = skipped.count + failed.count + completed.count
-            if done % 10 == 0 {
-                PerfLog.log("prefetch progress done=\(done) inflight=\(inflight)")
-            }
-        }
-    }
-    #endif
-
-    private func startCellDownload(_ cell: HomeCollectionViewCell, urlString: String, at indexPath: IndexPath) {
-        activeCellDownloads += 1
-        #if DEBUG
-        let requestStart = CFAbsoluteTimeGetCurrent()
-        PerfLog.log("cellStart item=\(indexPath.item) active=\(activeCellDownloads)")
-        #endif
-        cell.shelterImageView.kf.setImage(
-            with: URL(string: urlString),
-            placeholder: UIImage(named: "dketch-4"),
+    private func prefetchImages(from animals: [AnimalData], limit: Int) {
+        let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
+        guard !urls.isEmpty else { return }
+        let prefetcher = ImagePrefetcher(
+            urls: urls,
             options: [
                 .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .downloadPriority(1.0),
-                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
-            ],
-            completionHandler: { [weak self] result in
-                guard let self = self else { return }
-                self.activeCellDownloads -= 1
-                #if DEBUG
-                let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000)
-                switch result {
-                case .success(let value):
-                    let cache = String(describing: value.cacheType)
-                    PerfLog.log("cell item=\(indexPath.item) cache=\(cache) "
-                        + "\(elapsedMs)ms active=\(self.activeCellDownloads)")
-                    if !self.hasLoggedFirstImageSinceReset {
-                        self.hasLoggedFirstImageSinceReset = true
-                        PerfLog.log("anchor firstImage item=\(indexPath.item)")
-                    }
-                case .failure(let error):
-                    guard !error.isTaskCancelled else { return }
-                    PerfLog.log("cell item=\(indexPath.item) FAIL \(elapsedMs)ms code=\(error.errorCode)")
-                }
-                #endif
-            }
+                .downloadPriority(URLSessionTask.lowPriority)
+            ]
         )
-    }
-
-    private func prefetchImages(from animals: [AnimalData], limit: Int) {
-        let urls = animals.prefix(limit).compactMap { URL(string: $0.albumFile) }
-        guard !urls.isEmpty else { return }
-        let options: KingfisherOptionsInfo = [
-            .processor(thumbnailProcessor),
-            .scaleFactor(UIScreen.main.scale),
-            .backgroundDecode,
-            .downloadPriority(URLSessionTask.lowPriority)
-        ]
-        #if DEBUG
-        PerfLog.log("prefetch start +\(urls.count) inflight=\(PerfLog.adjustInFlight(by: urls.count))")
-        let prefetcher = ImagePrefetcher(urls: urls, options: options,
-                                         progressBlock: perfPrefetchProgressBlock())
-        #else
-        let prefetcher = ImagePrefetcher(urls: urls, options: options)
-        #endif
         imagePrefetchers.append(prefetcher)
         prefetcher.start()
     }
@@ -355,7 +252,18 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
-        startCellDownload(cell, urlString: item.albumFile, at: indexPath)
+        cell.shelterImageView.kf.setImage(
+            with: URL(string: item.albumFile),
+            placeholder: UIImage(named: "dketch-4"),
+            options: [
+                .processor(thumbnailProcessor),
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode,
+                .downloadPriority(1.0),
+                // 連線停滯時 10 秒逾時後重試，避免佔位圖永久停留（見 docs/superpowers/specs/2026-07-10-image-loading-perf-design.md）
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
+            ]
+        )
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
         let sexImageName: String
@@ -442,19 +350,15 @@ extension HomeViewController: UICollectionViewDataSourcePrefetching {
             return URL(string: animalDatas[indexPath.item].albumFile)
         }
         guard !urls.isEmpty else { return }
-        let options: KingfisherOptionsInfo = [
-            .processor(thumbnailProcessor),
-            .scaleFactor(UIScreen.main.scale),
-            .backgroundDecode,
-            .downloadPriority(URLSessionTask.lowPriority)
-        ]
-        #if DEBUG
-        PerfLog.log("prefetch start +\(urls.count) inflight=\(PerfLog.adjustInFlight(by: urls.count))")
-        let prefetcher = ImagePrefetcher(urls: urls, options: options,
-                                         progressBlock: perfPrefetchProgressBlock())
-        #else
-        let prefetcher = ImagePrefetcher(urls: urls, options: options)
-        #endif
+        let prefetcher = ImagePrefetcher(
+            urls: urls,
+            options: [
+                .processor(thumbnailProcessor),
+                .scaleFactor(UIScreen.main.scale),
+                .backgroundDecode,
+                .downloadPriority(URLSessionTask.lowPriority)
+            ]
+        )
         imagePrefetchers.append(prefetcher)
         prefetcher.start()
     }
