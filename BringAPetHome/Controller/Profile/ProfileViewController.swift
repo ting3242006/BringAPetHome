@@ -28,6 +28,10 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        // v1.2.0 隨「探索」tab 一併隱藏「我的分享」清單（它是進入探索功能的唯一外部入口）。
+        // 恢復方式：刪除此行，並還原下方兩處 fetchUserSharing 呼叫。
+        // 詳見 docs/superpowers/specs/2026-07-11-hide-tabs-design.md
+        tableView.isHidden = true
         selectedBackgroundView.backgroundColor = UIColor.clear
         checkUserLogin()
     }
@@ -41,10 +45,6 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getUserProfile()
-        shareManager.fetchUserSharing(uid: Auth.auth().currentUser?.uid ?? "", completion: { [weak self] shareList in
-            self?.shareList = shareList ?? []
-            self?.tableView.reloadData()
-        })
         if Auth.auth().currentUser == nil {
             showLoginVC()
             userNameLabel.text = "暱稱"
@@ -118,14 +118,7 @@ class ProfileViewController: UIViewController {
     private func checkUserLogin() {
         if Auth.auth().currentUser == nil {
             showLoginVC()
-        } else {
-            return
         }
-        let userUid = Auth.auth().currentUser?.uid ?? ""
-        shareManager.fetchUserSharing(uid: userUid, completion: { [weak self] shareList in
-            self?.shareList = shareList ?? []
-            self?.tableView.reloadData()
-        })
     }
 }
 

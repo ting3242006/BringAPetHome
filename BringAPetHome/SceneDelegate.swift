@@ -17,6 +17,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        hideUnreleasedTabs()
+    }
+
+    /// v1.2.0 暫時隱藏「送養」與「探索」tab。
+    /// 恢復方式：刪除此方法與上方的呼叫，並還原 ProfileViewController 的「我的分享」清單。
+    /// 詳見 docs/superpowers/specs/2026-07-11-hide-tabs-design.md
+    private func hideUnreleasedTabs() {
+        guard let tabBarController = window?.rootViewController as? UITabBarController,
+              let allTabs = tabBarController.viewControllers else { return }
+        let hiddenIndices: Set<Int> = [1, 2]   // 1=送養, 2=探索
+        tabBarController.viewControllers = allTabs.enumerated()
+            .filter { !hiddenIndices.contains($0.offset) }
+            .map { $0.element }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
