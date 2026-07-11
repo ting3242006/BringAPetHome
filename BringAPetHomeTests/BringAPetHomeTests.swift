@@ -25,7 +25,7 @@ class BringAPetHomeTests: XCTestCase {
 
     func testApiCallCompletes() throws {
           // given
-          let urlString = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL"
+          let urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL"
           let url = URL(string: urlString)!
           let promise = expectation(description: "Completion handler invoked")
           var statusCode: Int?
@@ -49,7 +49,7 @@ class BringAPetHomeTests: XCTestCase {
     // 或檢查 API 跟專案裡的有沒有一樣
     
     func testApiStatusCode() throws {
-        let url = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL")!
+        let url = URL(string: "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL")!
         let promise = expectation(description: "Status code: 200")
         
         sut.dataTask(with: url) { (data, response, error) in
