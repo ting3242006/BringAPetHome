@@ -1,7 +1,7 @@
 # 隱藏送養/探索 tab（v1.2.0）設計
 
 日期：2026-07-11
-狀態：user 已核可（方案 A：SceneDelegate 過濾）
+狀態：user 已核可（方案 B：TabBarController subclass。初版方案 A 於 review 被否決，見下方失敗紀錄）
 
 ## 目標
 
@@ -57,7 +57,9 @@ self.view.window?.rootViewController = self.storyboard?.instantiateViewControlle
 ## 改動範圍
 
 ### `BringAPetHome/Controller/MainTabBarController.swift`（新增）
-`UITabBarController` subclass，`viewDidLoad` 內以 `enumerated().filter{ !hiddenTabIndices.contains($0.offset) }.map{ $0.element }` 一次重建陣列（避免「移除索引 1 後位移」的經典 bug），移除索引 1、2。
+`UITabBarController` subclass，`viewDidLoad` 內過濾 `viewControllers`。
+
+**以 root VC 的型別辨識，而非索引位置**：`root is AdoptionViewController || root is SharePetCollectionViewController`。寫死索引 `[1, 2]` 有兩個弱點——日後調整 storyboard 的 tab 順序會靜默刪錯 tab；且非冪等（重複執行時索引 1、2 已是收藏與個人檔案）。型別判斷對兩者皆免疫，也更能表達「隱藏這兩個功能」的意圖。
 
 **必須手動加入 Xcode target**（本專案已知坑，見 CLAUDE.md）。**若漏掉，編譯仍會成功，但 Storyboard 找不到該 class，靜默 fallback 成普通 `UITabBarController`，功能完全不生效**——這是最危險的失敗模式，驗收必須確認檔案在 target 的 Sources build phase 內。
 

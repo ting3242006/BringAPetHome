@@ -16,18 +16,19 @@ import UIKit
 /// 詳見 docs/superpowers/specs/2026-07-11-hide-tabs-design.md
 class MainTabBarController: UITabBarController {
 
-    /// 1 = 送養（AdoptionViewController）, 2 = 探索（SharePetCollectionViewController）
-    private let hiddenTabIndices: Set<Int> = [1, 2]
-
     override func viewDidLoad() {
         super.viewDidLoad()
         hideUnreleasedTabs()
     }
 
+    /// 以 root VC 的型別辨識要隱藏的 tab，而非索引位置。
+    /// 索引寫死（[1, 2]）有兩個弱點：日後調整 storyboard 的 tab 順序會靜默刪錯 tab；
+    /// 且重複執行會誤刪（第二次的索引 1、2 已是收藏與個人檔案）。型別判斷對兩者皆免疫。
     private func hideUnreleasedTabs() {
         guard let allTabs = viewControllers else { return }
-        viewControllers = allTabs.enumerated()
-            .filter { !hiddenTabIndices.contains($0.offset) }
-            .map { $0.element }
+        viewControllers = allTabs.filter { tab in
+            let root = (tab as? UINavigationController)?.viewControllers.first ?? tab
+            return !(root is AdoptionViewController || root is SharePetCollectionViewController)
+        }
     }
 }
