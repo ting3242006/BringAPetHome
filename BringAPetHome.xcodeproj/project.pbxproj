@@ -64,6 +64,7 @@
 		5F52A7E2D04C5459CC822D2D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */; };
 		64EDE15C2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 64EDE15B2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy */; };
 		7954F532F797B975F70B0FAD /* Pods_BringAPetHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */; };
+		797972B21B4FBB695C028383 /* Pods_BringAPetHomeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A7AF961A4A33C6E38620716 /* Pods_BringAPetHomeTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,10 +137,13 @@
 		25E5733A2869D04C009348A0 /* BringAPetHome.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BringAPetHome.entitlements; sourceTree = "<group>"; };
 		25E5733B2869D343009348A0 /* CustomFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunc.swift; sourceTree = "<group>"; };
 		3553C5DC4967E9C811258625 /* Pods-BringAPetHome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.release.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.release.xcconfig"; sourceTree = "<group>"; };
+		5A7AF961A4A33C6E38620716 /* Pods_BringAPetHomeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BringAPetHomeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64EDE15B2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BringAPetHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88403816CC320A23BF606720 /* Pods-BringAPetHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.debug.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.debug.xcconfig"; sourceTree = "<group>"; };
 		BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		D189B2A879283EC0C50D29C0 /* Pods-BringAPetHomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHomeTests.release.xcconfig"; path = "Target Support Files/Pods-BringAPetHomeTests/Pods-BringAPetHomeTests.release.xcconfig"; sourceTree = "<group>"; };
+		E90987CF86924565936D890D /* Pods-BringAPetHomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHomeTests.debug.xcconfig"; path = "Target Support Files/Pods-BringAPetHomeTests/Pods-BringAPetHomeTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +159,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				797972B21B4FBB695C028383 /* Pods_BringAPetHomeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +171,8 @@
 			children = (
 				88403816CC320A23BF606720 /* Pods-BringAPetHome.debug.xcconfig */,
 				3553C5DC4967E9C811258625 /* Pods-BringAPetHome.release.xcconfig */,
+				E90987CF86924565936D890D /* Pods-BringAPetHomeTests.debug.xcconfig */,
+				D189B2A879283EC0C50D29C0 /* Pods-BringAPetHomeTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -362,6 +369,7 @@
 			isa = PBXGroup;
 			children = (
 				6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */,
+				5A7AF961A4A33C6E38620716 /* Pods_BringAPetHomeTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -394,6 +402,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2524137E288825560093601E /* Build configuration list for PBXNativeTarget "BringAPetHomeTests" */;
 			buildPhases = (
+				48E766E40910ABCB0496C842 /* [CP] Check Pods Manifest.lock */,
 				25241372288825560093601E /* Sources */,
 				25241373288825560093601E /* Frameworks */,
 				25241374288825560093601E /* Resources */,
@@ -481,13 +490,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -529,6 +534,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+		48E766E40910ABCB0496C842 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BringAPetHomeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		E2AC4D3A6F3F155308DF51BA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -771,7 +798,6 @@
 				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BringAPetHome/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要你的同意，才能開啟相機拍攝動物圖片";
@@ -836,12 +862,12 @@
 		};
 		2524137C288825560093601E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E90987CF86924565936D890D /* Pods-BringAPetHomeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J3XG5W7SR9;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					HEADER_SEARCH_PATHS,
@@ -861,6 +887,7 @@
 		};
 		2524137D288825560093601E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D189B2A879283EC0C50D29C0 /* Pods-BringAPetHomeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;

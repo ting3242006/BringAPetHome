@@ -339,6 +339,8 @@ extension HomeViewController: HomeFilterViewControllerDelegate {
             && (filter.bodytype ?? "").isEmpty
             && filter.areaPkid == nil
         currentFilter = isEmpty ? nil : filter
+        let topOffset = CGPoint(x: 0, y: -collectionView.adjustedContentInset.top)
+        collectionView.setContentOffset(topOffset, animated: false)
         fetchData(reset: true)
     }
 }
