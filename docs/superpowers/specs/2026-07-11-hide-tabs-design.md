@@ -30,22 +30,42 @@ v1.2.0 上線前暫時隱藏「送養」與「探索」兩個 tab，程式碼全
 2. **一併隱藏 Profile 的「我的分享」入口**（user 核可）：否則探索功能仍可從個人檔案進入，形成「進得去但發不了新文」的半殘狀態。
 3. Profile 頁的 tableView **直接隱藏**（user 核可），該頁成為純個人資料頁（封面、頭像、暱稱、編輯、登出），下半部留白。
 
-## 方案（A：SceneDelegate 過濾）
+## 方案（B：TabBarController subclass）
 
-選擇理由：**完全不碰 Storyboard**。該檔 2158 行、已知有 constraint breaking 問題，手改 XML（刪 segue 或加 customClass）是本次最大風險來源。方案 A 的改動全為純 Swift，恢復時刪除對應段落即可。
+**初版採方案 A（SceneDelegate 一次性過濾）已於 review 被否決——見下方「方案 A 失敗紀錄」。**
+
+方案 B：新增 `MainTabBarController: UITabBarController`，於 `viewDidLoad` 過濾 `viewControllers`；Storyboard 的 tabBarController 加上 `customClass`。
+
+選擇理由：**過濾在每次實例化時執行**，任何重建 rootViewController 的路徑（含登出）都自動生效，不需逐一補洞。
+
+### 方案 A 失敗紀錄（2026-07-11 review 發現，Critical）
+
+`ProfileViewController.swift:77` 的**登出**按鈕會執行：
+
+```swift
+self.view.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarController")
+```
+
+它從 Storyboard 重新實例化一個**全新的 5-tab** TabBarController，完全繞過 SceneDelegate 在 `willConnectTo` 的一次性過濾。復現：冷啟動（tab 正確隱藏）→ 進個人檔案 → 登出 → 送養/探索 tab 重新出現。
+
+教訓：**一次性的 runtime 過濾，其正確性依賴「沒有任何地方重建該物件」這個無法在本地驗證的全域假設。** 初版 Explore 查了 SceneDelegate/AppDelegate 無 tab 操作，卻沒查 `rootViewController =` 的賦值點。改用 subclass 後，過濾與物件生命週期綁定，此類假設不再需要。
 
 已否決：
-- 方案 B（TabBarController subclass）：需在 storyboard 加 customClass，且多一個檔案。
+- 方案 A（SceneDelegate 一次性過濾）：登出繞過，見上。
 - 方案 C（storyboard 刪 relationship segue）：手改 XML 風險高、diff 難讀、恢復麻煩。
 
-## 改動範圍（僅兩個 Swift 檔）
+## 改動範圍
+
+### `BringAPetHome/Controller/MainTabBarController.swift`（新增）
+`UITabBarController` subclass，`viewDidLoad` 內以 `enumerated().filter{ !hiddenTabIndices.contains($0.offset) }.map{ $0.element }` 一次重建陣列（避免「移除索引 1 後位移」的經典 bug），移除索引 1、2。
+
+**必須手動加入 Xcode target**（本專案已知坑，見 CLAUDE.md）。**若漏掉，編譯仍會成功，但 Storyboard 找不到該 class，靜默 fallback 成普通 `UITabBarController`，功能完全不生效**——這是最危險的失敗模式，驗收必須確認檔案在 target 的 Sources build phase 內。
+
+### `BringAPetHome/View/Base.lproj/Main.storyboard`
+tabBarController（`Main.storyboard:1098`）加上 `customClass="MainTabBarController" customModule="BringAPetHome" customModuleProvider="target"`。僅新增 attribute，不動 segue 結構。
 
 ### `SceneDelegate.swift`
-於 `scene(_:willConnectTo:options:)` 內，取得 `window?.rootViewController as? UITabBarController`，移除索引 1、2。
-
-**實作注意**：必須避免「移除索引 1 後索引位移」的經典 bug——由大到小移除，或用一次性的 `enumerated().filter` 重建陣列。
-
-以 `// MARK:` 或明確註解標示為 v1.2.0 暫時性隱藏，並寫明恢復方式（刪除本段）。
+不改（初版的過濾已撤除）。
 
 ### `ProfileViewController.swift`
 - `viewDidLoad` 加 `tableView.isHidden = true`。
@@ -60,6 +80,7 @@ v1.2.0 上線前暫時隱藏「送養」與「探索」兩個 tab，程式碼全
 - 編譯：專案 CLAUDE.md「驗證指令」，BUILD SUCCEEDED + changed-file 零新增警告。
 - 實機手動（無單元測試 target）：
   1. Tab bar 僅剩三個：首頁、收藏、個人檔案。
-  2. 個人檔案頁看不到「我的分享」清單，頁面其餘元素（頭像、暱稱、編輯、登出）正常。
-  3. 首頁瀏覽／篩選、收藏功能無退化。
-  4. 冷啟動無 crash（索引移除若寫錯會直接崩）。
+  2. **登出後 tab 仍只有三個**（方案 A 的 Critical 復現路徑，必測）。
+  3. 個人檔案頁看不到「我的分享」清單，頁面其餘元素（頭像、暱稱、編輯、登出）正常。
+  4. 首頁瀏覽／篩選、收藏功能無退化。
+  5. 冷啟動無 crash（索引移除若寫錯會直接崩）。

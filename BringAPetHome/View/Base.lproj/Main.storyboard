@@ -1095,7 +1095,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="q7Y-u6-COd">
             <objects>
-                <tabBarController storyboardIdentifier="MainTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="qCk-hV-aGE" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="qCk-hV-aGE" customClass="MainTabBarController" customModule="BringAPetHome" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="T53-eO-uKq"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="psW-E5-fZU">

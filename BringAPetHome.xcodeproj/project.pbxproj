@@ -61,6 +61,7 @@
 		25E573362869B26D009348A0 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E573352869B26D009348A0 /* ProfileTableViewCell.swift */; };
 		25E573392869B6A8009348A0 /* SignInWithAppleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E573382869B6A8009348A0 /* SignInWithAppleVC.swift */; };
 		25E5733C2869D343009348A0 /* CustomFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E5733B2869D343009348A0 /* CustomFunc.swift */; };
+		5F52A7E2D04C5459CC822D2D /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */; };
 		64EDE15C2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 64EDE15B2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy */; };
 		7954F532F797B975F70B0FAD /* Pods_BringAPetHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */; };
 /* End PBXBuildFile section */
@@ -138,6 +139,7 @@
 		64EDE15B2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		6EB70D8402DBAFBE4D0C90C4 /* Pods_BringAPetHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BringAPetHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		88403816CC320A23BF606720 /* Pods-BringAPetHome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BringAPetHome.debug.xcconfig"; path = "Target Support Files/Pods-BringAPetHome/Pods-BringAPetHome.debug.xcconfig"; sourceTree = "<group>"; };
+		BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +316,7 @@
 				254861B128659BC500A4C177 /* Share */,
 				251A7EAA285F111700FA7E1D /* Adoption */,
 				251A7EA9285F10F500FA7E1D /* Home */,
+				BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				2511F4752867413B00E59FB0 /* ShareModel.swift in Sources */,
 				251AF647285CB0EF007B912D /* MapViewController.swift in Sources */,
 				251A7EAF285F122800FA7E1D /* AdoptionTableViewCell.swift in Sources */,
+				5F52A7E2D04C5459CC822D2D /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
