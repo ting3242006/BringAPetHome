@@ -5,7 +5,7 @@
 //  Created by Ting on 2022/6/14.
 //
 
-// [PERF] 量測碼使檔案暫時超過 400 行，Phase 2 清理時連同此註解移除
+// [PERF] 量測碼使檔案與類別暫時超過長度上限，效能任務結束清理時連同此註解移除
 // swiftlint:disable file_length
 
 import UIKit
@@ -46,6 +46,7 @@ private enum PerfLog {
 }
 #endif
 
+// swiftlint:disable:next type_body_length
 class HomeViewController: UIViewController {
 
     let header = MJRefreshStateHeader()
@@ -60,9 +61,8 @@ class HomeViewController: UIViewController {
     private var currentFilter: Filter?
     private var imagePrefetchers: [ImagePrefetcher] = []
     private var delayedBackgroundFetch: DispatchWorkItem?
-    private let maxConcurrentCellDownloads = 4
+    // 純計數，供 [PERF] log 觀察並發數，不阻擋下載（節流 gate 已於 2026-07-11 移除，見 spec）
     private var activeCellDownloads = 0
-    private var pendingCellLoads: [(indexPath: IndexPath, urlString: String)] = []
     #if DEBUG
     private var hasLoggedFirstImageSinceReset = false
     #endif
@@ -136,7 +136,6 @@ class HomeViewController: UIViewController {
             imagePrefetchers.removeAll()
             delayedBackgroundFetch?.cancel()
             delayedBackgroundFetch = nil
-            pendingCellLoads.removeAll()
             #if DEBUG
             hasLoggedFirstImageSinceReset = false
             #endif
@@ -256,21 +255,6 @@ class HomeViewController: UIViewController {
     }
     #endif
 
-    private func loadCellImage(_ cell: HomeCollectionViewCell, urlString: String, at indexPath: IndexPath) {
-        let cached = ImageCache.default.imageCachedType(
-            forKey: urlString, processorIdentifier: thumbnailProcessor.identifier).cached
-        if cached || activeCellDownloads < maxConcurrentCellDownloads {
-            pendingCellLoads.removeAll { $0.indexPath == indexPath }
-            startCellDownload(cell, urlString: urlString, at: indexPath)
-        } else if !pendingCellLoads.contains(where: { $0.indexPath == indexPath }) {
-            cell.shelterImageView.image = UIImage(named: "dketch-4")
-            pendingCellLoads.append((indexPath, urlString))
-            #if DEBUG
-            PerfLog.log("cellQueue enqueue item=\(indexPath.item) pending=\(pendingCellLoads.count)")
-            #endif
-        }
-    }
-
     private func startCellDownload(_ cell: HomeCollectionViewCell, urlString: String, at indexPath: IndexPath) {
         activeCellDownloads += 1
         #if DEBUG
@@ -290,13 +274,13 @@ class HomeViewController: UIViewController {
             completionHandler: { [weak self] result in
                 guard let self = self else { return }
                 self.activeCellDownloads -= 1
-                self.drainPendingCellLoads()
                 #if DEBUG
                 let elapsedMs = Int((CFAbsoluteTimeGetCurrent() - requestStart) * 1000)
                 switch result {
                 case .success(let value):
                     let cache = String(describing: value.cacheType)
-                    PerfLog.log("cell item=\(indexPath.item) cache=\(cache) \(elapsedMs)ms active=\(self.activeCellDownloads)")
+                    PerfLog.log("cell item=\(indexPath.item) cache=\(cache) "
+                        + "\(elapsedMs)ms active=\(self.activeCellDownloads)")
                     if !self.hasLoggedFirstImageSinceReset {
                         self.hasLoggedFirstImageSinceReset = true
                         PerfLog.log("anchor firstImage item=\(indexPath.item)")
@@ -308,19 +292,6 @@ class HomeViewController: UIViewController {
                 #endif
             }
         )
-    }
-
-    private func drainPendingCellLoads() {
-        while activeCellDownloads < maxConcurrentCellDownloads, !pendingCellLoads.isEmpty {
-            let next = pendingCellLoads.removeFirst()
-            guard let cell = collectionView.cellForItem(at: next.indexPath) as? HomeCollectionViewCell else {
-                #if DEBUG
-                PerfLog.log("cellQueue skip offscreen item=\(next.indexPath.item)")
-                #endif
-                continue
-            }
-            startCellDownload(cell, urlString: next.urlString, at: next.indexPath)
-        }
     }
 
     private func prefetchImages(from animals: [AnimalData], limit: Int) {
@@ -384,7 +355,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                                                             for: indexPath) as? HomeCollectionViewCell
         else { return UICollectionViewCell() }
         let item = self.animalDatas[indexPath.item]
-        loadCellImage(cell, urlString: item.albumFile, at: indexPath)
+        startCellDownload(cell, urlString: item.albumFile, at: indexPath)
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)
         cell.placeLabel.text = ShelterManager.shared.areaName(pkid: item.areaPkid)
         let sexImageName: String

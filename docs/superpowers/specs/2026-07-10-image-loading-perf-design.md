@@ -64,6 +64,20 @@ Xcode 跑實機 → 冷啟動看首屏 → 下滑 2–3 屏 → 套一次篩選 
 
 最終驗收指標（非體感）：修正後重跑三場景 log，比對 timeout 數（基準 3）、首屏全部完成時間、p90（基準 21,771ms）。WiFi 輔助開關實驗僅作佐證，不作結論依據。
 
+## Phase 2 驗收結果與修正（2026-07-11，perf2 log）
+
+指標達標但**體感未改善，且並發假說被自身數據推翻**：
+
+- 帳面：timeout 3→1 張、p90 21,771→8,761ms、中位 6,717→2,697ms、同時下載 ≤4（軟上限見 6）。
+- 推翻並發假說：最慢兩張（item 5 = 20,530ms、item 6 = 21,740ms）發生於 `active=2` / `active=1`，幾乎無並發。分組中位數：active=3 → 1,174ms；active=4+ → 2,715ms；active=0-1 → 2,998ms。**並發高時反而較快**，節流無保護價值。
+- 節流 gate 成為新延遲來源：排隊等待中位 1,265ms、p90 8,505ms、**最大 79,596ms**，pending 峰值 11。機制：stall 的連線佔住 slot（20s+），N=4 之下後續全部排隊——gate 把單點 stall 放大為整片等待。
+- timeout 語意釐清：`downloadTimeout` → URLRequest `timeoutInterval` 是**無活動逾時**，非總時長上限。資料涓滴進入即不觸發（item 5 耗時 20.5s 仍「成功」）。log 中 3 次 `-1001` 為真正無回應者。
+- 根因收斂：冷啟動初期連線 stall（~20s），之後（t+33s 起）恢復正常（中位 2-3s）。裝置端 log 有 `waiting fallback`／`no path found for pdp_ip`／TCP RST；user 關閉 WiFi 輔助後體感改善（質性觀察，待 log 量化）。
+
+**決議（user 核可 2026-07-11）：移除節流 gate**，`activeCellDownloads` 降級為純計數（僅供 [PERF] log 觀察並發數，不阻擋下載）。**本輪只動 gate 這一個變數**，timeout 語意修正（`timeoutIntervalForResource` 總時長上限）與連線預熱留待下一輪，避免同時改動多個變數導致下一份 log 無法歸因。
+
+Phase 3 候選（依 gate 移除後的 log 決定）：①`timeoutIntervalForResource` 總時長上限 ②連線預熱 ③圖片代理（Cloud Function + CDN）。
+
 修完實機確認 + 走 FEATURE_TEST_PLAN.md 的首頁瀏覽與篩選兩項。
 
 ## 清理承諾
