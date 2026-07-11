@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseFirestore
 
 class AdoptionViewController: UIViewController {
     

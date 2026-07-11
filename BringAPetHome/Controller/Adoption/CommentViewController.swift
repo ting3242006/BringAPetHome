@@ -6,7 +6,8 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseAuth
+import FirebaseFirestore
 
 class CommentViewController: UIViewController {
     var adoptionId: String?

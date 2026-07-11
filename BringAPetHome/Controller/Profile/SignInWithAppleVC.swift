@@ -10,7 +10,7 @@ import FirebaseAuth // 用來與 Firebase Auth 進行串接用的
 import AuthenticationServices // Sign in with Apple 的主體框架
 import CryptoKit // 用來產生隨機字串 (Nonce) 的
 import AVFoundation
-import Firebase
+import FirebaseFirestore
 
 class SignInWithAppleVC: UIViewController {
     

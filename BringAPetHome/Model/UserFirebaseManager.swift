@@ -7,7 +7,7 @@
 
 import Foundation
 import FirebaseAuth
-import Firebase
+import FirebaseFirestore
 import AuthenticationServices
 import FirebaseStorage
 import CoreAudio

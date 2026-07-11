@@ -62,22 +62,22 @@
 * Used `Core Data` to save favorite animal collection.
 * Implemented MapView to display the shelter location using `MapKit`.
 * Designed the UI and user flow.
-* Installed frameworks and tracked dependencies using `CocoaPods` to manage libraries.
+* Tracked third-party dependencies with `Swift Package Manager`.
 * Used `AVFoundation` to handle audio playback and video streaming.
 * Followed the `Agile` methodology for implementing the project.
 
 ## Libraries
-* Firebase
-* lottie-ios
-* SwiftLint
+* FirebaseAuth / FirebaseFirestore / FirebaseStorage / FirebaseDatabase / FirebaseCrashlytics
+* Lottie
+* SwiftLintPlugins
 * Kingfisher
 * IQKeyboardManagerSwift
 * MJRefresh
 
 ## Requirement
-* Xcode 13.0
+* Xcode 27 beta 2 for current CLI verification
 * Swift 5.0
-* iOS 15.0
+* iOS 17.0
 
 ## ReleaseNotes
 | Version | Date | Description                                                                                     |
