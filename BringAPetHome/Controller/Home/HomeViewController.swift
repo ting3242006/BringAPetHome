@@ -259,7 +259,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 .processor(thumbnailProcessor),
                 .scaleFactor(UIScreen.main.scale),
                 .backgroundDecode,
-                .downloadPriority(1.0)
+                .downloadPriority(1.0),
+                // 連線停滯時 10 秒逾時後重試，避免佔位圖永久停留（見 docs/superpowers/specs/2026-07-10-image-loading-perf-design.md）
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
             ]
         )
         cell.sexLabel.text = ShelterManager.shared.sexCh(sex: item.sex)

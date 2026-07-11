@@ -144,7 +144,9 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
             placeholder: placeholderImage ?? UIImage(named: "dketch-4"),
             options: [
                 .cacheOriginalImage,
-                .loadDiskFileSynchronously
+                .loadDiskFileSynchronously,
+                // 與首頁一致：全域 downloadTimeout 已降為 10 秒，需搭配重試避免弱網下大圖載入失敗
+                .retryStrategy(DelayRetryStrategy(maxRetryCount: 2, retryInterval: .seconds(1)))
             ]
         )
         cell.albumFileImageView.contentMode = .scaleAspectFill
