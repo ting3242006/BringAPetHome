@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private var deepLinkPresentationState = DeepLinkPresentationState()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -17,6 +18,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        guard let url = connectionOptions.urlContexts.first?.url else { return }
+        DispatchQueue.main.async { [weak self] in
+            self?.handleDeepLink(url: url)
+        }
+    }
+
+    func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
+        guard let url = urlContexts.first?.url else { return }
+        handleDeepLink(url: url)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -29,6 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        retryPendingDeepLinkPresentation()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -45,5 +56,115 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+    }
+
+    private func handleDeepLink(url: URL) {
+        guard let route = AnimalDeepLink.route(from: url) else { return }
+        if let animal = route.animal {
+            showAnimalDetail(animal)
+            return
+        }
+        if let animal = loadedAnimal(id: route.animalId) {
+            showAnimalDetail(animal)
+            return
+        }
+
+        ShelterManager.shared.fetchAnimal(id: route.animalId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let animal):
+                    self?.showAnimalDetail(animal)
+                case .failure(let error):
+                    print("Deep link animal fetch failed:", error)
+                }
+            }
+        }
+    }
+
+    private func loadedAnimal(id animalId: Int) -> AnimalData? {
+        navigationControllerForDeepLink()?
+            .viewControllers
+            .compactMap { $0 as? HomeViewController }
+            .first?
+            .animalDatas
+            .first(where: { $0.animalId == animalId })
+    }
+
+    private func showAnimalDetail(_ animal: AnimalData) {
+        guard let navigationController = navigationControllerForDeepLink() else {
+            _ = deepLinkPresentationState.animalToPresent(animal, canPresent: false)
+            retryPendingDeepLinkPresentation()
+            return
+        }
+
+        _ = deepLinkPresentationState.animalToPresent(animal, canPresent: true)
+        pushAnimalDetail(animal, on: navigationController)
+    }
+
+    private func retryPendingDeepLinkPresentation() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self = self,
+                  let navigationController = self.navigationControllerForDeepLink(),
+                  let animal = self.deepLinkPresentationState.pendingAnimalToPresent(canPresent: true)
+            else { return }
+
+            self.pushAnimalDetail(animal, on: navigationController)
+        }
+    }
+
+    private func pushAnimalDetail(_ animal: AnimalData, on navigationController: UINavigationController) {
+        if let detailVC = navigationController.topViewController as? HomeDetailViewController,
+           detailVC.pet?.animalId == animal.animalId {
+            return
+        }
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let detailVC = storyboard.instantiateViewController(
+            withIdentifier: "HomeDetailViewController"
+        ) as? HomeDetailViewController else { return }
+
+        detailVC.pet = animal
+        navigationController.pushViewController(detailVC, animated: true)
+    }
+
+    private func navigationControllerForDeepLink() -> UINavigationController? {
+        if let tabBarController = window?.rootViewController as? UITabBarController {
+            tabBarController.loadViewIfNeeded()
+            let homeNavigationController = tabBarController.viewControllers?
+                .compactMap { $0 as? UINavigationController }
+                .first { $0.viewControllers.first is HomeViewController }
+            if let homeNavigationController = homeNavigationController {
+                homeNavigationController.loadViewIfNeeded()
+                tabBarController.selectedViewController = homeNavigationController
+                return homeNavigationController
+            }
+            return tabBarController.selectedViewController as? UINavigationController
+        }
+        return window?.rootViewController as? UINavigationController
+    }
+}
+
+struct DeepLinkPresentationState {
+    private var pendingAnimal: AnimalData?
+
+    var hasPendingAnimal: Bool {
+        pendingAnimal != nil
+    }
+
+    mutating func animalToPresent(_ animal: AnimalData, canPresent: Bool) -> AnimalData? {
+        guard canPresent else {
+            pendingAnimal = animal
+            return nil
+        }
+
+        pendingAnimal = nil
+        return animal
+    }
+
+    mutating func pendingAnimalToPresent(canPresent: Bool) -> AnimalData? {
+        guard canPresent, let pendingAnimal = pendingAnimal else { return nil }
+
+        self.pendingAnimal = nil
+        return pendingAnimal
     }
 }

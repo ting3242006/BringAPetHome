@@ -11,15 +11,15 @@ import CoreLocation
 import CoreData
 
 class HomeDetailViewController: UIViewController {
-    
+
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
-    
+
     var pet: AnimalData?
     var placeholderImage: UIImage?
     let selectedBackgroundView = UIView()
     var saveAnimal: Animal?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
@@ -29,28 +29,28 @@ class HomeDetailViewController: UIViewController {
         saveFavorites()
         layout()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false // 下一頁出現 TabBar
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
-    
+
     @IBAction func backButton(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
-    
+
     @IBAction func clickMapButton(_ sender: Any) {
         guard let mapVC = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController else { return }
         mapVC.address = pet?.shelterAddress
         self.navigationController?.pushViewController(mapVC, animated: true)
     }
-    
+
     // MARK: - 打電話
     @IBAction func clickPhoneButton(_ sender: Any) {
         guard let tel = pet?.shelterTel else {
@@ -73,17 +73,19 @@ class HomeDetailViewController: UIViewController {
         controller.addAction(canceAction)
         present(controller, animated: true, completion: nil)
     }
-    
+
     // MARK: - 分享資訊
     @IBAction func shareInfoButton(_ sender: Any) {
-        let activity = UIActivityViewController(activityItems: [pet?.albumFile, pet?.kind, pet?.shelterAddress], applicationActivities: nil)
+        guard let pet = pet else { return }
+        let items = AnimalShareContentBuilder.activityItems(for: pet)
+        let activity = UIActivityViewController(activityItems: items, applicationActivities: nil)
         present(activity, animated: true)
     }
-    
+
     @objc private func didTapClose() {
         self.navigationController?.popViewController(animated: true)
     }
-    
+
     private func layout() {
         tableView.anchor(top: view.topAnchor,
                          leading: view.leadingAnchor,
@@ -100,13 +102,13 @@ class HomeDetailViewController: UIViewController {
         let barAppearance = UINavigationBarAppearance()
         barAppearance.configureWithTransparentBackground()
         UINavigationBar.appearance().scrollEdgeAppearance = barAppearance
-        
+
         tableView.contentInsetAdjustmentBehavior = .never
         backButton.backgroundColor = UIColor.black.withAlphaComponent(0.35)
         backButton.layer.cornerRadius = 20
         backButton.layer.masksToBounds = true
     }
-    
+
     private func saveFavorites() {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
@@ -127,11 +129,11 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeDetailTableViewCell.identifier, for: indexPath) as? HomeDetailTableViewCell else { return UITableViewCell() }
         cell.link = self
@@ -168,11 +170,11 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
-    
+
     func heartButtonTapped() {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         guard let context = appDelegate?.persistentContainer.viewContext else { return }
-        
+
         if let saveAnimal = saveAnimal {
             // 刪除對應的圖片檔案
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -209,7 +211,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             let age = pet?.age
             let opendate = pet?.opendate
             let like = saveAnimal?.like ?? false
-            
+
             saveAnimal?.id = Int64(id)
             saveAnimal?.sex = sex
             saveAnimal?.steriization = sterilization
@@ -229,14 +231,14 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
             saveAnimal?.age = age
             saveAnimal?.opendate = opendate
             saveAnimal?.like = like
-            
+
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
             let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let imageUrl = documentsDirectory.appendingPathComponent("\(id)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)
             appDelegate?.saveContext()
-            
+
             do {
                 let request = Animal.fetchRequest()
                 let animals = try context.fetch(request)
@@ -244,7 +246,7 @@ extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
                     print("DEBUG: \(animal.id) \(animal.like)")
                 }
             } catch {
-                
+
             }
         }
     }

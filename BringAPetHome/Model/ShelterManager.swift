@@ -11,13 +11,13 @@ import MapKit
 // swiftlint:enable identifier_name
 
 class ShelterManager {
-    
+
     static let shared = ShelterManager()
-    
+
     private init() { }
-    
+
     func fetchData(skip: Int, top: Int = 100, filter: Filter? = nil, completion: @escaping (Result<[AnimalData]>) -> Void) {
-        
+
         var urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=\(top)&$skip=\(skip)"
         if let filter = filter {
             if let kind = filter.kind, !kind.isEmpty {
@@ -36,16 +36,16 @@ class ShelterManager {
                 }
             }
         }
-            
+
         guard let urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: urlString) else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.cachePolicy = .returnCacheDataElseLoad
+        request.cachePolicy = .reloadIgnoringLocalCacheData
         request.timeoutInterval = 20
-        
+
         URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(error ?? STHTTPClientError.unexpectedError))
@@ -59,8 +59,41 @@ class ShelterManager {
             }
         }.resume()
     }
+
+    func fetchAnimal(id animalId: Int, completion: @escaping (Result<AnimalData>) -> Void) {
+        let urlString = [
+            "https://data.moa.gov.tw/Service/OpenData/TransService.aspx",
+            "?UnitId=QcbUEzN6E6DL",
+            "&animal_id=\(animalId)"
+        ].joined()
+        guard let encodedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedUrlString) else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        request.timeoutInterval = 20
+
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(.failure(error ?? STHTTPClientError.unexpectedError))
+                return
+            }
+            do {
+                let animalDatas = try JSONDecoder().decode([AnimalData].self, from: data)
+                if let animal = animalDatas.first(where: { $0.animalId == animalId }) {
+                    completion(.success(animal))
+                } else {
+                    completion(.failure(STHTTPClientError.unexpectedError))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
     // 拉回 mainThread
-    
+
     // swiftlint:disable all
     func areaName(pkid: Int) -> String {
         switch pkid {
@@ -113,7 +146,7 @@ class ShelterManager {
         }
     }
     // swiftlint:ensable all
-    
+
     func sexCh(sex: String) -> String {
         switch sex {
         case "M":
@@ -126,7 +159,7 @@ class ShelterManager {
             return ""
         }
     }
-    
+
     func ageCh(age: String) -> String {
         switch age {
         case "CHILD":
@@ -139,7 +172,7 @@ class ShelterManager {
             return "不詳"
         }
     }
-    
+
     func bodytypeCh(bodytype: String) -> String {
         switch bodytype {
         case "SMALL":
@@ -152,7 +185,7 @@ class ShelterManager {
             return ""
         }
     }
-    
+
     func sterilization(sterilization: String) -> String {
         switch sterilization {
         case "T":
@@ -165,7 +198,7 @@ class ShelterManager {
             return ""
         }
     }
-    
+
     func status(status: String) -> String {
         switch status {
         case "OPEN":
