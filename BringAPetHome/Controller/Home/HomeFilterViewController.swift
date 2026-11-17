@@ -7,13 +7,6 @@
 
 import UIKit
 
-struct Filter: Equatable {
-    var kind: String?
-    var sex: String?
-    var bodytype: String?
-    var areaPkid: Int?
-}
-
 protocol HomeFilterViewControllerDelegate: AnyObject {
     func selectFilterViewController(_ controller: HomeFilterViewController, didSelect filter: Filter)
 }

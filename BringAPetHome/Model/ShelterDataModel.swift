@@ -148,3 +148,10 @@ struct AnimalShareContentBuilder {
         return lines.joined(separator: "\n")
     }
 }
+
+struct Filter: Equatable {
+    var kind: String?
+    var sex: String?
+    var bodytype: String?
+    var areaPkid: Int?
+}

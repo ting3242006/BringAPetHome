@@ -11,9 +11,7 @@ class FavoriteListViewController: UIViewController {
 
     @IBOutlet weak var favoriteTableView: UITableView!
     
-    // 宣告 Core Data 常數
-    let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
-    var animalList: [Animal] = []
+    var animalList: [FavoriteRecord] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +21,9 @@ class FavoriteListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let context = context else { return }
-
         do {
-            animalList = try context.fetch(Animal.fetchRequest())
+            guard let favorites = try FavoriteStore.shared.allFavorites() else { return }
+            animalList = favorites
         } catch {
             print("error")
         }
@@ -53,15 +50,16 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
-        let animal = animalList[indexPath.row]
-        cell.idLabel.text = "ID:\(animal.id)"
-        cell.opendate.text = "\(animal.openDate ?? "")"
-        cell.sterilization.text = ShelterManager.shared.sterilization(sterilization: animal.steriization ?? "")
-        cell.place.text = animal.place
+        let record = animalList[indexPath.row]
+        let animal = record.animalData
+        cell.idLabel.text = "ID:\(animal.animalId)"
+        cell.opendate.text = "\(record.openDate ?? "")"
+        cell.sterilization.text = ShelterManager.shared.sterilization(sterilization: record.steriization ?? "")
+        cell.place.text = record.place
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let imageUrl = documentsDirectory.appendingPathComponent("\(animal.id)").appendingPathExtension("jpg")
+        let imageUrl = documentsDirectory.appendingPathComponent("\(animal.animalId)").appendingPathExtension("jpg")
         cell.animalImageView.image = UIImage(contentsOfFile: imageUrl.path)
-        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: animal.sex ?? "")
+        cell.sexLabel.text = ShelterManager.shared.sexCh(sex: animal.sex)
         var name = ""
         switch cell.sexLabel.text {
         case "男":
@@ -79,28 +77,9 @@ extension FavoriteListViewController: UITableViewDataSource, UITableViewDelegate
     // swiftlint:disable all
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         favoriteTableView.deselectRow(at: indexPath, animated: true)
-        let animal = self.animalList[indexPath.row]
+        let animalData = self.animalList[indexPath.row].animalData
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "HomeDetailViewController") as? HomeDetailViewController else { return }
-        let animalData = AnimalData(animalId: Int(animal.id),
-                                    place: animal.place ?? "", kind: animal.kind ?? "",
-                                    sex: animal.sex ?? "",
-                                    bodytype: animal.bodytype ?? "",
-                                    colour: animal.colour ?? "",
-                                    age: animal.age ?? "",
-                                    status: animal.status ?? "",
-                                    remark: animal.remark ?? "",
-                                    opendate: animal.opendate ?? "",
-                                    shelterName: animal.shelterName ?? "",
-                                    albumFile: animal.albumFile ?? "",
-                                    shelterAddress: animal.shelterAddress ?? "",
-                                    shelterTel: animal.shelterTel ?? "",
-                                    animalVariety: animal.animalVariety ?? "",
-                                    areaPkid: Int(animal.areaPkid),
-                                    animalSterilization: animal.animalSterilization ?? "",
-                                    title: animal.title ?? "",
-                                    cDate: animal.cDate ?? "",
-                                    albumUpdate: "")
         detailVC.pet = animalData
         self.navigationController?.pushViewController(detailVC, animated: true)
     }

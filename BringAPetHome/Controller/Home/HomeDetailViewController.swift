@@ -7,7 +7,6 @@
 
 import UIKit
 import Kingfisher
-import CoreData
 
 class HomeDetailViewController: UIViewController {
 
@@ -17,7 +16,7 @@ class HomeDetailViewController: UIViewController {
     var pet: AnimalData?
     var placeholderImage: UIImage?
     let selectedBackgroundView = UIView()
-    var saveAnimal: Animal?
+    var isFavorite = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,18 +108,7 @@ class HomeDetailViewController: UIViewController {
     }
 
     private func saveFavorites() {
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        guard let context = appDelegate?.persistentContainer.viewContext else { return }
-        let predicate = NSPredicate(format: "id == %d",
-                                    pet?.animalId ?? 0)
-        let request: NSFetchRequest<Animal> = Animal.fetchRequest()
-        request.predicate = predicate
-        do {
-            saveAnimal = try context.fetch(request).first
-            print("saveAnimal", pet?.animalId, saveAnimal)
-        } catch {
-            print("error", error)
-        }
+        isFavorite = FavoriteStore.shared.isFavorite(id: pet?.animalId ?? 0)
     }
 }
 
@@ -135,7 +123,7 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeDetailTableViewCell.identifier, for: indexPath) as? HomeDetailTableViewCell else { return UITableViewCell() }
-        cell.heartButton.isSelected = saveAnimal != nil
+        cell.heartButton.isSelected = isFavorite
         cell.delegate = self
         cell.selectedBackgroundView = selectedBackgroundView
         let urls = pet?.albumFile
@@ -170,82 +158,29 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
 extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
 
     func heartButtonTapped() {
-        let appDelegate = UIApplication.shared.delegate as? AppDelegate
-        guard let context = appDelegate?.persistentContainer.viewContext else { return }
-
-        if let saveAnimal = saveAnimal {
+        if isFavorite {
             // 刪除對應的圖片檔案
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let imageUrl = documentsDirectory.appendingPathComponent("\(saveAnimal.id)").appendingPathExtension("jpg")
+            let imageUrl = documentsDirectory.appendingPathComponent("\(pet?.animalId ?? 0)").appendingPathExtension("jpg")
             // 刪除前先 FileManager.removeItem
             try? FileManager.default.removeItem(at: imageUrl)
 
-            context.delete(saveAnimal)
-            // 刪除後呼叫 saveContext()，以免刪除只存在記憶體，app 關掉後又回來了。
-            appDelegate?.saveContext()
-            // 刪除後重設 saveAnimal
-            self.saveAnimal = nil
+            FavoriteStore.shared.remove(id: pet?.animalId ?? 0)
+            // 刪除後重設收藏狀態
+            isFavorite = false
 
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
             cell?.heartButton.isSelected = false
         } else {
-            saveAnimal = Animal(context: context)
-            let id = pet?.animalId ?? 0
-            let sex = pet?.sex ?? ""
-            let sterilization = pet?.animalSterilization ?? ""
-            let openDate = pet?.opendate ?? ""
-            let place = pet?.place ?? ""
-            let kind = pet?.kind ?? ""
-            let animalVariety = pet?.animalVariety ?? ""
-            let bodytype = pet?.bodytype ?? ""
-            let shelterTel = pet?.shelterTel
-            let areaPkid = pet?.areaPkid ?? 0
-            let colour = pet?.colour ?? ""
-            let albumFile = pet?.albumFile ?? ""
-            let remark = pet?.remark ?? ""
-            let cDate = pet?.cDate ?? ""
-            let shelterAddress = pet?.shelterAddress ?? ""
-            let shelterName = pet?.shelterName
-            let age = pet?.age
-            let opendate = pet?.opendate
-            let like = saveAnimal?.like ?? false
-
-            saveAnimal?.id = Int64(id)
-            saveAnimal?.sex = sex
-            saveAnimal?.steriization = sterilization
-            saveAnimal?.openDate = openDate
-            saveAnimal?.place = place
-            saveAnimal?.bodytype = bodytype
-            saveAnimal?.animalVariety = animalVariety
-            saveAnimal?.shelterTel = shelterTel
-            saveAnimal?.areaPkid = Int64(areaPkid)
-            saveAnimal?.kind = kind
-            saveAnimal?.colour = colour
-            saveAnimal?.albumFile = albumFile
-            saveAnimal?.remark = remark
-            saveAnimal?.cDate = cDate
-            saveAnimal?.shelterAddress = shelterAddress
-            saveAnimal?.shelterName = shelterName
-            saveAnimal?.age = age
-            saveAnimal?.opendate = opendate
-            saveAnimal?.like = like
+            guard let pet = pet else { return }
+            isFavorite = true
 
             let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
             let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let imageUrl = documentsDirectory.appendingPathComponent("\(id)").appendingPathExtension("jpg")
+            let imageUrl = documentsDirectory.appendingPathComponent("\(pet.animalId)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)
-            appDelegate?.saveContext()
-
-            do {
-                let request = Animal.fetchRequest()
-                let animals = try context.fetch(request)
-                animals.forEach { animal in
-                    print("DEBUG: \(animal.id) \(animal.like)")
-                }
-            } catch {
-
-            }
+            FavoriteStore.shared.add(pet)
         }
     }
 }

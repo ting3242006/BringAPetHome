@@ -37,6 +37,7 @@
 		252D807E285995290076236B /* ShelterDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807D285995290076236B /* ShelterDataModel.swift */; };
 		252D80802859A1A40076236B /* UITableViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */; };
 		252D80822859CC7C0076236B /* ShelterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80812859CC7C0076236B /* ShelterManager.swift */; };
+		252D8081285A0001F5A0B001 /* FavoriteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D8081285A0002F5A0B002 /* FavoriteStore.swift */; };
 		252D80842859E67C0076236B /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D80832859E67C0076236B /* HTTP.swift */; };
 		252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 252D8085285A170A0076236B /* HomeDetailViewController.swift */; };
 		25317A4C28741AF1003093C7 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */; };
@@ -117,6 +118,7 @@
 		252D807D285995290076236B /* ShelterDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterDataModel.swift; sourceTree = "<group>"; };
 		252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extension.swift"; sourceTree = "<group>"; };
 		252D80812859CC7C0076236B /* ShelterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelterManager.swift; sourceTree = "<group>"; };
+		252D8081285A0002F5A0B002 /* FavoriteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteStore.swift; sourceTree = "<group>"; };
 		252D80832859E67C0076236B /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		252D8085285A170A0076236B /* HomeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDetailViewController.swift; sourceTree = "<group>"; };
 		25317A4B28741AF1003093C7 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 				252D80832859E67C0076236B /* HTTP.swift */,
 				252D807D285995290076236B /* ShelterDataModel.swift */,
 				252D80812859CC7C0076236B /* ShelterManager.swift */,
+				252D8081285A0002F5A0B002 /* FavoriteStore.swift */,
 				25A215B828607435002CE9BA /* AdoptionModel.swift */,
 				25BB098728616F60005E7872 /* AdoptionManager.swift */,
 				2511F4742867413B00E59FB0 /* ShareModel.swift */,
@@ -538,6 +541,7 @@
 				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,
 				251AAA8E286875A90074F094 /* ShareDetailTableViewCell.swift in Sources */,
 				252D80822859CC7C0076236B /* ShelterManager.swift in Sources */,
+				252D8081285A0001F5A0B001 /* FavoriteStore.swift in Sources */,
 				254861B62865AE7B00A4C177 /* ShareCollectionViewCell.swift in Sources */,
 				251CF7FF28586FC7004BDEC9 /* HomeViewController.swift in Sources */,
 				252D8086285A170A0076236B /* HomeDetailViewController.swift in Sources */,

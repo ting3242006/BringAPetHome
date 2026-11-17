@@ -15,9 +15,11 @@ class ShelterManager {
 
     private init() { }
 
+    private let apiEndpoint = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx"
+
     func fetchData(skip: Int, top: Int = 100, filter: Filter? = nil, completion: @escaping (Result<[AnimalData]>) -> Void) {
 
-        var urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=\(top)&$skip=\(skip)"
+        var urlString = "\(apiEndpoint)?UnitId=QcbUEzN6E6DL&$top=\(top)&$skip=\(skip)"
         if let filter = filter {
             if let kind = filter.kind, !kind.isEmpty {
                 urlString.append("&animal_kind=\(kind)")
@@ -61,7 +63,7 @@ class ShelterManager {
 
     func fetchAnimal(id animalId: Int, completion: @escaping (Result<AnimalData>) -> Void) {
         let urlString = [
-            "https://data.moa.gov.tw/Service/OpenData/TransService.aspx",
+            apiEndpoint,
             "?UnitId=QcbUEzN6E6DL",
             "&animal_id=\(animalId)"
         ].joined()
