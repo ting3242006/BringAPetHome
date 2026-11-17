@@ -73,6 +73,22 @@ class UserFirebaseManager {
         }
     }
     
+    var currentUserId: String? {
+        Auth.auth().currentUser?.uid
+    }
+
+    var isLoggedIn: Bool {
+        Auth.auth().currentUser != nil
+    }
+
+    func signOut() throws {
+        try Auth.auth().signOut()
+    }
+
+    func deleteUserDocument() {
+        dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").delete()
+    }
+
     func deleteAccount() {
         let user = Auth.auth().currentUser
         user?.delete { error in

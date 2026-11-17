@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 import Kingfisher
 
 class ProfileViewController: UIViewController {
@@ -45,7 +44,7 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getUserProfile()
-        if Auth.auth().currentUser == nil {
+        if !UserFirebaseManager.shared.isLoggedIn {
             showLoginVC()
             userNameLabel.text = "暱稱"
             logoutBarButton.tintColor = UIColor.clear
@@ -58,7 +57,7 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func editProfileInfo(_ sender: Any) {
-        if Auth.auth().currentUser == nil {
+        if !UserFirebaseManager.shared.isLoggedIn {
             showLoginVC()
             return
         } else {
@@ -72,7 +71,7 @@ class ProfileViewController: UIViewController {
         let controller = UIAlertController(title: "登出提醒", message: "確定要登出嗎?", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "確定", style: .default) { _ in
             do {
-                try Auth.auth().signOut()
+                try UserFirebaseManager.shared.signOut()
                 
                 self.view.window?.rootViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarController")
             } catch let signOutError as NSError {
@@ -92,7 +91,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func getUserProfile() {
-        guard Auth.auth().currentUser != nil else {
+        guard UserFirebaseManager.shared.isLoggedIn else {
             userNameLabel.text = "暱稱"
             return
         }
@@ -102,7 +101,7 @@ class ProfileViewController: UIViewController {
             userNameLabel.text = cached.name
         }
         // 再從 Firestore 同步最新資料
-        UserFirebaseManager.shared.fetchUser(userId: Auth.auth().currentUser?.uid ?? "") { [weak self] result in
+        UserFirebaseManager.shared.fetchUser(userId: UserFirebaseManager.shared.currentUserId ?? "") { [weak self] result in
             guard let self = self else { return }
             switch result {
             case let .success(user):
@@ -116,7 +115,7 @@ class ProfileViewController: UIViewController {
     }
     
     private func checkUserLogin() {
-        if Auth.auth().currentUser == nil {
+        if !UserFirebaseManager.shared.isLoggedIn {
             showLoginVC()
         }
     }

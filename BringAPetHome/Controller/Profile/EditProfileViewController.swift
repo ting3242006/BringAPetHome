@@ -6,9 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseFirestore
-import FirebaseStorage
 import Kingfisher
 
 class EditProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
@@ -20,7 +17,6 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var deleteAccountButton: UIButton!
     @IBOutlet weak var privacyPolicyButton: UIButton!
 
-    let dataBase = Firestore.firestore()
     private var originalViewY: CGFloat = 0
 
     override func viewDidLoad() {
@@ -89,7 +85,7 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     @IBAction func deleteAccount(_ sender: Any) {
         let alert  = UIAlertController(title: "刪除帳號", message: "確定要刪除嗎? 如要刪除，請先登出再登入一次", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "確認", style: .destructive) { (_) in
-            self.dataBase.collection("User").document(Auth.auth().currentUser?.uid ?? "").delete()
+            UserFirebaseManager.shared.deleteUserDocument()
             self.deleteAccount()
             
             let vc = ProfileViewController()
@@ -105,27 +101,19 @@ class EditProfileViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBAction func uploadInfo(_ sender: Any) {
         guard let imageData = self.userImageView.image?.jpegData(compressionQuality: 0.5) else { return }
-        guard let user = Auth.auth().currentUser else { return }
+        guard let userId = UserFirebaseManager.shared.currentUserId else { return }
 
         sendInfoButton.isEnabled = false
 
-        let fileReference = Storage.storage().reference().child(UUID().uuidString + ".jpg")
-        fileReference.putData(imageData, metadata: nil) { result in
+        ImageUploader().upload(data: imageData, path: UUID().uuidString + ".jpg") { [weak self] result in
+            guard let self = self else { return }
             switch result {
-            case .success:
-                fileReference.downloadURL { [weak self] result in
-                    guard let self = self else { return }
+            case .success(let url):
+                UserFirebaseManager.shared.updateUserInfo(id: userId, image: "\(url)",
+                                                          name: self.usernameTextField.text ?? "") { result in
                     switch result {
-                    case .success(let url):
-                        UserFirebaseManager.shared.updateUserInfo(id: user.uid, image: "\(url)",
-                                                                  name: self.usernameTextField.text ?? "") { result in
-                            switch result {
-                            case .success:
-                                self.navigationController?.popToRootViewController(animated: true)
-                            case .failure:
-                                self.sendInfoButton.isEnabled = true
-                            }
-                        }
+                    case .success:
+                        self.navigationController?.popToRootViewController(animated: true)
                     case .failure:
                         self.sendInfoButton.isEnabled = true
                     }
