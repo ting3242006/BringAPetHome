@@ -8,9 +8,6 @@
 import Foundation
 import UIKit
 
-let currentDate = Date()
-let pasteDate = Date(timeIntervalSinceNow: -60 * 60 * 24 * 7)
-
 extension Date {
     func displayTimeInSocialMediaStyle() ->  String {
         let secondsAgo = Int(Date().timeIntervalSince(self))

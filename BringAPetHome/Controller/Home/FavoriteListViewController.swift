@@ -14,11 +14,6 @@ class FavoriteListViewController: UIViewController {
     // 宣告 Core Data 常數
     let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     var animalList: [Animal] = []
-    var animalDatas = [AnimalData]() {
-        didSet {
-            reloadData()
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

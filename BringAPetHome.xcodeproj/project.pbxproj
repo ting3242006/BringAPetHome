@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */; };
 		2511F47128670A5800E59FB0 /* SharePetCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F47028670A5800E59FB0 /* SharePetCollectionViewController.swift */; };
 		2511F473286725A800E59FB0 /* PostSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F472286725A800E59FB0 /* PostSharingViewController.swift */; };
 		2511F4752867413B00E59FB0 /* ShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2511F4742867413B00E59FB0 /* ShareModel.swift */; };
@@ -67,7 +66,6 @@
 		A10000000000000000000002 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000202 /* FirebaseAuth */; };
 		A10000000000000000000003 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000203 /* FirebaseFirestore */; };
 		A10000000000000000000004 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000204 /* FirebaseStorage */; };
-		A10000000000000000000005 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000205 /* FirebaseDatabase */; };
 		A10000000000000000000006 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000206 /* FirebaseCrashlytics */; };
 		A10000000000000000000007 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000207 /* Kingfisher */; };
 		A10000000000000000000008 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000208 /* IQKeyboardManagerSwift */; };
@@ -86,7 +84,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		2511F47028670A5800E59FB0 /* SharePetCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePetCollectionViewController.swift; sourceTree = "<group>"; };
 		2511F472286725A800E59FB0 /* PostSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSharingViewController.swift; sourceTree = "<group>"; };
 		2511F4742867413B00E59FB0 /* ShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareModel.swift; sourceTree = "<group>"; };
@@ -156,7 +153,6 @@
 				A10000000000000000000002 /* FirebaseAuth in Frameworks */,
 				A10000000000000000000006 /* FirebaseCrashlytics in Frameworks */,
 				A10000000000000000000001 /* FirebaseCore in Frameworks */,
-				A10000000000000000000005 /* FirebaseDatabase in Frameworks */,
 				A10000000000000000000003 /* FirebaseFirestore in Frameworks */,
 				A10000000000000000000004 /* FirebaseStorage in Frameworks */,
 				A10000000000000000000008 /* IQKeyboardManagerSwift in Frameworks */,
@@ -293,7 +289,6 @@
 				257CA5EF28589A780009BE17 /* UIView+Extension.swift */,
 				257CA5F228589B550009BE17 /* UIScreen+Extension.swift */,
 				252D807F2859A1A40076236B /* UITableViewCell+Extension.swift */,
-				250EAB24286CAB0A0096AD87 /* UIImageView+Extension.swift */,
 				25E5733B2869D343009348A0 /* CustomFunc.swift */,
 				2529E4F82871E4BB00373C90 /* Time+Extension.swift */,
 			);
@@ -392,7 +387,6 @@
 				A10000000000000000000202 /* FirebaseAuth */,
 				A10000000000000000000206 /* FirebaseCrashlytics */,
 				A10000000000000000000201 /* FirebaseCore */,
-				A10000000000000000000205 /* FirebaseDatabase */,
 				A10000000000000000000203 /* FirebaseFirestore */,
 				A10000000000000000000204 /* FirebaseStorage */,
 				A10000000000000000000208 /* IQKeyboardManagerSwift */,
@@ -539,7 +533,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				251FF2B12876BB64005945A1 /* EULAViewController.swift in Sources */,
-				250EAB25286CAB0A0096AD87 /* UIImageView+Extension.swift in Sources */,
 				25E5732F2869746F009348A0 /* ShareCommentViewController.swift in Sources */,
 				251A7EA8285EED5100FA7E1D /* AnimalData.xcdatamodeld in Sources */,
 				251646AF28643FD400D3AF27 /* CommentTableViewCell.swift in Sources */,
@@ -951,11 +944,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A10000000000000000000101 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
-		};
-		A10000000000000000000205 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000101 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseDatabase;
 		};
 		A10000000000000000000206 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;

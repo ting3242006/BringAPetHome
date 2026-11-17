@@ -7,7 +7,6 @@
 
 import UIKit
 import Kingfisher
-import CoreLocation
 import CoreData
 
 class HomeDetailViewController: UIViewController {
@@ -136,7 +135,6 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeDetailTableViewCell.identifier, for: indexPath) as? HomeDetailTableViewCell else { return UITableViewCell() }
-        cell.link = self
         cell.heartButton.isSelected = saveAnimal != nil
         cell.delegate = self
         cell.selectedBackgroundView = selectedBackgroundView

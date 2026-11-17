@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseAuth
-import FirebaseDatabase
 import FirebaseFirestore
 
 class AdoptionViewController: UIViewController {
@@ -16,7 +15,6 @@ class AdoptionViewController: UIViewController {
     let selectedBackgroundView = UIView()
     var publishButton = UIButton()
     var refreshControl: UIRefreshControl!
-    var databaseRef: DatabaseReference!
     var dbModels: [[String: Any]] = [] {
         didSet {
             tableView.reloadData()
@@ -28,7 +26,6 @@ class AdoptionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        databaseRef = Database.database().reference().child("Adoption")
         tableView.dataSource = self
         tableView.delegate = self
         tableView.reloadData()

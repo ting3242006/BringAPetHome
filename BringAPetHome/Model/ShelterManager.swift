@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MapKit
 
 // swiftlint:enable identifier_name
 

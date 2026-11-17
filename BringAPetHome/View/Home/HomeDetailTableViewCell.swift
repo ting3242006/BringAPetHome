@@ -34,7 +34,6 @@ class HomeDetailTableViewCell: UITableViewCell {
     @IBOutlet weak var cDateLabel: UILabel!
     
     var heartButton = UIButton(type: .system)
-    var link: HomeDetailViewController?
     static let reuseIdentifier = "\(HomeDetailTableViewCell.self)"
     
     override func awakeFromNib() {

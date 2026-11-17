@@ -68,10 +68,6 @@ class BringAPetHomeTests: XCTestCase {
         wait(for: [promise], timeout: 5)
     }
 
-    func checkApiIsSame() {
-
-    }
-
     func testShareMessageIncludesAnimalDetailsAndDeepLink() {
         let animal = AnimalData(animalId: 12345,
                                 place: "臺北市",

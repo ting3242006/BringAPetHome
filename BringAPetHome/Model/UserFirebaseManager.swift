@@ -9,15 +9,11 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 import AuthenticationServices
-import FirebaseStorage
-import CoreAudio
-import CoreML
 
 class UserFirebaseManager {
     
     static let shared = UserFirebaseManager()
     private let dataBase = Firestore.firestore()
-    var currentUser: UserModel?
     var userData: UserModel?
     var friendData: UserModel?
     public var isUserBlocked: Bool = false

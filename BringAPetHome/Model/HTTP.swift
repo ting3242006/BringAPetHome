@@ -18,24 +18,3 @@ enum STHTTPClientError: Error {
     case serverError
     case unexpectedError
 }
-
-enum STHTTPMethod: String {
-    case GET
-    case POST
-}
-
-enum STHTTPHeaderField: String {
-    case contentType = "Content-Type"
-    case auth = "Authorization"
-}
-
-enum STHTTPHeaderValue: String {
-    case json = "application/json"
-}
-
-protocol STRequest {
-    var headers: [String: String] { get }
-    var body: Data? { get }
-    var method: String { get }
-    var endPoint: String { get }
-}
