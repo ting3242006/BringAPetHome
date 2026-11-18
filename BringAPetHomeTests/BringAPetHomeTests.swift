@@ -13,60 +13,45 @@ class BringAPetHomeTests: XCTestCase {
 
     var sut: URLSession!
     var shelterManager: ShelterManager!
+    private let apiTimeout: TimeInterval = 10
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        sut = URLSession(configuration: .default)
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = apiTimeout
+        configuration.timeoutIntervalForResource = apiTimeout
+        sut = URLSession(configuration: configuration)
     }
 
     override func tearDownWithError() throws {
+        sut?.invalidateAndCancel()
         sut = nil
         try super.tearDownWithError()
     }
 
-    func testApiCallCompletes() throws {
-          // given
-          let urlString = "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL"
-          let url = URL(string: urlString)!
-          let promise = expectation(description: "Completion handler invoked")
-          var statusCode: Int?
-          var responseError: Error?
+    func testApiCallCompletes() async throws {
+        let (_, response) = try await sut.data(for: apiRequest())
+        XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
+    }
 
-          // when
-          let dataTask = sut.dataTask(with: url) { _, response, error in
-            statusCode = (response as? HTTPURLResponse)?.statusCode
-            responseError = error
-            promise.fulfill()
-          }
-          dataTask.resume()
-          wait(for: [promise], timeout: 15)
+    func testApiStatusCode() async throws {
+        let (_, response) = try await sut.data(for: apiRequest())
+        XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
+    }
 
-          // then
-          XCTAssertNil(responseError)
-          XCTAssertEqual(statusCode, 200)
-        }
-
-    // decoder API 能不能裝進 shelterDataModel 裡面
-    // 或檢查 API 跟專案裡的有沒有一樣
-
-    func testApiStatusCode() throws {
-        let url = URL(string: "https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL")!
-        let promise = expectation(description: "Status code: 200")
-
-        sut.dataTask(with: url) { _, response, error in
-            if let error = error {
-                XCTFail("Error: \(error.localizedDescription)")
-                return
-            }
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if statusCode == 200 {
-                    promise.fulfill()
-                } else {
-                    XCTFail("Status Code: \(statusCode)")
-                }
-            }
-        }.resume()
-        wait(for: [promise], timeout: 15)
+    private func apiRequest() throws -> URLRequest {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "data.moa.gov.tw"
+        components.path = "/Service/OpenData/TransService.aspx"
+        components.queryItems = [
+            URLQueryItem(name: "UnitId", value: "QcbUEzN6E6DL"),
+            URLQueryItem(name: "$top", value: "1"),
+            URLQueryItem(name: "$skip", value: "0")
+        ]
+        var request = URLRequest(url: try XCTUnwrap(components.url))
+        request.timeoutInterval = apiTimeout
+        return request
     }
 
     @MainActor
@@ -170,7 +155,7 @@ class BringAPetHomeTests: XCTestCase {
         XCTAssertTrue(message.contains("電話：02-12345678"))
         XCTAssertTrue(message.contains("地址：臺北市信義區"))
         XCTAssertTrue(message.contains("開放認養：2026-07-12"))
-        XCTAssertTrue(message.contains("bringapethome://animal/12345"))
+        XCTAssertTrue(message.contains("https://bringapethome.web.app/animal/12345?openExternalBrowser=1"))
     }
 
     func testAnimalDeepLinkParsesAnimalId() {
@@ -207,7 +192,13 @@ class BringAPetHomeTests: XCTestCase {
                                 cDate: "2026-07-11",
                                 albumUpdate: "2026-07-11")
 
-        let url = try XCTUnwrap(AnimalDeepLink.url(for: animal))
+        let encoded = try JSONEncoder().encode(animal).base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        var components = URLComponents(string: "bringapethome://animal/443673")!
+        components.queryItems = [URLQueryItem(name: "snapshot", value: encoded)]
+        let url = try XCTUnwrap(components.url)
         let route = try XCTUnwrap(AnimalDeepLink.route(from: url))
 
         XCTAssertEqual(route.animalId, 443673)
@@ -223,40 +214,6 @@ class BringAPetHomeTests: XCTestCase {
 
         XCTAssertEqual(route.animalId, 443673)
         XCTAssertNil(route.animal)
-    }
-
-    func testShareActivityItemsExposeDeepLinkAsURL() {
-        let animal = AnimalData(animalId: 12345,
-                                place: "臺北市",
-                                kind: "貓",
-                                sex: "F",
-                                bodytype: "SMALL",
-                                colour: "三花",
-                                age: "CHILD",
-                                status: "OPEN",
-                                remark: "親人",
-                                opendate: "2026-07-12",
-                                shelterName: "臺北市動物之家",
-                                albumFile: "https://example.com/cat.jpg",
-                                shelterAddress: "臺北市信義區",
-                                shelterTel: "02-12345678",
-                                animalVariety: "混種貓",
-                                areaPkid: 2,
-                                animalSterilization: "F",
-                                title: "",
-                                cDate: "2026-07-11",
-                                albumUpdate: "2026-07-11")
-
-        let items = AnimalShareContentBuilder.activityItems(for: animal)
-
-        XCTAssertEqual(items.count, 2)
-        XCTAssertNotNil(items[0] as? String)
-        guard let deepLink = items[1] as? URL else {
-            XCTFail("Share activity should expose the deep link as URL")
-            return
-        }
-        XCTAssertEqual(AnimalDeepLink.route(from: deepLink)?.animalId, 12345)
-        XCTAssertEqual(AnimalDeepLink.route(from: deepLink)?.animal?.shelterName, "臺北市動物之家")
     }
 
     func testDeepLinkPresentationStateKeepsAnimalUntilNavigationIsReady() {
@@ -286,6 +243,62 @@ class BringAPetHomeTests: XCTestCase {
         XCTAssertTrue(state.hasPendingAnimal)
         XCTAssertEqual(state.pendingAnimalToPresent(canPresent: true)?.animalId, 12345)
         XCTAssertFalse(state.hasPendingAnimal)
+    }
+}
+
+extension BringAPetHomeTests {
+    func testShareActivityItemsContainOneCompleteTextWithClickableLink() throws {
+        let animal = AnimalData(animalId: 12345,
+                                place: "臺北市",
+                                kind: "貓",
+                                sex: "F",
+                                bodytype: "SMALL",
+                                colour: "三花",
+                                age: "CHILD",
+                                status: "OPEN",
+                                remark: "親人",
+                                opendate: "2026-07-12",
+                                shelterName: "臺北市動物之家",
+                                albumFile: "https://example.com/cat.jpg",
+                                shelterAddress: "臺北市信義區",
+                                shelterTel: "02-12345678",
+                                animalVariety: "混種貓",
+                                areaPkid: 2,
+                                animalSterilization: "F",
+                                title: "",
+                                cDate: "2026-07-11",
+                                albumUpdate: "2026-07-11")
+
+        let items = AnimalShareContentBuilder.activityItems(for: animal)
+
+        XCTAssertEqual(items.count, 1)
+        let message = try XCTUnwrap(items.first as? String)
+        XCTAssertEqual(message, AnimalShareContentBuilder.message(for: animal))
+        XCTAssertTrue(message.contains("等待認養的貓"))
+        XCTAssertTrue(message.contains("收容所：臺北市動物之家"))
+        XCTAssertTrue(message.contains("電話：02-12345678"))
+        XCTAssertTrue(message.contains("地址：臺北市信義區"))
+        let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let links = detector.matches(in: message, range: NSRange(message.startIndex..., in: message))
+            .compactMap(\.url)
+        XCTAssertEqual(links.count, 1)
+        let deepLink = try XCTUnwrap(links.first)
+        let components = try XCTUnwrap(URLComponents(url: deepLink, resolvingAgainstBaseURL: false))
+        XCTAssertEqual(components.scheme, "https")
+        XCTAssertEqual(components.host, "bringapethome.web.app")
+        XCTAssertEqual(components.path, "/animal/12345")
+        XCTAssertEqual(components.queryItems, [URLQueryItem(name: "openExternalBrowser", value: "1")])
+        XCTAssertEqual(AnimalDeepLink.route(from: deepLink)?.animalId, 12345)
+        XCTAssertNil(AnimalDeepLink.route(from: deepLink)?.animal)
+    }
+
+    func testCanonicalLinkRemainsBareAndShareQueryIsAccepted() throws {
+        let canonical = try XCTUnwrap(AnimalDeepLink.url(for: 12345))
+        XCTAssertEqual(canonical.absoluteString, "https://bringapethome.web.app/animal/12345")
+        XCTAssertNil(canonical.query)
+        let shared = try XCTUnwrap(URL(string: "https://bringapethome.web.app/animal/12345?openExternalBrowser=1"))
+        XCTAssertEqual(AnimalDeepLink.route(from: shared)?.animalId, 12345)
+        XCTAssertNil(AnimalDeepLink.route(from: shared)?.animal)
     }
 }
 

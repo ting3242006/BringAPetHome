@@ -73,6 +73,7 @@
 		A10000000000000000000008 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000208 /* IQKeyboardManagerSwift */; };
 		A10000000000000000000009 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000209 /* Lottie */; };
 		A10000000000000000000010 /* MJRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000210 /* MJRefresh */; };
+		A11A1C002026111800000001 /* UniversalLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11A1C002026111800000002 /* UniversalLinkTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +147,7 @@
 		25E5733A2869D04C009348A0 /* BringAPetHome.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BringAPetHome.entitlements; sourceTree = "<group>"; };
 		25E5733B2869D343009348A0 /* CustomFunc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunc.swift; sourceTree = "<group>"; };
 		64EDE15B2F592DBC0081C2A2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A11A1C002026111800000002 /* UniversalLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLinkTests.swift; sourceTree = "<group>"; };
 		BCDA673CFDD84E2E83F93EA9 /* MainTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -252,6 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				25241378288825560093601E /* BringAPetHomeTests.swift */,
+				A11A1C002026111800000002 /* UniversalLinkTests.swift */,
 			);
 			path = BringAPetHomeTests;
 			sourceTree = "<group>";
@@ -593,6 +596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				25241379288825560093601E /* BringAPetHomeTests.swift in Sources */,
+				A11A1C002026111800000001 /* UniversalLinkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

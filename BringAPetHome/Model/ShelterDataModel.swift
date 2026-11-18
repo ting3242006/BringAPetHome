@@ -56,6 +56,7 @@ struct AnimalData: Codable {
 struct AnimalDeepLink {
     private static let scheme = "bringapethome"
     private static let animalHost = "animal"
+    private static let universalLinkHost = "bringapethome.web.app"
     private static let snapshotQueryName = "snapshot"
 
     struct Route {
@@ -64,20 +65,8 @@ struct AnimalDeepLink {
     }
 
     static func url(for animalId: Int) -> URL? {
-        URL(string: "\(scheme)://\(animalHost)/\(animalId)")
-    }
-
-    static func url(for animal: AnimalData) -> URL? {
-        guard let data = try? JSONEncoder().encode(animal) else { return nil }
-
-        var components = URLComponents()
-        components.scheme = scheme
-        components.host = animalHost
-        components.path = "/\(animal.animalId)"
-        components.queryItems = [
-            URLQueryItem(name: snapshotQueryName, value: urlSafeBase64(from: data))
-        ]
-        return components.url
+        guard animalId > 0 else { return nil }
+        return URL(string: "https://\(universalLinkHost)/animal/\(animalId)")
     }
 
     static func animalId(from url: URL) -> Int? {
@@ -85,25 +74,37 @@ struct AnimalDeepLink {
     }
 
     static func route(from url: URL) -> Route? {
-        guard url.scheme == scheme,
-              url.host == animalHost,
-              let animalIdText = url.pathComponents.dropFirst().first,
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              components.user == nil, components.password == nil, components.port == nil
+        else { return nil }
+
+        let host = components.host?.lowercased()
+        let isUniversalLink = components.scheme == "https" && host == universalLinkHost
+        let isCustomLink = components.scheme == scheme && host == animalHost
+        guard isUniversalLink || isCustomLink else { return nil }
+
+        let prefix = isUniversalLink ? "/animal/" : "/"
+        let path = components.percentEncodedPath
+        guard path.hasPrefix(prefix) else { return nil }
+        let animalIdText = String(path.dropFirst(prefix.count))
+        guard let firstCharacter = animalIdText.utf8.first,
+              (49...57).contains(firstCharacter),
+              animalIdText.utf8.allSatisfy({ (48...57).contains($0) }),
               let animalId = Int(animalIdText)
         else { return nil }
 
-        let snapshot = URLComponents(url: url, resolvingAgainstBaseURL: false)?
-            .queryItems?
-            .first(where: { $0.name == snapshotQueryName })?
-            .value
+        guard isCustomLink else { return Route(animalId: animalId, animal: nil) }
+        let snapshot = components.queryItems?.first(where: { $0.name == snapshotQueryName })?.value
         let animal = snapshot.flatMap(animal(from:))
         return Route(animalId: animalId, animal: animal?.animalId == animalId ? animal : nil)
     }
 
-    private static func urlSafeBase64(from data: Data) -> String {
-        data.base64EncodedString()
-            .replacingOccurrences(of: "+", with: "-")
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: "=", with: "")
+    static func url(from userActivity: NSUserActivity) -> URL? {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+              let url = userActivity.webpageURL,
+              url.scheme == "https", route(from: url) != nil
+        else { return nil }
+        return url
     }
 
     private static func animal(from snapshot: String) -> AnimalData? {
@@ -120,17 +121,17 @@ struct AnimalDeepLink {
 
 struct AnimalShareContentBuilder {
     static func activityItems(for animal: AnimalData) -> [Any] {
-        let message = message(for: animal)
-        guard let deepLink = AnimalDeepLink.url(for: animal) else { return [message] }
-
-        return [message, deepLink]
+        [message(for: animal)]
     }
 
     static func message(for animal: AnimalData) -> String {
         let bodytype = ShelterManager.shared.bodytypeCh(bodytype: animal.bodytype)
         let variety = animal.animalVariety
         let bodytypeAndVariety = "\(bodytype)\(variety)"
-        let deepLink = AnimalDeepLink.url(for: animal)?.absoluteString ?? ""
+        var components = AnimalDeepLink.url(for: animal.animalId)
+            .flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
+        components?.queryItems = [URLQueryItem(name: "openExternalBrowser", value: "1")]
+        let deepLink = components?.url?.absoluteString ?? ""
 
         let lines = [
             "我在 Bring A Pet Home 看到一隻正在等待認養的\(animal.kind)",

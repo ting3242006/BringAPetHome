@@ -75,3 +75,7 @@ DerivedData/
 GoogleService-Info.plist
 
 # End of https://www.gitignore.io/api/xcode,macos,cocoapods
+
+# Firebase Hosting local cache and logs
+.firebase/
+firebase-debug.log

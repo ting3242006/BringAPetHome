@@ -11,6 +11,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     private var deepLinkPresentationState = DeepLinkPresentationState()
+    private var deepLinkRequestID = UUID()
+    private weak var deepLinkFailureAlert: UIAlertController?
+    private(set) var failureRetryState = DeepLinkFailureRetryState()
+    private var failureRetryWorkItem: DispatchWorkItem?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -18,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
-        guard let url = connectionOptions.urlContexts.first?.url else { return }
+        let universalLink = connectionOptions.userActivities.compactMap(AnimalDeepLink.url(from:)).first
+        guard let url = universalLink ?? connectionOptions.urlContexts.first?.url else { return }
         DispatchQueue.main.async { [weak self] in
             self?.handleDeepLink(url: url)
         }
@@ -26,6 +31,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, openURLContexts urlContexts: Set<UIOpenURLContext>) {
         guard let url = urlContexts.first?.url else { return }
+        handleDeepLink(url: url)
+    }
+
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard let url = AnimalDeepLink.url(from: userActivity) else { return }
         handleDeepLink(url: url)
     }
 
@@ -40,6 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
         retryPendingDeepLinkPresentation()
+        presentPendingDeepLinkFailure()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -60,6 +71,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private func handleDeepLink(url: URL) {
         guard let route = AnimalDeepLink.route(from: url) else { return }
+        let requestID = UUID()
+        deepLinkRequestID = requestID
+        cancelFailureRetry()
+        failureRetryState = DeepLinkFailureRetryState()
+        deepLinkPresentationState = DeepLinkPresentationState()
+        deepLinkFailureAlert?.dismiss(animated: false)
         if let animal = route.animal {
             showAnimalDetail(animal)
             return
@@ -70,12 +87,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         ShelterManager.shared.fetchAnimal(id: route.animalId) { [weak self] result in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, self.deepLinkRequestID == requestID else { return }
                 switch result {
                 case .success(let animal):
-                    self?.showAnimalDetail(animal)
+                    self.showAnimalDetail(animal)
                 case .failure(let error):
                     print("Deep link animal fetch failed:", error)
+                    self.deepLinkPresentationState.hasPendingFailure = true
+                    self.presentPendingDeepLinkFailure()
                 }
             }
         }
@@ -102,14 +122,62 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func retryPendingDeepLinkPresentation() {
+        guard deepLinkPresentationState.hasPendingAnimal else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            guard let self = self,
-                  let navigationController = self.navigationControllerForDeepLink(),
-                  let animal = self.deepLinkPresentationState.pendingAnimalToPresent(canPresent: true)
-            else { return }
-
-            self.pushAnimalDetail(animal, on: navigationController)
+            guard let self = self else { return }
+            if let navigationController = self.navigationControllerForDeepLink(),
+               let animal = self.deepLinkPresentationState.pendingAnimalToPresent(canPresent: true) {
+                self.pushAnimalDetail(animal, on: navigationController)
+            }
         }
+    }
+
+    private func scheduleFailureRetry() {
+        guard deepLinkPresentationState.hasPendingFailure,
+              let token = failureRetryState.scheduleRetry() else { return }
+        let requestID = deepLinkRequestID
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self = self,
+                  self.deepLinkRequestID == requestID,
+                  self.failureRetryState.beginRetry(token: token) else { return }
+            self.failureRetryWorkItem = nil
+            self.presentPendingDeepLinkFailure()
+        }
+        failureRetryWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: workItem)
+    }
+
+    private func cancelFailureRetry() {
+        failureRetryWorkItem?.cancel()
+        failureRetryWorkItem = nil
+        failureRetryState.cancelScheduledRetry()
+    }
+
+    private func presentPendingDeepLinkFailure() {
+        guard deepLinkPresentationState.hasPendingFailure else { return }
+        guard let navigationController = navigationControllerForDeepLink(),
+              navigationController.viewIfLoaded?.window != nil else {
+            scheduleFailureRetry()
+            return
+        }
+        var presenter: UIViewController = navigationController
+        while let presented = presenter.presentedViewController {
+            presenter = presented
+        }
+        guard !presenter.isBeingDismissed, !presenter.isBeingPresented else {
+            scheduleFailureRetry()
+            return
+        }
+        deepLinkPresentationState.hasPendingFailure = false
+        cancelFailureRetry()
+        let alert = UIAlertController(
+            title: "無法開啟動物資料",
+            message: "請確認網路連線後再試一次；這隻動物的資料也可能已下架。",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "確定", style: .default))
+        deepLinkFailureAlert = alert
+        presenter.present(alert, animated: true)
     }
 
     private func pushAnimalDetail(_ animal: AnimalData, on navigationController: UINavigationController) {
@@ -146,6 +214,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 struct DeepLinkPresentationState {
     private var pendingAnimal: AnimalData?
+    var hasPendingFailure = false
 
     var hasPendingAnimal: Bool {
         pendingAnimal != nil
@@ -166,5 +235,32 @@ struct DeepLinkPresentationState {
 
         self.pendingAnimal = nil
         return pendingAnimal
+    }
+}
+
+struct DeepLinkFailureRetryState {
+    private(set) var attempts = 0
+    private(set) var scheduledToken: UUID?
+
+    var hasScheduledRetry: Bool {
+        scheduledToken != nil
+    }
+
+    mutating func scheduleRetry() -> UUID? {
+        guard attempts < 10, scheduledToken == nil else { return nil }
+        attempts += 1
+        let token = UUID()
+        scheduledToken = token
+        return token
+    }
+
+    mutating func beginRetry(token: UUID) -> Bool {
+        guard scheduledToken == token else { return false }
+        scheduledToken = nil
+        return true
+    }
+
+    mutating func cancelScheduledRetry() {
+        scheduledToken = nil
     }
 }

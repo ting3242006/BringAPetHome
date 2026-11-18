@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["J3XG5W7SR9.com.YiTing.BringAPetHome"],
+        "components": [{ "/": "/animal/*" }]
+      }
+    ]
+  }
+}

@@ -113,25 +113,26 @@ Assets 中定義：`HoneyYellow`（主色調）、`DarkGreen`、`RichBlack`
 
 ## Deep Link
 
-- **URL Scheme**: `bringapethome://animal/{animalId}?snapshot={animalData}`
-- 舊格式 `bringapethome://animal/{animalId}` 仍保留相容性
+- **分享網址**：`https://bringapethome.web.app/animal/{animalId}`；實際分享連結附 `openExternalBrowser=1`。
+- **舊連結相容**：保留 `bringapethome://animal/{animalId}?snapshot={animalData}` 與不含 snapshot 的 `bringapethome://animal/{animalId}`。
 - 處理位置：`SceneDelegate.handleDeepLink(url:)`
-- 流程：解析連結 → 優先使用 snapshot → 尋找 App 已載入資料 → 呼叫政府 API → push HomeDetailViewController
+- 流程：解析連結 → 舊 Scheme 優先使用 snapshot → 尋找 App 已載入資料 → 呼叫政府 API → push HomeDetailViewController；HTTPS 不使用 snapshot。
 
-### Universal Links（待實作）
+### Universal Links（已實作）
 
-- 預計格式：`https://<domain>/animal/{animalId}`
+- 正式格式：`https://bringapethome.web.app/animal/{animalId}`
+- 分享提供一份完整文字，內含唯一 HTTPS 連結並附 `openExternalBrowser=1`；LINE 與備忘錄保留動物及收容所聯絡資訊。
 - 已安裝 App：直接開啟對應的 `HomeDetailViewController`
 - 未安裝 App：開啟 fallback 網頁，提供 App Store 下載連結
 - 使用 Firebase Hosting 提供 fallback 網頁與 `apple-app-site-association`
-- App target 需加入 Associated Domains entitlement
-- Universal Links 上線後仍保留現有 URL Scheme，確保舊分享連結可以繼續使用
+- App target 已加入 `applinks:bringapethome.web.app` Associated Domains entitlement
+- 保留現有 URL Scheme 與 snapshot 解析，確保舊分享連結可以繼續使用；舊 snapshot 實機尚未驗證。驗證紀錄見 `hosting/README.md`。
 
 ## 待完成 / 預留項目
 
 （遷移時未逐項覆核，可能已有部分完成或過時，使用前建議先核對現況）
 
-- [ ] Universal Links（搭配 Firebase Hosting；規格見上方「Universal Links（待實作）」）
+- [x] Universal Links（搭配 Firebase Hosting；規格見上方「Universal Links（已實作）」）
 - [ ] 恢復「送養」「探索」tab（見 `docs/superpowers/specs/2026-07-11-hide-tabs-design.md`；恢復時依 `docs/ARCHITECTURE.md` 改寫該段舊寫法）
 
 ## 遷移記錄與已知問題（2026-07-11）
