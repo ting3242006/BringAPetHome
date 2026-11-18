@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomeDetailTableViewCellDelegate: AnyObject {
-    func heartButtonTapped()
+    func heartButtonTapped(in cell: HomeDetailTableViewCell)
 }
 
 class HomeDetailTableViewCell: UITableViewCell {
@@ -59,7 +59,6 @@ class HomeDetailTableViewCell: UITableViewCell {
     
     // MARK: - Action
     @objc func heartButtonTapped() {
-        heartButton.isSelected = !heartButton.isSelected
-        delegate?.heartButtonTapped()
+        delegate?.heartButtonTapped(in: self)
     }
 }

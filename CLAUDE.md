@@ -47,7 +47,7 @@ fi
 ```bash
 LOG=$(mktemp -t bap-test).log
 xcodebuild -project BringAPetHome.xcodeproj -scheme BringAPetHome \
-  -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.2' \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=26.0' \
   -only-testing:BringAPetHomeTests CODE_SIGNING_ALLOWED=NO test > "$LOG" 2>&1
 echo "exit=$?"
 grep -E "Test Case .*(passed|failed)|TEST (SUCCEEDED|FAILED)" "$LOG"
@@ -55,7 +55,7 @@ grep -E "Test Case .*(passed|failed)|TEST (SUCCEEDED|FAILED)" "$LOG"
 
 判準：`exit=0` 且 `** TEST SUCCEEDED **`（實測 2026-07-12 連 5 輪綠）。
 
-- **測試依賴外網**：兩個測試都實打農業部開放資料 API（`data.moa.gov.tw`）。斷網或 API 端掛掉會紅，與程式碼無關；紅的時候先 `curl` 該 URL 分辨是誰的鍋。timeout 5 秒、實測回應 2~5 秒，貼線——偶發逾時先重跑一次再下結論。
+- **測試依賴外網**：其中兩個測試會呼叫農業部開放資料 API（`data.moa.gov.tw`），等待上限皆為 15 秒。若測試失敗，先用 `curl` 檢查端點是否正常回應。偶發逾時可重跑一次。
 - 若報 `xcodebuild requires Xcode ... command line tools instance`：本機 xcode-select 曾被重設指向 CLT，先 `export DEVELOPER_DIR=/Applications/Xcode-27.0.0-Beta.2.app/Contents/Developer`（或請 user 用 sudo 重設 xcode-select）。
 
-測試涵蓋極少（只有 2 個 API 連通性測試），UI/邏輯改動仍需對照 `FEATURE_TEST_PLAN.md` 說明受影響項目與手動驗證步驟。
+單元測試涵蓋 2 個 API 連通性測試、7 個分享文案與 deep link 邏輯測試，以及 4 個收藏 Core Data 回歸測試。UI／邏輯改動仍需在回報中列出受影響項目與手動驗證步驟（見 `docs/ARCHITECTURE.md` 第 3 節）。

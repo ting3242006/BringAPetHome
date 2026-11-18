@@ -29,16 +29,16 @@ final class FavoriteStore {
         appDelegate?.persistentContainer.viewContext
     }
 
-    private func firstAnimal(id: Int, in context: NSManagedObjectContext) throws -> Animal? {
+    private static func firstAnimal(id: Int, in context: NSManagedObjectContext) throws -> Animal? {
         let request: NSFetchRequest<Animal> = Animal.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %d", id)
+        request.predicate = NSPredicate(format: "id == %@", NSNumber(value: Int64(id)))
         return try context.fetch(request).first
     }
 
     func isFavorite(id: Int) -> Bool {
         guard let context = context else { return false }
         do {
-            let animal = try firstAnimal(id: id, in: context)
+            let animal = try Self.firstAnimal(id: id, in: context)
             print("saveAnimal", id, animal as Any)
             return animal != nil
         } catch {
@@ -81,13 +81,25 @@ final class FavoriteStore {
         }
     }
 
-    func remove(id: Int) {
-        guard let context = context else { return }
-        // 與舊行為一致：只刪除查詢到的第一筆
-        guard let animal = try? firstAnimal(id: id, in: context) else { return }
-        context.delete(animal)
-        // 刪除後呼叫 saveContext()，以免刪除只存在記憶體，app 關掉後又回來了。
-        appDelegate?.saveContext()
+    func remove(id: Int) -> Bool {
+        guard let context = context else { return false }
+        return Self.remove(id: id, in: context)
+    }
+
+    static func remove(id: Int, in context: NSManagedObjectContext) -> Bool {
+        // 從乾淨的 context 開始，失敗時才能只復原這次刪除。
+        guard !context.hasChanges else { return false }
+        do {
+            // 與舊行為一致：只刪除查詢到的第一筆。
+            guard let animal = try firstAnimal(id: id, in: context) else { return true }
+            context.delete(animal)
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            print("移除收藏失敗", error)
+            return false
+        }
     }
 
     /// 回傳 nil 代表取不到 context；fetch 失敗則 throw，由呼叫端決定如何處理。

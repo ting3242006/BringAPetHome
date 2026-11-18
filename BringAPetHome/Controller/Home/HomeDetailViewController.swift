@@ -157,26 +157,24 @@ extension HomeDetailViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension HomeDetailViewController: HomeDetailTableViewCellDelegate {
 
-    func heartButtonTapped() {
+    func heartButtonTapped(in cell: HomeDetailTableViewCell) {
         if isFavorite {
+            let animalId = pet?.animalId ?? 0
+            guard FavoriteStore.shared.remove(id: animalId) else { return }
+
             // 刪除對應的圖片檔案
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let imageUrl = documentsDirectory.appendingPathComponent("\(pet?.animalId ?? 0)").appendingPathExtension("jpg")
-            // 刪除前先 FileManager.removeItem
+            let imageUrl = documentsDirectory.appendingPathComponent("\(animalId)").appendingPathExtension("jpg")
             try? FileManager.default.removeItem(at: imageUrl)
 
-            FavoriteStore.shared.remove(id: pet?.animalId ?? 0)
-            // 刪除後重設收藏狀態
             isFavorite = false
-
-            let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
-            cell?.heartButton.isSelected = false
+            cell.heartButton.isSelected = false
         } else {
             guard let pet = pet else { return }
             isFavorite = true
+            cell.heartButton.isSelected = true
 
-            let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? HomeDetailTableViewCell
-            let imageData = cell?.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
+            let imageData = cell.albumFileImageView.image?.jpegData(compressionQuality: 0.5)
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let imageUrl = documentsDirectory.appendingPathComponent("\(pet.animalId)").appendingPathExtension("jpg")
             try? imageData?.write(to: imageUrl)

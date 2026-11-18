@@ -5,6 +5,7 @@
 //  Created by Ting on 2022/7/20.
 //
 
+import CoreData
 import XCTest
 @testable import BringAPetHome
 
@@ -38,7 +39,7 @@ class BringAPetHomeTests: XCTestCase {
             promise.fulfill()
           }
           dataTask.resume()
-          wait(for: [promise], timeout: 5)
+          wait(for: [promise], timeout: 15)
 
           // then
           XCTAssertNil(responseError)
@@ -65,7 +66,75 @@ class BringAPetHomeTests: XCTestCase {
                 }
             }
         }.resume()
-        wait(for: [promise], timeout: 5)
+        wait(for: [promise], timeout: 15)
+    }
+
+    @MainActor
+    func testRemoveFavoriteUsesFull64BitID() throws {
+        let context = try makeFavoriteContext()
+        let targetID = 4_294_967_419
+        try insertFavorite(id: 123, into: context)
+        try insertFavorite(id: Int64(targetID), into: context)
+        try context.save()
+
+        XCTAssertTrue(FavoriteStore.remove(id: targetID, in: context))
+
+        let verificationContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        verificationContext.persistentStoreCoordinator = context.persistentStoreCoordinator
+        XCTAssertEqual(try verificationContext.fetch(Animal.fetchRequest()).map(\.id), [123])
+    }
+
+    @MainActor
+    func testRemoveMissingFavoriteReturnsTrue() throws {
+        let context = try makeFavoriteContext()
+
+        XCTAssertTrue(FavoriteStore.remove(id: 123, in: context))
+    }
+
+    @MainActor
+    func testRemoveFavoriteRollsBackWhenSaveFails() throws {
+        let context = try makeFavoriteContext()
+        try insertFavorite(id: 123, into: context)
+        try context.save()
+        context.failSaves = true
+
+        XCTAssertFalse(FavoriteStore.remove(id: 123, in: context))
+        XCTAssertFalse(context.hasChanges)
+        XCTAssertEqual(try context.fetch(Animal.fetchRequest()).map(\.id), [123])
+    }
+
+    @MainActor
+    func testRemoveFavoritePreservesPendingChanges() throws {
+        let context = try makeFavoriteContext()
+        try insertFavorite(id: 123, into: context)
+        let otherFavorite = try insertFavorite(id: 456, into: context)
+        try context.save()
+        otherFavorite.place = "新北市"
+
+        XCTAssertFalse(FavoriteStore.remove(id: 123, in: context))
+        XCTAssertEqual(otherFavorite.changedValues()["place"] as? String, "新北市")
+        XCTAssertEqual(try context.fetch(Animal.fetchRequest()).map(\.id).sorted(), [123, 456])
+    }
+
+    @MainActor
+    @discardableResult
+    private func insertFavorite(id: Int64, into context: NSManagedObjectContext) throws -> Animal {
+        let entity = try XCTUnwrap(NSEntityDescription.entity(forEntityName: "Animal", in: context))
+        let favorite = Animal(entity: entity, insertInto: context)
+        favorite.id = id
+        return favorite
+    }
+
+    @MainActor
+    private func makeFavoriteContext() throws -> FavoriteTestContext {
+        let bundle = Bundle(for: FavoriteStore.self)
+        let modelURL = try XCTUnwrap(bundle.url(forResource: "AnimalData", withExtension: "momd"))
+        let model = try XCTUnwrap(NSManagedObjectModel(contentsOf: modelURL))
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        try coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil)
+        let context = FavoriteTestContext(concurrencyType: .mainQueueConcurrencyType)
+        context.persistentStoreCoordinator = coordinator
+        return context
     }
 
     func testShareMessageIncludesAnimalDetailsAndDeepLink() {
@@ -217,5 +286,16 @@ class BringAPetHomeTests: XCTestCase {
         XCTAssertTrue(state.hasPendingAnimal)
         XCTAssertEqual(state.pendingAnimalToPresent(canPresent: true)?.animalId, 12345)
         XCTAssertFalse(state.hasPendingAnimal)
+    }
+}
+
+private final class FavoriteTestContext: NSManagedObjectContext, @unchecked Sendable {
+    var failSaves = false
+
+    override func save() throws {
+        if failSaves {
+            throw NSError(domain: NSCocoaErrorDomain, code: NSPersistentStoreSaveError)
+        }
+        try super.save()
     }
 }
